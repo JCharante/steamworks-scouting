@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from settings import Settings
@@ -30,7 +30,6 @@ class TeamV1(Base):
 	pk = Column(Integer, primary_key=True)
 	team_name = Column(String(100))
 	team_number = Column(Integer)
-	robot_type = Column(String(100))
 
 
 class RobotV1(Base):
@@ -41,12 +40,14 @@ class RobotV1(Base):
 	team_number = Column(Integer)
 	robot_type = Column(String())
 	climbing_ability = Column(String(100))
+	uses_actuated_gear_mechanism = Column(Boolean)
 
 
 class RobotNotesV1(Base):
 	__tablename__ = 'RobotNotesV1'
 	pk = Column(Integer, primary_key=True)
-	robot_id = Column(String(100))
+	robot_id = Column(String(36))
+	note = Column(String(1000))
 
 
 class TeamNotesV1(Base):
@@ -76,14 +77,8 @@ class MatchV1(Base):
 	blue_score = Column(Integer)
 	red_score = Column(Integer)
 	match_id = Column(String(36))
-
-
-class MatchAtEventV1(Base):
-	__tablename__ = 'MatchAtEventV1'
-	pk = Column(Integer, primary_key=True)
 	match_number = Column(Integer)
 	event_id = Column(String(36))
-	match_id = Column(String(36))
 
 
 class TeamAtMatchV1(Base):
