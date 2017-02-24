@@ -16,3 +16,11 @@ class InvalidRobotId(Exception):
 
 class InvalidMatchId(Exception):
 	pass
+
+
+class InvalidTeamNoteId(Exception):
+	pass
+
+
+class InvalidRobotNoteId(Exception):
+	pass
