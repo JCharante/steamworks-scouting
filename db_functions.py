@@ -96,7 +96,6 @@ def valid_team_note_id(team_note_id: str) -> bool:
 	return note is not None
 
 
-
 def valid_robot_note_id(robot_note_id: str) -> bool:
 	session = DBSession()
 	note = session.query(RobotNoteV1).filter(RobotNoteV1.note_id == robot_note_id).first()
@@ -228,3 +227,14 @@ def modify_team_note(note_id: str, new_message: str):
 	note.note = new_message
 	session.commit()
 	session.close()
+
+
+def modify_robot_note(note_id: str, new_message: str):
+	if valid_robot_note_id(note_id) is False:
+		raise exceptions.InvalidRobotNoteId()
+	session = DBSession()
+	note = session.query(RobotNoteV1).filter(RobotNoteV1.note_id == note_id).first()  # type: RobotNoteV1
+	note.note = new_message
+	session.commit()
+	session.close()
+
