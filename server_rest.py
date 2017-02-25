@@ -1,6 +1,6 @@
 # I know this isn't real rest, but your neither is your api.
 
-from flask import Flask, request, jsonify, make_response, abort, Response, url_for
+from flask import Flask, request, jsonify, make_response, Response, url_for
 import db_functions
 import util
 import exceptions
@@ -162,7 +162,41 @@ def team_notes_add():
 
 @app.route('/team/note/edit', methods=['OPTIONS', 'POST'])
 def team_note_edit():
-	pass
+	required_parameters = {
+		'note_id': None,
+		'message': None
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				else:
+					required_parameters[parameter_name] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	note_id = required_parameters['note_id']  # type: str
+	message = required_parameters['message']  # type: str
+
+	try:
+		note_id = db_functions.modify_team_note(note_id, message)
+	except exceptions.InvalidTeamNoteId:
+		return http_400(5, 'Invalid Value', 'note_id')
+
+	response['success'] = True
+	return home_cor(jsonify(**response))
 
 
 @app.route('/event/teams/add', methods=['OPTIONS', 'POST'])
@@ -278,7 +312,43 @@ def match_add_team():
 
 @app.route('/match/remove_team', methods=['OPTIONS', 'POST'])
 def match_remove_team():
-	pass
+	required_parameters = {
+		'match_id': None,
+		'team_number': None
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				else:
+					required_parameters[parameter_name] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	match_id = required_parameters['match_id']  # type: str
+	team_number = required_parameters['team_number']  # type: int
+
+	try:
+		db_functions.remove_team_from_match(match_id, team_number)
+	except exceptions.InvalidMatchId:
+		return http_400(5, 'Invalid Value', 'match_id')
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+
+	response['success'] = True
+	return home_cor(jsonify(**response))
 
 
 @app.route('/match/details', methods=['OPTIONS', 'POST'])

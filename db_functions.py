@@ -151,6 +151,17 @@ def assign_team_to_match(match_id: str, team_number: int, side: str) -> None:
 	session.close()
 
 
+def remove_team_from_match(match_id: str, team_number: int) -> None:
+	if valid_match_id(match_id) is False:
+		raise exceptions.InvalidMatchId()
+	if valid_team_number(team_number) is False:
+		raise exceptions.InvalidTeamNumber()
+	session = DBSession()
+	session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match_id).filter(TeamAtMatchV1.team_number == team_number).delete()
+	session.commit()
+	session.close()
+
+
 def create_robot(robot_name: str, team_number: int, robot_type: str, climbing_ability: str,
 				 uses_actuated_gear_mechanism: bool) -> str:
 	if valid_team_number(team_number) is False:
