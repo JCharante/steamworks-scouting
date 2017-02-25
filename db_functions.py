@@ -250,3 +250,59 @@ def modify_robot_note(note_id: str, new_message: str):
 	session.commit()
 	session.close()
 
+
+def all_teams():
+	session = DBSession()
+	teams = []
+	for team in session.query(TeamV1).all():
+		team = team  # type: TeamV1
+		teams.append({
+			'team_number': team.team_number,
+			'team_name': team.team_name
+		})
+	session.close()
+	return teams
+
+
+def teams_at_event(event_id: str):
+	if valid_event_id(event_id) is False:
+		raise exceptions.InvalidEventId
+	teams = []
+	session = DBSession()
+	for team_at_event_v1 in session.query(TeamAtEventV1).filter(TeamAtEventV1.event_id == event_id).all():  # type: TeamAtEventV1
+		team = session.query(TeamV1).filter(TeamV1.team_number == team_at_event_v1.team_number).first()
+		teams.append({
+			'team_number': team.team_number,
+			'team_name': team.team_name
+		})
+	return teams
+
+
+def all_events():
+	session = DBSession()
+	events = []
+	for event in session.query(EventV1).all():  # type: EventV1
+		events.append({
+			'event_id': event.event_id,
+			'event_name': event.event_name
+		})
+	return events
+
+
+def team_events(team_number: int) -> List[Dict[[str, str], [str, str]]]:
+	"""
+	Get the events that a team is in
+	:param team_number:
+	:return:
+	"""
+	if valid_team_number(team_number) is False:
+		raise exceptions.InvalidTeamNumber()
+	session = DBSession()
+	events = []
+	for team_at_event_v1 in session.query(TeamAtEventV1).filter(TeamAtEventV1.team_number == team_number).all()  # type: TeamAtEventV1
+		event = session.query(EventV1).filter(EventV1.event_id == team_at_event_v1.event_id).first()
+		events.append({
+			'event_name': event.event_name,
+			'event_id': event.event_id
+		})
+	return events

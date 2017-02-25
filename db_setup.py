@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean
+from sqlalchemy import Column, Integer, String, Float, Boolean, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
 from settings import Settings
 
 Base = declarative_base()
@@ -38,7 +37,7 @@ class RobotV1(Base):
 	robot_name = Column(String(100))
 	robot_id = Column(String(36))
 	team_number = Column(Integer)
-	robot_type = Column(String())
+	robot_type = Column(String(100))
 	climbing_ability = Column(String(100))
 	uses_actuated_gear_mechanism = Column(Boolean)
 
