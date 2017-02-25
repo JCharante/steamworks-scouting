@@ -204,7 +204,45 @@ def matches_create():
 
 @app.route('/match/add_team', methods=['OPTIONS', 'POST'])
 def match_add_team():
-	pass
+	required_parameters = {
+		'match_id': None,
+		'team_number': None,
+		'side': None
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				else:
+					required_parameters[parameter_name] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	match_id = required_parameters['match_id']  # type: str
+	team_number = required_parameters['team_number']  # type: int
+	side = required_parameters['side']  # type: str
+
+	try:
+		db_functions.assign_team_to_match(match_id, team_number, side)
+	except exceptions.InvalidMatchId:
+		return http_400(5, 'Invalid Value', 'match_id')
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+
+	response['success'] = True
+	return home_cor(jsonify(**response))
 
 
 @app.route('/match/remove_team', methods=['OPTIONS', 'POST'])
