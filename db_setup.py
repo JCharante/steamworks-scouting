@@ -86,6 +86,7 @@ class MatchV1(Base):
 class TeamAtMatchV1(Base):
 	__tablename__ = 'TeamAtMatchV1'
 	pk = Column(Integer, primary_key=True)
+	side = Column(String(4))
 	team_number = Column(Integer)
 	match_id = Column(String(36))
 	cycle_time = Column(Float)

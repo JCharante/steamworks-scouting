@@ -134,7 +134,7 @@ def create_match(event_id: str, match_number: int) -> str:
 	return match_id
 
 
-def assign_team_to_match(match_id: str, team_number: int) -> None:
+def assign_team_to_match(match_id: str, team_number: int, side: str) -> None:
 	if valid_match_id(match_id) is False:
 		raise exceptions.InvalidMatchId()
 	if valid_team_number(team_number) is False:
@@ -144,7 +144,8 @@ def assign_team_to_match(match_id: str, team_number: int) -> None:
 		team_number=team_number,
 		match_id=match_id,
 		cycle_time=0.0,
-		rp=0
+		rp=0,
+		side=side
 	))
 	session.commit()
 	session.close()
