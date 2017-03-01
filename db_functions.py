@@ -327,7 +327,7 @@ def all_events():
 	return events
 
 
-def team_events(team_number: int) -> List[Dict[[str, str], [str, str]]]:
+def team_events(team_number: int) -> List[Dict[str, str]]:
 	"""
 	Get the events that a team is in
 	:param team_number:
