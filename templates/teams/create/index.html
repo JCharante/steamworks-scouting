@@ -1,0 +1,27 @@
+{% extends "navbar/base.html" %}
+
+{% block scripts %}
+	<script src="/static/internal/teams/create/js/script.js"></script>
+{% endblock %}
+
+{% block body_content %}
+	{{ super() }}
+	<div class="row">
+		<h1 class="col-xs-12 text-center">Create Team</h1>
+		<div class="col-md-6 col-xs-12">
+			<div class="form-group">
+				<label for="team-name">Team Name</label>
+				<input type="text" class="form-control" id="team-name" placeholder="The Mad Lads">
+			</div>
+		</div>
+		<div class="col-md-6 col-xs-12">
+			<div class="form-group">
+				<label for="team-number">Team Number</label>
+				<input type="text" class="form-control" id="team-number" placeholder="1337">
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<button id="create-team" type="button" class="btn btn-primary btn-lg btn-block">Create Team</button>
+		</div>
+	</div>
+{% endblock %}

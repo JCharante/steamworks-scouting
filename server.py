@@ -115,6 +115,12 @@ def api_teams_create():
 	if team_number is None:
 		return http_400(3, 'Required Parameter is Missing', 'team_number')
 
+	team_name = team_name  # type: str
+	try:
+		team_number = int(team_number)
+	except ValueError:
+		return http_400(10, 'Required Parameter is not an Integer!', 'team_number')
+
 	try:
 		db_functions.create_team(team_name, team_number)
 	except exceptions.TeamNumberTaken:
@@ -696,6 +702,11 @@ def app_events():
 @server.route('/app/teams')
 def app_teams():
 	return render_template('teams/index.html')
+
+
+@server.route('/app/teams/create')
+def app_teams_create():
+	return render_template('teams/create/index.html')
 
 
 print(f'Using Database: {settings.database_address}')
