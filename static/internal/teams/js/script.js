@@ -7,7 +7,7 @@ Vue.component('team-row', {
 	computed: {
 		teamPageLink: function() {
 			var self = this;
-			return '/app/teams/team/?team_number=' + self.team_number;
+			return '/app/teams/team?team_number=' + self.team_number;
 		}
 	},
 	template:
