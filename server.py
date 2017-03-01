@@ -1,6 +1,6 @@
 # I know this isn't real rest, but your neither is your api.
 
-from flask import Flask, request, jsonify, make_response, Response, url_for
+from flask import Flask, request, jsonify, make_response, Response, url_for, render_template, redirect
 import db_functions
 import util
 import exceptions
@@ -8,7 +8,7 @@ from settings import Settings
 import json
 from typing import Dict, List
 
-app = Flask(__name__)
+server = Flask(__name__)
 
 settings = Settings()
 
@@ -21,7 +21,7 @@ def home_cor(obj):
 	return return_response
 
 
-@app.errorhandler(400)
+@server.errorhandler(400)
 def http_400(code: int, message: str, fields: str):
 	"""
 
@@ -38,11 +38,11 @@ def http_400(code: int, message: str, fields: str):
 		'message': message,
 		'fields': fields
 	}), 400))
-	response_object.headers['Content-Type'] = 'application/json'
+	response_object.headers['Content-Type'] = 'serverlication/json'
 	return response_object
 
 
-@app.route('/api/events/create', methods=['OPTIONS', 'POST'])
+@server.route('/api/events/create', methods=['OPTIONS', 'POST'])
 def api_events_create():
 	response = dict()
 
@@ -68,7 +68,7 @@ def api_events_create():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/teams/all', methods=['OPTIONS', 'GET'])
+@server.route('/api/teams/all', methods=['OPTIONS', 'GET'])
 def api_teams_all():
 	response = dict()
 
@@ -79,7 +79,7 @@ def api_teams_all():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/teams/create', methods=['OPTIONS', 'POST'])
+@server.route('/api/teams/create', methods=['OPTIONS', 'POST'])
 def api_teams_create():
 	response = dict()
 
@@ -112,7 +112,7 @@ def api_teams_create():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/team/matches', methods=['OPTIONS', 'POST'])
+@server.route('/api/team/matches', methods=['OPTIONS', 'POST'])
 def api_team_matches():
 	required_parameters = {
 		'team_number': None
@@ -149,7 +149,7 @@ def api_team_matches():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/team/details', methods=['OPTIONS', 'POST'])
+@server.route('/api/team/details', methods=['OPTIONS', 'POST'])
 def api_team_details():
 	required_parameters = {
 		'team_number': None
@@ -186,7 +186,7 @@ def api_team_details():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/team/events', methods=['OPTIONS', 'POST'])
+@server.route('/api/team/events', methods=['OPTIONS', 'POST'])
 def api_team_events():
 	required_parameters = {
 		'team_number': None
@@ -223,7 +223,7 @@ def api_team_events():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/team/notes/add', methods=['OPTIONS', 'POST'])
+@server.route('/api/team/notes/add', methods=['OPTIONS', 'POST'])
 def api_team_notes_add():
 	required_parameters = {
 		'team_number': None,
@@ -262,7 +262,7 @@ def api_team_notes_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/team/note/edit', methods=['OPTIONS', 'POST'])
+@server.route('/api/team/note/edit', methods=['OPTIONS', 'POST'])
 def api_team_note_edit():
 	required_parameters = {
 		'note_id': None,
@@ -301,7 +301,7 @@ def api_team_note_edit():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/event/teams/add', methods=['OPTIONS', 'POST'])
+@server.route('/api/event/teams/add', methods=['OPTIONS', 'POST'])
 def api_event_teams_add():
 	response = dict()
 
@@ -336,7 +336,7 @@ def api_event_teams_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/matches/create', methods=['OPTIONS', 'POST'])
+@server.route('/api/matches/create', methods=['OPTIONS', 'POST'])
 def api_matches_create():
 	response = dict()
 
@@ -369,7 +369,7 @@ def api_matches_create():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/match/add_team', methods=['OPTIONS', 'POST'])
+@server.route('/api/match/add_team', methods=['OPTIONS', 'POST'])
 def api_match_add_team():
 	required_parameters = {
 		'match_id': None,
@@ -412,7 +412,7 @@ def api_match_add_team():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/match/remove_team', methods=['OPTIONS', 'POST'])
+@server.route('/api/match/remove_team', methods=['OPTIONS', 'POST'])
 def api_match_remove_team():
 	required_parameters = {
 		'match_id': None,
@@ -453,7 +453,7 @@ def api_match_remove_team():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/match/details', methods=['OPTIONS', 'POST'])
+@server.route('/api/match/details', methods=['OPTIONS', 'POST'])
 def api_match_details():
 	required_parameters = {
 		'match_id': None
@@ -490,7 +490,7 @@ def api_match_details():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/robots/add', methods=['OPTIONS', 'POST'])
+@server.route('/api/robots/add', methods=['OPTIONS', 'POST'])
 def api_robots_add():
 	required_parameters = {
 		'robot_name': None,
@@ -539,7 +539,7 @@ def api_robots_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/robots/notes/add', methods=['OPTIONS', 'POST'])
+@server.route('/api/robots/notes/add', methods=['OPTIONS', 'POST'])
 def api_robots_notes_add():
 	required_parameters = {
 		'robot_id': None,
@@ -578,7 +578,7 @@ def api_robots_notes_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/robots/note/edit', methods=['OPTIONS', 'POST'])
+@server.route('/api/robots/note/edit', methods=['OPTIONS', 'POST'])
 def api_robots_note_edit():
 	required_parameters = {
 		'note_id': None,
@@ -617,7 +617,7 @@ def api_robots_note_edit():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/api/robot/edit', methods=['OPTIONS', 'POST'])
+@server.route('/api/robot/edit', methods=['OPTIONS', 'POST'])
 def api_robot_edit():
 	required_parameters = {
 		'robot_id': None,
@@ -669,6 +669,18 @@ def api_robot_edit():
 	return home_cor(jsonify(**response))
 
 
+@server.route('/app/')
+@server.route('/app/home')
+@server.route('/')
+def app():
+	return render_template('homepage/index.html')
+
+
+@server.route('/app/events')
+def app_events():
+	return render_template('events/index.html')
+
+
 print(f'Using Database: {settings.database_address}')
 
-app.run(debug=True, host='0.0.0.0', port=8881)
+server.run(debug=True, host='0.0.0.0', port=8881)
