@@ -327,6 +327,33 @@ def all_events():
 	return events
 
 
+def matches_at_event(event_id: str):
+	if valid_event_id(event_id) is False:
+		raise exceptions.InvalidEventId()
+	session = DBSession()
+	matches = []
+	for match in session.query(MatchV1).filter(MatchV1.event_id == event_id).all():  # type: MatchV1
+		matches.append({
+			'match_id': match.match_id,
+			'match_number': match.match_number
+		})
+	session.close()
+	return matches
+
+
+def event_details(event_id: str):
+	if valid_event_id(event_id) is False:
+		raise exceptions.InvalidMatchId()
+	session = DBSession()
+	event_detail = dict()
+	event_detail['matches'] = matches_at_event(event_id)
+	event = session.query(EventV1).filter(EventV1.event_id == event_id).first()  # type: EventV1
+	event_detail['name'] = event.event_name
+	event_detail['event_id'] = event.event_id
+	session.close()
+	return event_detail
+
+
 def team_events(team_number: int) -> List[Dict[str, str]]:
 	"""
 	Get the events that a team is in
