@@ -266,7 +266,7 @@ def all_teams():
 
 def teams_at_event(event_id: str):
 	if valid_event_id(event_id) is False:
-		raise exceptions.InvalidEventId
+		raise exceptions.InvalidEventId()
 	teams = []
 	session = DBSession()
 	for team_at_event_v1 in session.query(TeamAtEventV1).filter(TeamAtEventV1.event_id == event_id).all():  # type: TeamAtEventV1
@@ -275,7 +275,45 @@ def teams_at_event(event_id: str):
 			'team_number': team.team_number,
 			'team_name': team.team_name
 		})
+	session.close()
 	return teams
+
+
+def team_matches(team_number: int):
+	if valid_team_number(team_number) is False:
+		raise exceptions.InvalidTeamNumber()
+	session = DBSession()
+	matches = []
+	for team_at_match in session.query(TeamAtMatchV1).filter(TeamAtMatchV1.team_number == team_number).all():  # type: TeamAtMatchV1
+		matches.append({
+			'match_id': team_at_match.match_id
+		})
+		session.close()
+	return matches
+
+
+def match_details(match_id: str):
+	if valid_match_id(match_id) is False:
+		raise exceptions.InvalidMatchId()
+	session = DBSession()
+	details = {
+		'blue_team': [],
+		'red_team': []
+	}
+	for team_at_match in session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match_id).all():  # type: TeamAtMatchV1
+		if team_at_match.side == 'red':
+			details['red_team'].append(team_at_match.team_number)
+		if team_at_match.side == 'blue':
+			details['blue_team'].append(team_at_match.team_number)
+	match = session.query(MatchV1).filter(MatchV1.match_id == match_id).first()  # type: MatchV1
+	details['event_id'] = match.event_id
+	details['match_number'] = match.match_number
+	details['score'] = {
+		'red_score': match.red_score,
+		'blue_score': match.blue_score
+	}
+	session.close()
+	return details
 
 
 def all_events():
@@ -299,10 +337,24 @@ def team_events(team_number: int) -> List[Dict[[str, str], [str, str]]]:
 		raise exceptions.InvalidTeamNumber()
 	session = DBSession()
 	events = []
-	for team_at_event_v1 in session.query(TeamAtEventV1).filter(TeamAtEventV1.team_number == team_number).all()  # type: TeamAtEventV1
+	for team_at_event_v1 in session.query(TeamAtEventV1).filter(TeamAtEventV1.team_number == team_number).all():  # type: TeamAtEventV1
 		event = session.query(EventV1).filter(EventV1.event_id == team_at_event_v1.event_id).first()
 		events.append({
 			'event_name': event.event_name,
 			'event_id': event.event_id
 		})
+	session.close()
 	return events
+
+
+def team_details(team_number: int):
+	if valid_team_number(team_number) is False:
+		raise exceptions.InvalidTeamNumber()
+	session = DBSession()
+	team = session.query(TeamV1).filter(TeamV1.team_number == team_number).first()
+	session.close()
+	return {
+		'team_number': team.team_number,
+		'team_name': team.team_name
+	}
+
