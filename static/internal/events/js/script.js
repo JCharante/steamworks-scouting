@@ -7,7 +7,7 @@ Vue.component('event-row', {
 	computed: {
 		eventPageLink: function() {
 			var self = this;
-			return '/app/event/' + self.event_id;
+			return '/app/events/event?event_id=' + self.event_id;
 		}
 	},
 	template:
