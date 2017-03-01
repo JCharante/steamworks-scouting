@@ -42,7 +42,7 @@ def http_400(code: int, message: str, fields: str):
 	return response_object
 
 
-@app.route('/events/create', methods=['OPTIONS', 'POST'])
+@app.route('/api/events/create', methods=['OPTIONS', 'POST'])
 def events_create():
 	response = dict()
 
@@ -68,7 +68,7 @@ def events_create():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/teams/all', methods=['OPTIONS', 'GET'])
+@app.route('/api/teams/all', methods=['OPTIONS', 'GET'])
 def teams_all():
 	response = dict()
 
@@ -79,7 +79,7 @@ def teams_all():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/teams/create', methods=['OPTIONS', 'POST'])
+@app.route('/api/teams/create', methods=['OPTIONS', 'POST'])
 def teams_create():
 	response = dict()
 
@@ -112,7 +112,7 @@ def teams_create():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/team/matches', methods=['OPTIONS', 'POST'])
+@app.route('/api/team/matches', methods=['OPTIONS', 'POST'])
 def team_matches():
 	required_parameters = {
 		'team_number': None
@@ -149,7 +149,7 @@ def team_matches():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/team/details', methods=['OPTIONS', 'POST'])
+@app.route('/api/team/details', methods=['OPTIONS', 'POST'])
 def team_details():
 	required_parameters = {
 		'team_number': None
@@ -186,7 +186,7 @@ def team_details():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/team/events', methods=['OPTIONS', 'POST'])
+@app.route('/api/team/events', methods=['OPTIONS', 'POST'])
 def team_events():
 	required_parameters = {
 		'team_number': None
@@ -223,7 +223,7 @@ def team_events():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/team/notes/add', methods=['OPTIONS', 'POST'])
+@app.route('/api/team/notes/add', methods=['OPTIONS', 'POST'])
 def team_notes_add():
 	required_parameters = {
 		'team_number': None,
@@ -262,7 +262,7 @@ def team_notes_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/team/note/edit', methods=['OPTIONS', 'POST'])
+@app.route('/api/team/note/edit', methods=['OPTIONS', 'POST'])
 def team_note_edit():
 	required_parameters = {
 		'note_id': None,
@@ -301,7 +301,7 @@ def team_note_edit():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/event/teams/add', methods=['OPTIONS', 'POST'])
+@app.route('/api/event/teams/add', methods=['OPTIONS', 'POST'])
 def event_teams_add():
 	response = dict()
 
@@ -336,7 +336,7 @@ def event_teams_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/matches/create', methods=['OPTIONS', 'POST'])
+@app.route('/api/matches/create', methods=['OPTIONS', 'POST'])
 def matches_create():
 	response = dict()
 
@@ -369,7 +369,7 @@ def matches_create():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/match/add_team', methods=['OPTIONS', 'POST'])
+@app.route('/api/match/add_team', methods=['OPTIONS', 'POST'])
 def match_add_team():
 	required_parameters = {
 		'match_id': None,
@@ -412,7 +412,7 @@ def match_add_team():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/match/remove_team', methods=['OPTIONS', 'POST'])
+@app.route('/api/match/remove_team', methods=['OPTIONS', 'POST'])
 def match_remove_team():
 	required_parameters = {
 		'match_id': None,
@@ -453,7 +453,7 @@ def match_remove_team():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/match/details', methods=['OPTIONS', 'POST'])
+@app.route('/api/match/details', methods=['OPTIONS', 'POST'])
 def match_details():
 	required_parameters = {
 		'match_id': None
@@ -490,7 +490,7 @@ def match_details():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/robots/add', methods=['OPTIONS', 'POST'])
+@app.route('/api/robots/add', methods=['OPTIONS', 'POST'])
 def robots_add():
 	required_parameters = {
 		'robot_name': None,
@@ -539,7 +539,7 @@ def robots_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/robots/notes/add', methods=['OPTIONS', 'POST'])
+@app.route('/api/robots/notes/add', methods=['OPTIONS', 'POST'])
 def robots_notes_add():
 	required_parameters = {
 		'robot_id': None,
@@ -578,7 +578,7 @@ def robots_notes_add():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/robots/note/edit', methods=['OPTIONS', 'POST'])
+@app.route('/api/robots/note/edit', methods=['OPTIONS', 'POST'])
 def robots_note_edit():
 	required_parameters = {
 		'note_id': None,
@@ -617,7 +617,7 @@ def robots_note_edit():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/robot/edit', methods=['OPTIONS', 'POST'])
+@app.route('/api/robot/edit', methods=['OPTIONS', 'POST'])
 def robot_edit():
 	required_parameters = {
 		'robot_id': None,

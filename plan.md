@@ -8,7 +8,7 @@
 ### Scouting Service
 
 * Record data for a team in a match
-	
+
 ### Analyzing Service
 
 * View real time scouting data for a team. 
