@@ -61,6 +61,9 @@ def api_events_create():
 
 	if event_name is None:
 		return http_400(3, 'Required Parameter is Missing', 'event_name')
+	event_name = event_name  # type: str
+	if event_name == '' or event_name == ' ':
+		return http_400(11, 'Required Parameter Cannot Be Blank', 'event_name')
 
 	event_id = db_functions.create_event(event_name)
 
@@ -707,6 +710,11 @@ def app_teams():
 @server.route('/app/teams/create')
 def app_teams_create():
 	return render_template('teams/create/index.html')
+
+
+@server.route('/app/events/create')
+def app_events_create():
+	return render_template('events/create/index.html')
 
 
 print(f'Using Database: {settings.database_address}')
