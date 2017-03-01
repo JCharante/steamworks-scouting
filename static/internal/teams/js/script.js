@@ -11,12 +11,14 @@ Vue.component('team-row', {
 		}
 	},
 	template:
-	'<div class="panel panel-default">' +
-		'<div class="panel-heading">' +
-			'<p>{{ team_number }} - {{ team_name }}</p>' +
-		'</div>' +
-		'<div class="panel-body">' +
-			'<a :href="teamPageLink"><p>Team Page</p></a>' +
+	'<div class="col-lg4 col-md-6 col-xs-12">' +
+		'<div class="panel panel-default">' +
+			'<div class="panel-heading">' +
+				'<p>{{ team_number }} - {{ team_name }}</p>' +
+			'</div>' +
+			'<div class="panel-body">' +
+				'<a :href="teamPageLink"><p>Team Page</p></a>' +
+			'</div>' +
 		'</div>' +
 	'</div>'
 });
@@ -28,7 +30,7 @@ Vue.component('teams-list', {
 	},
 	props: ['teams'],
 	template:
-	'<div>' +
+	'<div class="row">' +
 		'<team-row v-for="team in teams" :team_name="team.team_name" :team_number="team.team_number"></team-row>' +
 	'</div>'
 });
@@ -52,7 +54,7 @@ Vue.component('teams-page', {
 	},
 	template:
 	'<div class="row">' +
-		'<h1 class="text-center">teams</h1>' +
+		'<h1 class="text-center">Teams</h1>' +
 		'<teams-list :teams="teams"></teams-list>' +
 	'</div>',
 	data: function () {

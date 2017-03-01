@@ -11,12 +11,14 @@ Vue.component('event-row', {
 		}
 	},
 	template:
-	'<div class="panel panel-default">' +
-		'<div class="panel-heading">' +
-			'<p>{{ event_name }}</p>' +
-		'</div>' +
-		'<div class="panel-body">' +
-			'<a :href="eventPageLink"><p>Event Page</p></a>' +
+	'<div class="col-lg4 col-md-6 col-xs-12">' +
+		'<div class="panel panel-default">' +
+			'<div class="panel-heading">' +
+				'<p>{{ event_name }}</p>' +
+			'</div>' +
+			'<div class="panel-body">' +
+				'<a :href="eventPageLink"><p>Event Page</p></a>' +
+			'</div>' +
 		'</div>' +
 	'</div>'
 });
