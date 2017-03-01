@@ -68,6 +68,18 @@ def api_events_create():
 	return home_cor(jsonify(**response))
 
 
+@server.route('/api/events/all', methods=['OPTIONS', 'GET'])
+def api_events_all():
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	events = db_functions.all_events()
+
+	response['events'] = events
+	return home_cor(jsonify(**response))
+
+
 @server.route('/api/teams/all', methods=['OPTIONS', 'GET'])
 def api_teams_all():
 	response = dict()
