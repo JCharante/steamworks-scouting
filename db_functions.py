@@ -306,8 +306,11 @@ def match_details(match_id: str):
 		if team_at_match.side == 'blue':
 			details['blue_team'].append(team_at_match.team_number)
 	match = session.query(MatchV1).filter(MatchV1.match_id == match_id).first()  # type: MatchV1
+	event = session.query(EventV1).filter(EventV1.event_id == match.event_id).first()  # type: EventV1
 	details['event_id'] = match.event_id
+	details['event_name'] = event.event_name
 	details['match_number'] = match.match_number
+	details['match_id'] = match_id
 	details['score'] = {
 		'red_score': match.red_score,
 		'blue_score': match.blue_score

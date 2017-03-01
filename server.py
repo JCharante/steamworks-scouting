@@ -764,6 +764,11 @@ def app_events_event():
 	return render_template('events/event/index.html')
 
 
+@server.route('/app/matches/match')
+def app_matches_match():
+	return render_template('matches/match/index.html')
+
+
 print(f'Using Database: {settings.database_address}')
 
 server.run(debug=True, host='0.0.0.0', port=8881)
