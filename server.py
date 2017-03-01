@@ -693,6 +693,11 @@ def app_events():
 	return render_template('events/index.html')
 
 
+@server.route('/app/teams')
+def app_teams():
+	return render_template('teams/index.html')
+
+
 print(f'Using Database: {settings.database_address}')
 
 server.run(debug=True, host='0.0.0.0', port=8881)
