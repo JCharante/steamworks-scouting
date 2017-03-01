@@ -83,6 +83,43 @@ def api_events_all():
 	return home_cor(jsonify(**response))
 
 
+@server.route('/api/event/details', methods=['OPTIONS', 'POST'])
+def api_event_details():
+	required_parameters = {
+		'event_id': None
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				else:
+					required_parameters[parameter_name] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	event_id = required_parameters['event_id']  # type: str
+
+	try:
+		event_details = db_functions.event_details(event_id)
+	except exceptions.InvalidEventId:
+		return http_400(5, 'Invalid Value', 'event_id')
+
+	response['details'] = event_details
+	return home_cor(jsonify(**response))
+
+
 @server.route('/api/teams/all', methods=['OPTIONS', 'GET'])
 def api_teams_all():
 	response = dict()
@@ -715,6 +752,11 @@ def app_teams_create():
 @server.route('/app/events/create')
 def app_events_create():
 	return render_template('events/create/index.html')
+
+
+@server.route('/app/events/event')
+def app_events_event():
+	return render_template('events/event/index.html')
 
 
 print(f'Using Database: {settings.database_address}')
