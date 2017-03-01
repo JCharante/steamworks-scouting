@@ -419,6 +419,11 @@ def api_matches_create():
 		return http_400(3, 'Required Parameter is Missing', 'match_number')
 
 	try:
+		match_number = int(match_number)
+	except ValueError:
+		return http_400(10, 'Required Parameter is not an Integer!', 'match_number')
+
+	try:
 		db_functions.create_match(event_id, match_number)
 	except exceptions.InvalidEventId:
 		return http_400(5, 'Invalid Value', 'event_id')
