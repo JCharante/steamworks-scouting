@@ -1,10 +1,13 @@
 {% extends "navbar/base.html" %}
 
 {% block title %}
-Achilles - Events
+	Achilles - Events
 {% endblock %}
 
 {% block body_content %}
-<h1 class="text-center">Events</h1>
+	<div id="vue-app"></div>
 {% endblock %}
 
+{% block scripts %}
+	<script src="/static/internal/events/js/script.js"></script>
+{% endblock %}
