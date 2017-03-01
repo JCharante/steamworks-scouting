@@ -43,7 +43,7 @@ def http_400(code: int, message: str, fields: str):
 
 
 @app.route('/api/events/create', methods=['OPTIONS', 'POST'])
-def events_create():
+def api_events_create():
 	response = dict()
 
 	if request.method == 'OPTIONS':
@@ -69,7 +69,7 @@ def events_create():
 
 
 @app.route('/api/teams/all', methods=['OPTIONS', 'GET'])
-def teams_all():
+def api_teams_all():
 	response = dict()
 
 	if request.method == 'OPTIONS':
@@ -80,7 +80,7 @@ def teams_all():
 
 
 @app.route('/api/teams/create', methods=['OPTIONS', 'POST'])
-def teams_create():
+def api_teams_create():
 	response = dict()
 
 	if request.method == 'OPTIONS':
@@ -113,7 +113,7 @@ def teams_create():
 
 
 @app.route('/api/team/matches', methods=['OPTIONS', 'POST'])
-def team_matches():
+def api_team_matches():
 	required_parameters = {
 		'team_number': None
 	}
@@ -150,7 +150,7 @@ def team_matches():
 
 
 @app.route('/api/team/details', methods=['OPTIONS', 'POST'])
-def team_details():
+def api_team_details():
 	required_parameters = {
 		'team_number': None
 	}
@@ -187,7 +187,7 @@ def team_details():
 
 
 @app.route('/api/team/events', methods=['OPTIONS', 'POST'])
-def team_events():
+def api_team_events():
 	required_parameters = {
 		'team_number': None
 	}
@@ -224,7 +224,7 @@ def team_events():
 
 
 @app.route('/api/team/notes/add', methods=['OPTIONS', 'POST'])
-def team_notes_add():
+def api_team_notes_add():
 	required_parameters = {
 		'team_number': None,
 		'message': None
@@ -263,7 +263,7 @@ def team_notes_add():
 
 
 @app.route('/api/team/note/edit', methods=['OPTIONS', 'POST'])
-def team_note_edit():
+def api_team_note_edit():
 	required_parameters = {
 		'note_id': None,
 		'message': None
@@ -302,7 +302,7 @@ def team_note_edit():
 
 
 @app.route('/api/event/teams/add', methods=['OPTIONS', 'POST'])
-def event_teams_add():
+def api_event_teams_add():
 	response = dict()
 
 	if request.method == 'OPTIONS':
@@ -337,7 +337,7 @@ def event_teams_add():
 
 
 @app.route('/api/matches/create', methods=['OPTIONS', 'POST'])
-def matches_create():
+def api_matches_create():
 	response = dict()
 
 	if request.method == 'OPTIONS':
@@ -370,7 +370,7 @@ def matches_create():
 
 
 @app.route('/api/match/add_team', methods=['OPTIONS', 'POST'])
-def match_add_team():
+def api_match_add_team():
 	required_parameters = {
 		'match_id': None,
 		'team_number': None,
@@ -413,7 +413,7 @@ def match_add_team():
 
 
 @app.route('/api/match/remove_team', methods=['OPTIONS', 'POST'])
-def match_remove_team():
+def api_match_remove_team():
 	required_parameters = {
 		'match_id': None,
 		'team_number': None
@@ -454,7 +454,7 @@ def match_remove_team():
 
 
 @app.route('/api/match/details', methods=['OPTIONS', 'POST'])
-def match_details():
+def api_match_details():
 	required_parameters = {
 		'match_id': None
 	}
@@ -491,7 +491,7 @@ def match_details():
 
 
 @app.route('/api/robots/add', methods=['OPTIONS', 'POST'])
-def robots_add():
+def api_robots_add():
 	required_parameters = {
 		'robot_name': None,
 		'team_number': None,
@@ -540,7 +540,7 @@ def robots_add():
 
 
 @app.route('/api/robots/notes/add', methods=['OPTIONS', 'POST'])
-def robots_notes_add():
+def api_robots_notes_add():
 	required_parameters = {
 		'robot_id': None,
 		'message': None
@@ -579,7 +579,7 @@ def robots_notes_add():
 
 
 @app.route('/api/robots/note/edit', methods=['OPTIONS', 'POST'])
-def robots_note_edit():
+def api_robots_note_edit():
 	required_parameters = {
 		'note_id': None,
 		'message': None
@@ -618,7 +618,7 @@ def robots_note_edit():
 
 
 @app.route('/api/robot/edit', methods=['OPTIONS', 'POST'])
-def robot_edit():
+def api_robot_edit():
 	required_parameters = {
 		'robot_id': None,
 		'robot_name': None,
