@@ -749,6 +749,11 @@ def app_teams():
 	return render_template('teams/index.html')
 
 
+@server.route('/app/teams/team')
+def app_teams_team():
+	return render_template('teams/team/index.html')
+
+
 @server.route('/app/teams/create')
 def app_teams_create():
 	return render_template('teams/create/index.html')

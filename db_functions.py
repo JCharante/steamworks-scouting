@@ -283,11 +283,18 @@ def team_matches(team_number: int):
 	if valid_team_number(team_number) is False:
 		raise exceptions.InvalidTeamNumber()
 	session = DBSession()
-	matches = []
+	matches = {}
 	for team_at_match in session.query(TeamAtMatchV1).filter(TeamAtMatchV1.team_number == team_number).all():  # type: TeamAtMatchV1
-		matches.append({
-			'match_id': team_at_match.match_id
-		})
+		match = session.query(MatchV1).filter(MatchV1.match_id == team_at_match.match_id).first()  # type: MatchV1
+		event = session.query(EventV1).filter(EventV1.event_id == match.event_id).first()  # type: EventV1
+		matches[event.event_id] = {
+			'event_id': event.event_id,
+			'event_name': event.event_name,
+			'matches': matches.get(event.event_id, {}).get('matches', []).append({
+				'match_id': match.match_id,
+				'match_number': match.match_number
+			})
+		}
 		session.close()
 	return matches
 
