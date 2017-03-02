@@ -1,23 +1,58 @@
-Vue.component('team-list', {
-	props: ['match_number', 'match_id'],
+Vue.component('team-entry', {
+	props: ['team_number', 'match_id'],
 	mounted: function() {
 		var self = this;
-		console.log("Match Row: ", self.match_number, self.match_id);
 	},
 	computed: {
-		matchPageLink: function() {
+		teamAtMatchPageLink: function() {
 			var self = this;
-			return '/app/matches/match?match_id=' + self.match_id;
+			return '/app/matches/match/scout?team_number' + self.team_number + '&match_id=' + self.match_id;
+		}
+	},
+	methods: {
+		deleteTeam: function() {
+			var self = this;
+			var confirm_result = confirm("You are about to delete " + self.team_number + ' from this match. Are you sure? This cannot be undone!');
+			if (confirm_result) {
+				var team_number = self.team_number;
+				var match_id = self.match_id;
+
+				var data = {
+					team_number: team_number,
+					match_id: match_id
+				};
+
+				$.ajax({
+					method: 'POST',
+					url: '/api/match/remove_team',
+					data: JSON.stringify(data),
+					dataType: "json",
+					contentType: "application/json",
+					statusCode: {
+						200: function (data) {
+							console.log('Server Replied: ', data);
+							toastr["success"]("", "Removed Team From Match");
+							self.$emit('team-removed');
+						},
+						400: function (responseObject) {
+							console.log('Server Replied: ', responseObject);
+							var data = responseObject.responseJSON;
+							toastr["error"](data.message, "Error Creating Match");
+						}
+					}
+				});
+			}
 		}
 	},
 	template:
-	'<div class="col-lg2 col-md-3 col-xs-6">' +
+	'<div class="col-md-4 col-sm-6 col-xs-12">' +
 		'<div class="panel panel-default">' +
 			'<div class="panel-heading">' +
-				'<p>Match #{{ match_number }}:</p>' +
+				'<p>Team #{{ team_number }}</p>' +
 			'</div>' +
 			'<div class="panel-body">' +
-				'<a :href="matchPageLink"><p>Match Page</p></a>' +
+				'<a class="btn btn-primary" :href="teamAtMatchPageLink" role="button">Scout</a>' +
+				'<a class="btn btn-danger" role="button" v-on:click="deleteTeam">Delete Team</a>' +
 			'</div>' +
 		'</div>' +
 	'</div>'
@@ -30,32 +65,22 @@ Vue.component('teams-list', {
 	},
 	props: ['red_team', 'blue_team', 'match_id'],
 	methods: {
-		teamAtMatchPageLink: function(team_number) {
+		teamRemoved: function() {
 			var self = this;
-			return '/app/matches/match/scout?team_number' + team_number + '&match_id=' + self.match_id;
+			self.$emit('team-removed');
 		}
+
 	},
 	template:
 	'<div>' +
-		'<div class="col-md-6 col-xs-6">' +
-			'<div class="panel panel-default">' +
-				'<div class="panel-heading">' +
-					'<p>Red Team</p>' +
-				'</div>' +
-				'<div class="panel-body">' +
-					'<a v-for="team_number in red_team" :href="teamAtMatchPageLink(team_number)"><p>Scout Team #{{ team_number }} for this Match</p></a>' +
-				'</div>' +
-			'</div>' +
+		'<div class="row">' +
+			'<h2 class="text-center">Blue Team</h2>' +
+			'<team-entry v-on:team-removed="teamRemoved()" v-for="team_number in blue_team" :team_number="team_number" :match_id="match_id"></team-entry>' +
 		'</div>' +
-		'<div class="col-md-6 col-xs-6">' +
-			'<div class="panel panel-default">' +
-				'<div class="panel-heading">' +
-					'<p>Blue Team</p>' +
-				'</div>' +
-				'<div class="panel-body">' +
-					'<a v-for="team_number in blue_team" :href="teamAtMatchPageLink(team_number)"><p>Scout Team #{{ team_number }} for this Match</p></a>' +
-				'</div>' +
-			'</div>' +
+		'<hr>' +
+		'<div class="row">' +
+			'<h2 class="text-center">Red Team</h2>' +
+			'<team-entry v-on:team-removed="teamRemoved()" v-for="team_number in red_team" :team_number="team_number" :match_id="match_id"></team-entry>' +
 		'</div>' +
 	'</div>'
 });
@@ -159,7 +184,7 @@ Vue.component('match-page', {
 		'<hr>' +
 		'<add-team v-on:team-added="fetch_details()"></add-team>' +
 		'<hr>' +
-		'<teams-list :red_team="details.red_team" :blue_team="details.blue_team" :match_id="details.match_id"></teams-list>' +
+		'<teams-list v-on:team-removed="fetch_details()" :red_team="details.red_team" :blue_team="details.blue_team" :match_id="details.match_id"></teams-list>' +
 	'</div>',
 	data: function () {
 		return {
