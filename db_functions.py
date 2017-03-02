@@ -39,6 +39,7 @@ def delete_event(event_id: str):
 	for match in session.query(MatchV1).filter(MatchV1.event_id == event_id).all():
 		session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match.match_id).delete()
 	session.query(MatchV1).filter(MatchV1.event_id == event_id).delete()
+	session.query(TeamAtEventV1).filter(TeamAtEventV1.event_id == event_id).delete()
 	session.commit()
 	session.close()
 
