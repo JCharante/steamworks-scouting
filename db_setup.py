@@ -91,6 +91,19 @@ class TeamAtMatchV1(Base):
 	cycle_time = Column(Float)
 	rp = Column(Integer)
 
+
+class TeamAtMatchV2(Base):
+	__tablename__ = 'TeamAtMatchV2'
+	pk = Column(Integer, primary_key=True)
+	match_id = Column(String(36))
+	side = Column(String(4))
+	team_number = Column(Integer)
+	low_goal = Column(Integer)
+	high_goal = Column(String(7))
+	gears = Column(Integer)
+	auto_gear_position = Column(String(6))
+	climbing_rating = Column(Integer)
+
 settings = Settings()
 engine = create_engine(settings.database_address)
 Base.metadata.create_all(engine)
