@@ -51,6 +51,7 @@ Vue.component('event-row', {
 			'</div>' +
 			'<div class="panel-body">' +
 				'<a class="btn btn-primary" :href="eventPageLink" role="button">Event Page</a>' +
+				' ' +
 				'<a class="btn btn-danger" role="button" v-on:click="deleteEvent">Delete Event</a>' +
 			'</div>' +
 		'</div>' +
