@@ -151,7 +151,7 @@ Vue.component('team-row', {
 				'<p>{{ team_number }} - {{ team_name }}</p>' +
 			'</div>' +
 			'<div class="panel-body">' +
-				'<a :href="teamPageLink"><p>Team Page</p></a>' +
+				'<a class="btn btn-primary" :href="teamPageLink" role="button">Team Page</a>' +
 			'</div>' +
 		'</div>' +
 	'</div>'
