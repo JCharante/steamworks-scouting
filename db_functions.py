@@ -141,6 +141,7 @@ def assign_team_to_match(match_id: str, team_number: int, side: str) -> None:
 		raise exceptions.InvalidTeamNumber()
 	session = DBSession()
 	if session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match_id).filter(TeamAtMatchV1.team_number == team_number).first() is not None:
+		session.close()
 		raise exceptions.TeamIsAlreadyInMatch()
 	session.add(TeamAtMatchV1(
 		team_number=team_number,
