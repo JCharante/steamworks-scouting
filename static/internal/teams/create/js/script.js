@@ -21,6 +21,8 @@ function startSubmitButtonListener() {
 			statusCode: {
 				200: function (data) {
 					console.log('Server Replied: ', data);
+					$('#team-name').val('');
+					$('#team-number').val('');
 					toastr["success"]("", "Created Team")
 				},
 				400: function (responseObject) {
