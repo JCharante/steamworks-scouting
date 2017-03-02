@@ -121,6 +121,49 @@ Vue.component('robot', {
 });
 
 
+Vue.component('team-options', {
+	props: ['team_number'],
+	methods: {
+		deleteTeam: function() {
+			var self = this;
+			var team_number_entered = prompt('To delete the team (Cannot be Undone!!!) enter the team number');
+			if (team_number_entered == self.team_number) {
+				var data = {
+					team_number: self.team_number
+				};
+
+				$.ajax({
+					method: 'POST',
+					url: '/api/team/delete',
+					data: JSON.stringify(data),
+					dataType: "json",
+					contentType: "application/json",
+					statusCode: {
+						200: function (data) {
+							console.log('Server Replied: ', data);
+							toastr["success"]("You mad lad!!", "Team Deleted.");
+							window.location.replace('/app/teams/all');
+						},
+						400: function (responseObject) {
+							console.log('Server Replied: ', responseObject);
+							var data = responseObject.responseJSON;
+							toastr["error"](data.message, "Error Deleting Team");
+						}
+					}
+				});
+			} else {
+				toastr["info"]("Entered Incorrect Team Number", "Did Not Delete Team");
+			}
+		}
+	},
+	template:
+	'<div class="row">' +
+		'<h3 class="text-center">Options</h3>' +
+		'<a class="btn btn-danger" role="button" v-on:click="deleteTeam">Delete Team</a>' +
+	'</div>'
+});
+
+
 Vue.component('team-page', {
 	mounted: function() {
 		var self = this;
@@ -175,6 +218,8 @@ Vue.component('team-page', {
 	template:
 	'<div>' +
 		'<h1 class="text-center">Team #{{ team_number }} - {{ details.team_name }}</h1>' +
+		'<hr>' +
+		'<team-options :team_number="team_number"></team-options>' +
 		'<hr>' +
 		'<robot v-on:refresh-details="fetch_details()" :robot="details.robot"></robot>' +
 		'<hr>' +
