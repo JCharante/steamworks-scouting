@@ -21,10 +21,16 @@ Vue.component('match', {
 
 Vue.component('event', {
 	props: ['event_name', 'event_id', 'matches'],
+	computed: {
+		linkToEventPage: function() {
+			var self = this;
+			return '/app/events/event?event_id=' + self.event_id;
+		}
+	},
 	template:
 	'<div>' +
 		'<hr>' +
-		'<h3 class="text-center">{{ event_name }}</h3>' +
+		'<h3 class="text-center"><a :href="linkToEventPage">{{ event_name }}</a></h3>' +
 		'<match v-for="match in matches" :side="match.side" :match_id="match.match_id" :match_number="match.match_number"></match>' +
 	'</div>'
 });
@@ -40,7 +46,6 @@ Vue.component('events', {
 		'<event v-for="event in events" :event_name="event.event_name" :event_id="event.event_id" :matches="event.matches"></event>' +
 	'</div>'
 });
-
 
 Vue.component('robot', {
 	props: ['robot'],
