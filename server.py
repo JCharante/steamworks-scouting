@@ -470,6 +470,8 @@ def api_match_add_team():
 		return http_400(5, 'Invalid Value', 'match_id')
 	except exceptions.InvalidTeamNumber:
 		return http_400(5, 'Invalid Value', 'team_number')
+	except exceptions.TeamIsAlreadyInMatch:
+		return http_400(13, 'Already Participating', 'team_number')
 
 	response['success'] = True
 	return home_cor(jsonify(**response))

@@ -24,3 +24,7 @@ class InvalidTeamNoteId(Exception):
 
 class InvalidRobotNoteId(Exception):
 	pass
+
+
+class TeamIsAlreadyInMatch(Exception):
+	pass
