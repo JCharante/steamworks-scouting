@@ -178,9 +178,15 @@ Vue.component('match-page', {
 			})
 		}
 	},
+	computed: {
+		linkToEventPage: function() {
+			var self = this;
+			return '/app/events/event?event_id=' + self.details.event_id;
+		}
+	},
 	template:
 	'<div>' +
-		'<h1 class="text-center">{{ details.event_name }} - Match #{{ details.match_number }}</h1>' +
+		'<h1 class="text-center"><a :href="linkToEventPage">{{ details.event_name }}</a> - Match #{{ details.match_number }}</h1>' +
 		'<hr>' +
 		'<add-team v-on:team-added="fetch_details()"></add-team>' +
 		'<hr>' +
