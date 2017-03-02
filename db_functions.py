@@ -44,6 +44,19 @@ def delete_event(event_id: str):
 	session.close()
 
 
+def delete_team(team_number: int):
+	session = DBSession()
+	session.query(TeamV1).filter(TeamV1.team_number == team_number).delete()
+	for robot in session.query(RobotV2).filter(RobotV2.team_number == team_number).all():  # type: RobotV2
+		session.query(RobotNoteV1).filter(RobotNoteV1.robot_id == robot.robot_id).delete()
+	session.query(RobotV2.team_number == team_number).delete()
+	session.query(TeamAtEventV1).filter(TeamAtEventV1.team_number == team_number).delete()
+	session.query(TeamAtMatchV2).filter(TeamAtMatchV2.team_number == team_number).delete()
+	session.query(TeamNoteV1).filter(TeamNoteV1.team_number == team_number).delete()
+	session.commit()
+	session.close()
+
+
 def unique_team_number(team_number: int) -> bool:
 	"""
 	Checks if a team number is unique in the database

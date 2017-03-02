@@ -228,6 +228,46 @@ def api_teams_create():
 	return home_cor(jsonify(**response))
 
 
+@server.route('/api/team/delete', methods=['OPTIONS', 'POST'])
+def api_team_delete():
+	required_parameters = {
+		'team_number': {
+			'valid_types': [int],
+			'value': None
+		}
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	team_number = required_parameters['team_number']['value']  # type: int
+
+	db_functions.delete_team(team_number)
+
+	response['success'] = True
+
+	return home_cor(jsonify(**response))
+
+
 @server.route('/api/team/matches', methods=['OPTIONS', 'POST'])
 def api_team_matches():
 	required_parameters = {
@@ -821,6 +861,7 @@ def app_events():
 	return render_template('events/all/index.html')
 
 
+@server.route('/app/teams/all')
 @server.route('/app/teams')
 def app_teams():
 	return render_template('teams/index.html')
