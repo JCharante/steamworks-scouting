@@ -42,6 +42,85 @@ Vue.component('events', {
 });
 
 
+Vue.component('robot', {
+	props: ['robot'],
+	mounted: function() {
+		var self = this;
+	},
+	methods: {
+		saveChanges: function() {
+			var self = this;
+			console.log(self.robot);
+			var data = {
+				robot_id: self.robot.robot_id,
+				robot_name: self.robot.robot_name,
+				team_number: self.robot.team_number,
+				robot_type: self.robot.robot_type,
+				has_actuated_gear_mechanism: self.robot.has_actuated_gear_mechanism
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/robot/edit',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: "application/json",
+				statusCode: {
+					200: function (data) {
+						console.log('Server Replied: ', data);
+						toastr["success"]("", "Modified Robot Details");
+						self.$emit('refresh-details');
+					},
+					400: function (responseObject) {
+						console.log('Server Replied: ', responseObject);
+						var data = responseObject.responseJSON;
+						toastr["error"](data.message, "Error Saving Changes");
+					}
+				}
+			});
+		},
+		discardChanges: function() {
+			var self = this;
+			self.$emit('refresh-details');
+		}
+	},
+	template:
+	'<div class="row">' +
+		'<h2 class="text-center">Robot</h2>' +
+		'<form class="form-horizontal" role="form">' +
+			'<div class="form-group">' +
+				'<label class="col-lg-3 control-label">Robot name:</label>' +
+				'<div class="col-lg-8">' +
+					'<input class="form-control" type="text" v-model="robot.robot_name">' +
+				'</div>' +
+			'</div>' +
+			'<div class="form-group">' +
+				'<label class="col-lg-3 control-label">Robot Type:</label>' +
+				'<div class="col-lg-8">' +
+					'<div class="ui-select">' +
+						'<select id="user_time_zone" class="form-control" v-model="robot.robot_type">' +
+							'<option value="Unknown">Unknown</option>' +
+							'<option value="Gear">Gear</option>' +
+							'<option value="Defender">Defender</option>' +
+							'<option value="Shooter">Shooter</option>' +
+						'</select>' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+			'<div class="form-group">' +
+				'<label class="col-lg-3 control-label">Bools:</label>' +
+				'<input type="checkbox" v-model="robot.has_actuated_gear_mechanism"> Uses Actuated Gear Mechanism' +
+			'</div>' +
+			'<div class="form-group">' +
+				'<label class="col-lg-3 control-label">Options:</label>' +
+				'<a class="btn btn-primary" role="button" v-on:click="saveChanges">Save Changes</a> ' +
+				'<a class="btn btn-default" role="button" v-on:click="discardChanges">Discard Changes</a>' +
+			'</div>' +
+		'</form>' +
+	'</div>'
+});
+
+
 Vue.component('team-page', {
 	mounted: function() {
 		var self = this;
@@ -96,6 +175,9 @@ Vue.component('team-page', {
 	template:
 	'<div>' +
 		'<h1 class="text-center">Team #{{ team_number }} - {{ details.team_name }}</h1>' +
+		'<hr>' +
+		'<robot v-on:refresh-details="fetch_details()" :robot="details.robot"></robot>' +
+		'<hr>' +
 		'<events :events="events"></events>' +
 	'</div>',
 	data: function () {
@@ -103,7 +185,14 @@ Vue.component('team-page', {
 			team_number: 0,
 			details: {
 				team_name: 'Loading Team Name',
-				team_number: 0
+				team_number: 0,
+				robot: {
+					robot_name: 'Loading Robot Name',
+					robot_id: 'Loading Robot ID',
+					team_number: 0,
+					robot_type: 'Loading Robot Type',
+					has_actuated_gear_mechanism: false
+				}
 			},
 			events: [
 				{
