@@ -30,6 +30,13 @@ def create_event(event_name: str) -> str:
 	return event_id
 
 
+def delete_event(event_id: str):
+	session = DBSession()
+	session.query(EventV1).filter(EventV1.event_id == event_id).delete()
+	session.commit()
+	session.close()
+
+
 def unique_team_number(team_number: int) -> bool:
 	"""
 	Checks if a team number is unique in the database
