@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, MatchV1, TeamAtEventV1, TeamV1, EventV1, RobotNoteV1, RobotV1, TeamNoteV1, TeamAtMatchV2
+from db_setup import Base, MatchV1, TeamAtEventV1, TeamV1, EventV1, RobotNoteV1, TeamNoteV1, TeamAtMatchV2, RobotV2
 import util
 import uuid
 from settings import Settings
@@ -71,6 +71,14 @@ def create_team(team_name: str, team_number: int) -> None:
 		team_name=team_name,
 		team_number=team_number
 	))
+	robot_id = str(uuid.uuid4())
+	session.add(RobotV2(
+		robot_name='Unnamed',
+		robot_id=robot_id,
+		team_number=team_number,
+		robot_type='Unknown',
+		has_actuated_gear_mechanism=False
+	))
 	session.commit()
 	session.close()
 
@@ -98,7 +106,7 @@ def valid_match_id(match_id: str) -> bool:
 
 def valid_robot_id(robot_id: str) -> bool:
 	session = DBSession()
-	robot = session.query(RobotV1).filter(RobotV1.robot_id == robot_id).first()
+	robot = session.query(RobotV2).filter(RobotV2.robot_id == robot_id).first()
 	session.close()
 	return robot is not None
 
@@ -194,19 +202,18 @@ def remove_team_from_match(match_id: str, team_number: int) -> None:
 	session.close()
 
 
-def create_robot(robot_name: str, team_number: int, robot_type: str, climbing_ability: str,
-				 uses_actuated_gear_mechanism: bool) -> str:
+def create_robot(robot_name: str, team_number: int, robot_type: str,
+				 has_actuated_gear_mechanism: bool) -> str:
 	if valid_team_number(team_number) is False:
 		raise exceptions.InvalidTeamNumber()
 	robot_id = str(uuid.uuid4())
 	session = DBSession()
-	session.add(RobotV1(
+	session.add(RobotV2(
 		robot_name=robot_name,
 		robot_id=robot_id,
 		team_number=team_number,
 		robot_type=robot_type,
-		climbing_ability=climbing_ability,
-		uses_actuated_gear_mechanism=uses_actuated_gear_mechanism
+		has_actuated_gear_mechanism=has_actuated_gear_mechanism
 	))
 	session.commit()
 	session.close()
@@ -243,22 +250,19 @@ def add_robot_note(robot_id: str, message: str):
 	return note_id
 
 
-def modify_robot_details(robot_id: str, robot_name=None, robot_type=None, team_number=None, climbing_ability=None,
-						 uses_actuated_gear_mechanism=None):
+def modify_robot_details(robot_id: str, robot_name=None, robot_type=None, team_number=None, has_actuated_gear_mechanism=None):
 	if valid_robot_id(robot_id) is False:
 		raise exceptions.InvalidRobotId()
 	session = DBSession()
-	robot = session.query(RobotV1).filter(RobotV1.robot_id == robot_id).first()  # type: RobotV1
+	robot = session.query(RobotV2).filter(RobotV2.robot_id == robot_id).first()  # type: RobotV2
 	if robot_name is not None:
 		robot.robot_name = robot_name
 	if robot_type is not None:
 		robot.robot_type = robot_type
 	if team_number is not None:
 		robot.team_number = team_number
-	if climbing_ability is not None:
-		robot.climbing_ability = climbing_ability
-	if uses_actuated_gear_mechanism is not None:
-		robot.uses_actuated_gear_mechanism = uses_actuated_gear_mechanism
+	if has_actuated_gear_mechanism is not None:
+		robot.has_actuated_gear_mechanism = has_actuated_gear_mechanism
 	session.commit()
 	session.close()
 
@@ -437,9 +441,21 @@ def team_details(team_number: int):
 		raise exceptions.InvalidTeamNumber()
 	session = DBSession()
 	team = session.query(TeamV1).filter(TeamV1.team_number == team_number).first()
+	robot = session.query(RobotV2).filter(RobotV2.team_number == team_number).first()
+	if robot is None or team is None:
+		raise exceptions.InvalidTeamNumber()
+	robot = robot  # type: RobotV2
+	team = team  # type: TeamV1
 	session.close()
 	return {
 		'team_number': team.team_number,
-		'team_name': team.team_name
+		'team_name': team.team_name,
+		'robot': {
+			'robot_name': robot.robot_name,
+			'robot_id': robot.robot_id,
+			'team_number': team_number,
+			'robot_type': robot.robot_type,
+			'has_actuated_gear_mechanism': robot.has_actuated_gear_mechanism
+		}
 	}
 

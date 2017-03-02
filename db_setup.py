@@ -42,6 +42,16 @@ class RobotV1(Base):
 	uses_actuated_gear_mechanism = Column(Boolean)
 
 
+class RobotV2(Base):
+	__tablename__ = 'RobotV2'
+	pk = Column(Integer, primary_key=True)
+	robot_name = Column(String(100))
+	robot_id = Column(String(36))
+	team_number = Column(Integer)
+	robot_type = Column(String(100))
+	has_actuated_gear_mechanism = Column(Boolean)
+
+
 class RobotNoteV1(Base):
 	__tablename__ = 'RobotNoteV1'
 	pk = Column(Integer, primary_key=True)

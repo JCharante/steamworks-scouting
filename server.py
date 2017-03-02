@@ -745,12 +745,26 @@ def api_robots_note_edit():
 @server.route('/api/robot/edit', methods=['OPTIONS', 'POST'])
 def api_robot_edit():
 	required_parameters = {
-		'robot_id': None,
-		'robot_name': None,
-		'team_number': None,
-		'robot_type': None,
-		'climbing_ability': None,
-		'uses_actuated_gear_mechanism': None
+		'robot_id': {
+			'valid_types': [str],
+			'value': None
+		},
+		'robot_name': {
+			'valid_types': [str],
+			'value': None
+		},
+		'team_number': {
+			'valid_types': [int],
+			'value': None
+		},
+		'robot_type': {
+			'valid_types': [str],
+			'value': None
+		},
+		'has_actuated_gear_mechanism': {
+			'valid_types': [bool],
+			'value': None
+		}
 	}
 
 	# Generic Start #
@@ -762,8 +776,10 @@ def api_robot_edit():
 				parameter_value = data.get(parameter_name, None)
 				if parameter_value is None:
 					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
 				else:
-					required_parameters[parameter_name] = parameter_value
+					required_parameters[parameter_name]['value'] = parameter_value
 		else:
 			return http_400(2, 'Required JSON Object Not Sent', 'body')
 
@@ -773,20 +789,18 @@ def api_robot_edit():
 		return home_cor(jsonify(**response))
 	# Generic End #
 
-	robot_id = required_parameters['robot_id']  # type: str
-	robot_name = required_parameters['robot_name']  # type: str
-	team_number = required_parameters['team_number']  # type: int
-	robot_type = required_parameters['robot_type']  # type: str
-	climbing_ability = required_parameters['climbing_ability']  # type: str
-	uses_actuated_gear_mechanism = required_parameters['uses_actuated_gear_mechanism']  # type: bool
+	robot_id = required_parameters['robot_id']['value']  # type: str
+	robot_name = required_parameters['robot_name']['value']  # type: str
+	team_number = required_parameters['team_number']['value']  # type: int
+	robot_type = required_parameters['robot_type']['value']  # type: str
+	has_actuated_gear_mechanism = required_parameters['has_actuated_gear_mechanism']['value']  # type: bool
 
 	try:
 		db_functions.modify_robot_details(robot_id,
 										  robot_name=robot_name,
 										  robot_type=robot_type,
 										  team_number=team_number,
-										  climbing_ability=climbing_ability,
-										  uses_actuated_gear_mechanism=uses_actuated_gear_mechanism)
+										  has_actuated_gear_mechanism=has_actuated_gear_mechanism)
 	except exceptions.InvalidRobotId:
 		return http_400(5, 'Invalid Value', 'robot_id')
 
