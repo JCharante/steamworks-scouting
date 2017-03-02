@@ -32,3 +32,7 @@ class TeamIsAlreadyInMatch(Exception):
 
 class EventNameMustBeUnique(Exception):
 	pass
+
+
+class TeamNeedsToBeRegisteredAtEvent(Exception):
+	pass

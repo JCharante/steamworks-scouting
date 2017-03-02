@@ -37,6 +37,8 @@ def http_400(code: int, message: str, fields: str):
 	10 - Invalid Type for Required Parameter
 	11 - Required Parameter Cannot Be Blank
 	13 - Unique Value Required
+	14 - Already Participating in Match
+	15 - Team must register at Event first
 	"""
 	response_object = home_cor(Response(json.dumps({
 		'code': code,
@@ -527,7 +529,9 @@ def api_match_add_team():
 	except exceptions.InvalidTeamNumber:
 		return http_400(5, 'Invalid Value', 'team_number')
 	except exceptions.TeamIsAlreadyInMatch:
-		return http_400(13, 'Already Participating', 'team_number')
+		return http_400(14, 'Already Participating', 'team_number')
+	except exceptions.TeamNeedsToBeRegisteredAtEvent:
+		return http_400(15, 'Team Needs To Be Registered At Event', 'team_number')
 
 	response['success'] = True
 	return home_cor(jsonify(**response))

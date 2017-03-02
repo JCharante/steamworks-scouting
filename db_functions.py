@@ -113,6 +113,13 @@ def valid_robot_note_id(robot_note_id: str) -> bool:
 	return note is not None
 
 
+def team_is_registered_at_event(event_id: str, team_number: int) -> bool:
+	session = DBSession()
+	team_at_event = session.query(TeamAtEventV1).filter(TeamAtEventV1.event_id == event_id).filter(TeamAtEventV1.team_number == team_number).first()
+	session.close()
+	return team_at_event is not None
+
+
 def register_team_at_event(team_number: int, event_id: str) -> None:
 	if valid_team_number(team_number) is False:
 		raise exceptions.InvalidTeamNumber()
@@ -145,11 +152,16 @@ def create_match(event_id: str, match_number: int) -> str:
 
 
 def assign_team_to_match(match_id: str, team_number: int, side: str) -> None:
-	if valid_match_id(match_id) is False:
+	session = DBSession()
+	match = session.query(MatchV1).filter(MatchV1.match_id == match_id).first()
+	if match is None:
 		raise exceptions.InvalidMatchId()
 	if valid_team_number(team_number) is False:
+		session.close()
 		raise exceptions.InvalidTeamNumber()
-	session = DBSession()
+	if team_is_registered_at_event(match.event_id, team_number) is False:
+		session.close()
+		raise exceptions.TeamNeedsToBeRegisteredAtEvent()
 	if session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match_id).filter(TeamAtMatchV1.team_number == team_number).first() is not None:
 		session.close()
 		raise exceptions.TeamIsAlreadyInMatch()
