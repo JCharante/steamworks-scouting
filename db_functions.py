@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from db_setup import Base, MatchV1, TeamAtEventV1, TeamV1, TeamAtMatchV1, EventV1, RobotNoteV1, RobotV1, TeamNoteV1
+from sqlalchemy.orm import sessionmaker
+from db_setup import Base, MatchV1, TeamAtEventV1, TeamV1, EventV1, RobotNoteV1, RobotV1, TeamNoteV1, TeamAtMatchV2
 import util
 import uuid
 from settings import Settings
@@ -36,6 +36,9 @@ def create_event(event_name: str) -> str:
 def delete_event(event_id: str):
 	session = DBSession()
 	session.query(EventV1).filter(EventV1.event_id == event_id).delete()
+	for match in session.query(MatchV1).filter(MatchV1.event_id == event_id).all():
+		session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match.match_id).delete()
+	session.query(MatchV1).filter(MatchV1.event_id == event_id).delete()
 	session.commit()
 	session.close()
 
@@ -162,15 +165,18 @@ def assign_team_to_match(match_id: str, team_number: int, side: str) -> None:
 	if team_is_registered_at_event(match.event_id, team_number) is False:
 		session.close()
 		raise exceptions.TeamNeedsToBeRegisteredAtEvent()
-	if session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match_id).filter(TeamAtMatchV1.team_number == team_number).first() is not None:
+	if session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match_id).filter(TeamAtMatchV2.team_number == team_number).first() is not None:
 		session.close()
 		raise exceptions.TeamIsAlreadyInMatch()
-	session.add(TeamAtMatchV1(
-		team_number=team_number,
+	session.add(TeamAtMatchV2(
 		match_id=match_id,
-		cycle_time=0.0,
-		rp=0,
-		side=side
+		side=side,
+		team_number=team_number,
+		low_goal=0,
+		high_goal=0,
+		gears=0,
+		auto_gear_position='None',
+		climbing_rating=0
 	))
 	session.commit()
 	session.close()
@@ -182,7 +188,7 @@ def remove_team_from_match(match_id: str, team_number: int) -> None:
 	if valid_team_number(team_number) is False:
 		raise exceptions.InvalidTeamNumber()
 	session = DBSession()
-	session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match_id).filter(TeamAtMatchV1.team_number == team_number).delete()
+	session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match_id).filter(TeamAtMatchV2.team_number == team_number).delete()
 	session.commit()
 	session.close()
 
@@ -317,9 +323,9 @@ def team_matches(team_number: int):
 			'event_id': event.event_id
 		}
 		for match in session.query(MatchV1).filter(MatchV1.event_id == event.event_id).all():  # type: MatchV1
-			team_at_match = session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match.match_id).first()
+			team_at_match = session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match.match_id).first()
 			if team_at_match is not None:
-				team_at_match = team_at_match  # type: TeamAtMatchV1
+				team_at_match = team_at_match  # type: TeamAtMatchV2
 				matches.append({
 					'match_id': match.match_id,
 					'side': team_at_match.side,
@@ -339,7 +345,7 @@ def match_details(match_id: str):
 		'blue_team': [],
 		'red_team': []
 	}
-	for team_at_match in session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match_id).all():  # type: TeamAtMatchV1
+	for team_at_match in session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match_id).all():  # type: TeamAtMatchV2
 		if team_at_match.side == 'red':
 			details['red_team'].append(team_at_match.team_number)
 		if team_at_match.side == 'blue':

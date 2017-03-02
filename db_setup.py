@@ -99,7 +99,7 @@ class TeamAtMatchV2(Base):
 	side = Column(String(4))
 	team_number = Column(Integer)
 	low_goal = Column(Integer)
-	high_goal = Column(String(7))
+	high_goal = Column(Integer)
 	gears = Column(Integer)
 	auto_gear_position = Column(String(6))
 	climbing_rating = Column(Integer)
