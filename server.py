@@ -815,9 +815,10 @@ def app():
 	return render_template('homepage/index.html')
 
 
+@server.route('/app/events/all')
 @server.route('/app/events')
 def app_events():
-	return render_template('events/index.html')
+	return render_template('events/all/index.html')
 
 
 @server.route('/app/teams')
