@@ -255,11 +255,11 @@ def api_team_matches():
 	team_number = required_parameters['team_number']  # type: int
 
 	try:
-		matches = db_functions.team_matches(team_number)
+		events = db_functions.team_matches(team_number)
 	except exceptions.InvalidTeamNumber:
 		return http_400(5, 'Invalid Value', 'team_number')
 
-	response['matches'] = matches
+	response['events'] = events
 	return home_cor(jsonify(**response))
 
 

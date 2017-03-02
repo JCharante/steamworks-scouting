@@ -296,20 +296,27 @@ def team_matches(team_number: int):
 	if valid_team_number(team_number) is False:
 		raise exceptions.InvalidTeamNumber()
 	session = DBSession()
-	matches = {}
-	for team_at_match in session.query(TeamAtMatchV1).filter(TeamAtMatchV1.team_number == team_number).all():  # type: TeamAtMatchV1
-		match = session.query(MatchV1).filter(MatchV1.match_id == team_at_match.match_id).first()  # type: MatchV1
-		event = session.query(EventV1).filter(EventV1.event_id == match.event_id).first()  # type: EventV1
-		matches[event.event_id] = {
-			'event_id': event.event_id,
+	events = []
+	for team_at_event in session.query(TeamAtEventV1).filter(TeamAtEventV1.team_number == team_number).all():  # type: TeamAtEventV1
+		matches = []
+		event = session.query(EventV1).filter(EventV1.event_id == team_at_event.event_id).first()  # type: EventV1
+		event_details = {
 			'event_name': event.event_name,
-			'matches': matches.get(event.event_id, {}).get('matches', []).append({
-				'match_id': match.match_id,
-				'match_number': match.match_number
-			})
+			'event_id': event.event_id
 		}
-		session.close()
-	return matches
+		for match in session.query(MatchV1).filter(MatchV1.event_id == event.event_id).all():  # type: MatchV1
+			team_at_match = session.query(TeamAtMatchV1).filter(TeamAtMatchV1.match_id == match.match_id).first()
+			if team_at_match is not None:
+				team_at_match = team_at_match  # type: TeamAtMatchV1
+				matches.append({
+					'match_id': match.match_id,
+					'side': team_at_match.side,
+					'match_number': match.match_number
+				})
+		event_details['matches'] = matches
+		events.append(event_details)
+	session.close()
+	return events
 
 
 def match_details(match_id: str):
@@ -369,6 +376,15 @@ def event_details(event_id: str):
 		raise exceptions.InvalidMatchId()
 	session = DBSession()
 	event_detail = dict()
+	event_detail['teams'] = []
+	for team_at_match in session.query(TeamAtEventV1).filter(TeamAtEventV1.event_id == event_id).all():  # type: TeamAtEventV1
+		team = session.query(TeamV1).filter(TeamV1.team_number == team_at_match.team_number).first()
+		team_number = team_at_match.team_number
+		team_name = team.team_name
+		event_detail['teams'].append({
+			'team_name': team_name,
+			'team_number': team_number
+		})
 	event_detail['matches'] = matches_at_event(event_id)
 	event = session.query(EventV1).filter(EventV1.event_id == event_id).first()  # type: EventV1
 	event_detail['name'] = event.event_name
