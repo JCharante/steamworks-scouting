@@ -376,6 +376,15 @@ def event_details(event_id: str):
 		raise exceptions.InvalidMatchId()
 	session = DBSession()
 	event_detail = dict()
+	event_detail['teams'] = []
+	for team_at_match in session.query(TeamAtEventV1).filter(TeamAtEventV1.event_id == event_id).all():  # type: TeamAtEventV1
+		team = session.query(TeamV1).filter(TeamV1.team_number == team_at_match.team_number).first()
+		team_number = team_at_match.team_number
+		team_name = team.team_name
+		event_detail['teams'].append({
+			'team_name': team_name,
+			'team_number': team_number
+		})
 	event_detail['matches'] = matches_at_event(event_id)
 	event = session.query(EventV1).filter(EventV1.event_id == event_id).first()  # type: EventV1
 	event_detail['name'] = event.event_name
