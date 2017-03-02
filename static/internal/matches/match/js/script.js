@@ -53,7 +53,7 @@ Vue.component('team-entry', {
 			'<div class="panel-body">' +
 				'<a class="btn btn-primary" :href="teamAtMatchPageLink" role="button">Scout</a>' +
 				' ' +
-				'<a class="btn btn-danger" role="button" v-on:click="deleteTeam">Delete Team</a>' +
+				'<a class="btn btn-danger" role="button" v-on:click="deleteTeam">Remove From Match</a>' +
 			'</div>' +
 		'</div>' +
 	'</div>'
