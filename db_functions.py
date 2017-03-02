@@ -22,6 +22,9 @@ def create_event(event_name: str) -> str:
 	:return: The event id
 	"""
 	session = DBSession()
+	if session.query(EventV1).filter(EventV1.event_name == event_name).first() is not None:
+		session.close()
+		raise exceptions.EventNameMustBeUnique()
 	event_id = str(uuid.uuid4())
 	session.add(EventV1(event_name=event_name,
 						event_id=event_id))

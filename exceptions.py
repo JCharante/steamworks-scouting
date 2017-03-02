@@ -28,3 +28,7 @@ class InvalidRobotNoteId(Exception):
 
 class TeamIsAlreadyInMatch(Exception):
 	pass
+
+
+class EventNameMustBeUnique(Exception):
+	pass

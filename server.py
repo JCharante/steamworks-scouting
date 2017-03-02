@@ -32,41 +32,58 @@ def http_400(code: int, message: str, fields: str):
 	"""
 	"""
 	Error Codes:
+	2 - Required JSON object missing in body
+	3 - Required Parameter is Missing
+	10 - Invalid Type for Required Parameter
+	11 - Required Parameter Cannot Be Blank
+	13 - Unique Value Required
 	"""
 	response_object = home_cor(Response(json.dumps({
 		'code': code,
 		'message': message,
 		'fields': fields
 	}), 400))
-	response_object.headers['Content-Type'] = 'serverlication/json'
+	response_object.headers['Content-Type'] = 'application/json'
 	return response_object
 
 
 @server.route('/api/events/create', methods=['OPTIONS', 'POST'])
 def api_events_create():
-	response = dict()
+	required_parameters = {
+		'event_name': {
+			'valid_types': [str],
+			'value': None
+		}
+	}
 
-	if request.method == 'OPTIONS':
-		return home_cor(jsonify(**response))
-
-	event_name = None
-
+	# Generic Start #
 	if request.method == 'POST':
 		data = request.json
 		if data is not None:
 			data = data  # type: Dict
-			event_name = data.get('event_name', None)
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
 		else:
 			return http_400(2, 'Required JSON Object Not Sent', 'body')
 
-	if event_name is None:
-		return http_400(3, 'Required Parameter is Missing', 'event_name')
-	event_name = event_name  # type: str
-	if event_name == '' or event_name == ' ':
-		return http_400(11, 'Required Parameter Cannot Be Blank', 'event_name')
+	response = dict()
 
-	event_id = db_functions.create_event(event_name)
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
 
+	event_name = required_parameters['event_name']['value']  # type: str
+
+	try:
+		event_id = db_functions.create_event(event_name)
+	except exceptions.EventNameMustBeUnique:
+		return http_400(13, 'Unique Value Required', 'event_name')
 	response['event_id'] = event_id
 	return home_cor(jsonify(**response))
 
