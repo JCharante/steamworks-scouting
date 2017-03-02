@@ -17,7 +17,7 @@ Vue.component('match-row', {
 				'<p>Match #{{ match_number }}:</p>' +
 			'</div>' +
 			'<div class="panel-body">' +
-				'<a :href="matchPageLink"><p>Match Page</p></a>' +
+				'<a class="btn btn-primary" :href="matchPageLink" role="button">Match Page</a>' +
 			'</div>' +
 		'</div>' +
 	'</div>'
