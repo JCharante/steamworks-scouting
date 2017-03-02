@@ -1,9 +1,5 @@
-Vue.component('team-list', {
-	props: ['match_number', 'match_id'],
-	mounted: function() {
-		var self = this;
-		console.log("Match Row: ", self.match_number, self.match_id);
-	},
+Vue.component('match', {
+	props: ['side', 'match_id', 'match_number'],
 	computed: {
 		matchPageLink: function() {
 			var self = this;
@@ -11,29 +7,25 @@ Vue.component('team-list', {
 		}
 	},
 	template:
-	'<div class="col-lg2 col-md-3 col-xs-6">' +
+	'<div class="col-lg-4 col-md-6 col-xs-12">' +
 		'<div class="panel panel-default">' +
 			'<div class="panel-heading">' +
-				'<p>Match #{{ match_number }}:</p>' +
+				'<p> Match #{{ match_number }}</p>' +
 			'</div>' +
 			'<div class="panel-body">' +
-				'<a :href="matchPageLink"><p>Match Page</p></a>' +
+				'<a class="btn btn-primary" :href="matchPageLink" role="button">Match Page</a>' +
 			'</div>' +
 		'</div>' +
 	'</div>'
 });
 
 Vue.component('event', {
+	props: ['event_name', 'event_id', 'matches'],
 	template:
-	'<div class="col-md-6 col-xs-6">' +
-		'<div class="panel panel-default">' +
-			'<div class="panel-heading">' +
-				'<p>Red Team</p>' +
-			'</div>' +
-			'<div class="panel-body">' +
-				//'<a v-for="team_number in red_team" :href="teamAtMatchPageLink(team_number)"><p>Scout Team #{{ team_number }} for this Match</p></a>' +
-			'</div>' +
-		'</div>' +
+	'<div>' +
+		'<hr>' +
+		'<h3 class="text-center">{{ event_name }}</h3>' +
+		'<match v-for="match in matches" :side="match.side" :match_id="match.match_id" :match_number="match.match_number"></match>' +
 	'</div>'
 });
 
@@ -44,36 +36,58 @@ Vue.component('events', {
 	props: ['events'],
 	template:
 	'<div>' +
-		'<event v-for="event in events"></event>' +
+		'<h2 class="text-center">Events</h2>' +
+		'<event v-for="event in events" :event_name="event.event_name" :event_id="event.event_id" :matches="event.matches"></event>' +
 	'</div>'
 });
 
 
-Vue.component('match-page', {
+Vue.component('team-page', {
 	mounted: function() {
 		var self = this;
-		self.fetch_details()
+		self.$data.team_number = $.QueryString.team_number;
+		self.fetch_details();
+		self.fetch_matches();
 	},
 	methods: {
 		fetch_details: function() {
 			var self = this;
-			var match_id = $.QueryString.match_id;
+			var team_number = $.QueryString.team_number;
 
 			var data = {
-				match_id: match_id
+				team_number: team_number
 			};
 
 			$.ajax({
 				method: 'POST',
-				url: '/api/match/details',
+				url: '/api/team/details',
 				data: JSON.stringify(data),
 				dataType: "json",
 				contentType: 'application/json',
 				statusCode: {
 					200: function (data) {
-						console.log("Match Page: ", self);
 						self.$data.details = data.details;
-						console.log("Match Page: ", self.$data);
+					}
+				}
+			})
+		},
+		fetch_matches: function() {
+			var self = this;
+			var team_number = $.QueryString.team_number;
+
+			var data = {
+				team_number: team_number
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/team/matches',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: 'application/json',
+				statusCode: {
+					200: function (data) {
+						self.$data.events = data.events;
 					}
 				}
 			})
@@ -81,24 +95,37 @@ Vue.component('match-page', {
 	},
 	template:
 	'<div>' +
-		'<h1 class="text-center">{{ details.team_name }}</h1>' +
-		'<hr>' +
-		'<teams-list :red_team="details.red_team" :blue_team="details.blue_team" :match_id="details.match_id"></teams-list>' +
+		'<h1 class="text-center">Team #{{ team_number }} - {{ details.team_name }}</h1>' +
+		'<events :events="events"></events>' +
 	'</div>',
 	data: function () {
 		return {
+			team_number: 0,
 			details: {
 				team_name: 'Loading Team Name',
-				events: []
-			}
+				team_number: 0
+			},
+			events: [
+				{
+					event_id: "5baa51ac-abcf-40ae-91d2-c1d77fbbca09",
+					event_name: "Loading Event Name",
+					matches: [
+						{
+							match_id: "17b0f1d3-f28d-4c4d-8d00-fc2d27a66407",
+							match_number: 1,
+							side: "red"
+						}
+					]
+				}
+			]
 		}
 	}
 });
 
 function onceDocumentReady() {
-	var matchPage = new Vue({
+	var teamPage = new Vue({
 		el: '#vue-app',
-		template: '<match-page></match-page>'
+		template: '<team-page></team-page>'
 	});
 }
 
