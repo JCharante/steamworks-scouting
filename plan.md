@@ -33,14 +33,14 @@ For each team
 
 ### Per Team Per Match
 
-Low Goal - (-1 = bad | 0 = neutral | 1 = good)
-High Goal - (-1 = bad | 0 = neutral | 1 good)
-Gears - Integer
-Autonomous Gear Placing Position (Left, Middle, Right, or Can't)
-Climbing Rating - (1 = They Can't, 2 = They can but are slow/don't really do it, 3 = It takes them 15s or less, 4 = Almost instant climbing (hitting rope and going up))
+Low Goal - (-1 = bad | 0 = neutral | 1 = good)  
+High Goal - (-1 = bad | 0 = neutral | 1 good)  
+Gears - Integer  
+Autonomous Gear Placing Position - (Left, Middle, Right, or Can't)  
+Climbing Rating - (1 = They Can't, 2 = They can but are slow/don't really do it, 3 = It takes them 15s or less, 4 = Almost instant climbing (hitting rope and going up))  
 
 ### Per Match
-Red RP Gain = Int
-Blue RP Gain = Int
-Red Team Members = List[int]
-Blue Team Members = List[int]
+Red RP Gain = Int  
+Blue RP Gain = Int  
+Red Team Members = List[int]  
+Blue Team Members = List[int]  
