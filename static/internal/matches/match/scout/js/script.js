@@ -39,6 +39,44 @@ Vue.component('scout-data', {
 		subtractGear: function() {
 			var self = this;
 			self.gears -= 1;
+		},
+		saveChanges: function() {
+			var self = this;
+
+			var data = {
+				match_id: self.match_id,
+				team_number: self.team_number,
+				side: self.side,
+				low_goal: self.low_goal,
+				high_goal: self.high_goal,
+				gears: self.gears,
+				auto_gear_position: self.auto_gear_position,
+				climbing_rating: self.climbing_rating
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/match/scout/edit',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: "application/json",
+				statusCode: {
+					200: function (data) {
+						console.log('Server Replied: ', data);
+						toastr["success"]('Way to Go! I\'m tired and it\'s 3am', 'Saved Scouting Data!')
+						self.getScoutData();
+					},
+					400: function (responseObject) {
+						console.log('Server Replied: ', responseObject);
+						var data = responseObject.responseJSON;
+						toastr["error"](data.message, "Error Saving Scouting Data");
+					}
+				}
+			});
+		},
+		discardChanges: function() {
+			var self = this;
+			self.getScoutData();
 		}
 	},
 	data: function() {
@@ -124,6 +162,11 @@ Vue.component('scout-data', {
 						'</select>' +
 					'</div>' +
 				'</div>' +
+			'</div>' +
+			'<div class="form-group row">' +
+				'<label class="col-lg-3 control-label">Options:</label>' +
+				'<a class="btn btn-primary" role="button" v-on:click="saveChanges">Save Changes</a> ' +
+				'<a class="btn btn-default" role="button" v-on:click="discardChanges">Discard Changes</a>' +
 			'</div>' +
 		'</form>' +
 	'</div>'
