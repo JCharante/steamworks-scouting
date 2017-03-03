@@ -36,3 +36,7 @@ class EventNameMustBeUnique(Exception):
 
 class TeamNeedsToBeRegisteredAtEvent(Exception):
 	pass
+
+
+class TeamNotInMatch(Exception):
+	pass

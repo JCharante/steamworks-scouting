@@ -39,6 +39,7 @@ def http_400(code: int, message: str, fields: str):
 	13 - Unique Value Required
 	14 - Already Participating in Match
 	15 - Team must register at Event first
+	16 - Team is not in Match
 	"""
 	response_object = home_cor(Response(json.dumps({
 		'code': code,
@@ -748,6 +749,143 @@ def api_match_details():
 		return http_400(5, 'Invalid Value', 'match_id')
 
 	response['details'] = details
+	return home_cor(jsonify(**response))
+
+
+@server.route('/api/match/scout/details', methods=['OPTIONS', 'POST'])
+def api_match_scout_details():
+	required_parameters = {
+		'match_id': {
+			'valid_types': [str],
+			'value': None
+		},
+		'team_number': {
+			'valid_types': [int],
+			'value': None
+		}
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	match_id = required_parameters['match_id']['value']  # type: str
+	team_number = required_parameters['team_number']['value']   # type: int
+
+	try:
+		details = db_functions.scout_details(team_number, match_id)
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+	except exceptions.InvalidMatchId:
+		return http_400(5, 'Invalid Value', 'match_id')
+	except exceptions.TeamNotInMatch:
+		return http_400(16, 'Team is not in Match', 'team_number')
+
+	response['details'] = details
+	return home_cor(jsonify(**response))
+
+
+@server.route('/api/match/scout/edit', methods=['OPTIONS', 'POST'])
+def api_match_scout_edit():
+	required_parameters = {
+		'match_id': {
+			'valid_types': [str],
+			'value': None
+		},
+		'team_number': {
+			'valid_types': [int],
+			'value': None
+		},
+		'side': {
+			'valid_types': [str],
+			'value': None
+		},
+		'low_goal': {
+			'valid_types': [int],
+			'value': None
+		},
+		'high_goal': {
+			'valid_types': [int],
+			'value': None
+		},
+		'gears': {
+			'valid_types': [int],
+			'value': None
+		},
+		'auto_gear_position': {
+			'valid_types': [str],
+			'value': None
+		},
+		'climbing_rating': {
+			'valid_types': [int],
+			'value': None
+		}
+	}
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	match_id = required_parameters['match_id']['value']  # type: str
+	team_number = required_parameters['team_number']['value']  # type: int
+	side = required_parameters['side']['value']  # type: str
+	low_goal = required_parameters['low_goal']['value']  # type: int
+	high_goal = required_parameters['high_goal']['value']  # type: int
+	gears = required_parameters['gears']['value']  # type: int
+	auto_gear_position = required_parameters['auto_gear_position']['value']  # type: str
+	climbing_rating = required_parameters['climbing_rating']['value']  # type: int
+
+	try:
+		db_functions.update_scout(team_number, match_id,
+								  side=side,
+								  low_goal=low_goal,
+								  high_goal=high_goal,
+								  gears=gears,
+								  auto_gear_position=auto_gear_position,
+								  climbing_rating=climbing_rating)
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+	except exceptions.InvalidMatchId:
+		return http_400(5, 'Invalid Value', 'match_id')
+	except exceptions.TeamNotInMatch:
+		return http_400(16, 'Team is not in Match', 'team_number')
+
+	response['success'] = True
 	return home_cor(jsonify(**response))
 
 

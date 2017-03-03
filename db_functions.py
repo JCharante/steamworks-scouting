@@ -198,7 +198,7 @@ def assign_team_to_match(match_id: str, team_number: int, side: str) -> None:
 		high_goal=0,
 		gears=0,
 		auto_gear_position='None',
-		climbing_rating=0
+		climbing_rating=1
 	))
 	session.commit()
 	session.close()
@@ -532,3 +532,56 @@ def robot_details(team_number: int):
 	}
 	session.close()
 	return details
+
+
+def scout_details(team_number: int, match_id: str):
+	if valid_team_number(team_number) is False:
+		raise exceptions.InvalidTeamNumber()
+	if valid_match_id(match_id) is False:
+		raise exceptions.InvalidMatchId()
+	session = DBSession()
+	team_at_match = session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match_id).filter(TeamAtMatchV2.team_number == team_number).first()  # type: TeamAtMatchV2
+	if team_at_match is None:
+		session.close()
+		raise exceptions.TeamNotInMatch()
+	details = {
+		'match_id': team_at_match.match_id,
+		'side': team_at_match.side,
+		'team_number': team_at_match.team_number,
+		'low_goal': team_at_match.low_goal,
+		'high_goal': team_at_match.high_goal,
+		'gears': team_at_match.gears,
+		'auto_gear_position': team_at_match.auto_gear_position,
+		'climbing_rating': team_at_match.climbing_rating
+	}
+	session.close()
+	return details
+
+
+def update_scout(team_number: int, match_id: str,
+				 side=None, low_goal=None, high_goal=None, gears=None,
+				 auto_gear_position=None, climbing_rating=None):
+	if valid_team_number(team_number) is False:
+		raise exceptions.InvalidTeamNumber()
+	if valid_match_id(match_id) is False:
+		raise exceptions.InvalidMatchId()
+	session = DBSession()
+	team_at_match = session.query(TeamAtMatchV2).filter(TeamAtMatchV2.match_id == match_id).filter(TeamAtMatchV2.team_number == team_number).first()  # type: TeamAtMatchV2
+	if team_at_match is None:
+		session.close()
+		raise exceptions.TeamNotInMatch()
+
+	if side is not None:
+		team_at_match.side = side
+	if low_goal is not None:
+		team_at_match.low_goal = low_goal
+	if high_goal is not None:
+		team_at_match.high_goal = high_goal
+	if gears is not None:
+		team_at_match.gears = gears
+	if auto_gear_position is not None:
+		team_at_match.auto_gear_position = auto_gear_position
+	if climbing_rating is not None:
+		team_at_match.climbing_rating = climbing_rating
+	session.commit()
+	session.close()
