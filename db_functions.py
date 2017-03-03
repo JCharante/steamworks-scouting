@@ -290,6 +290,13 @@ def modify_team_note(note_id: str, new_message: str):
 	session.close()
 
 
+def delete_team_note(note_id: str):
+	session = DBSession()
+	session.query(TeamNoteV1).filter(TeamNoteV1.note_id == note_id).delete()
+	session.commit()
+	session.close()
+
+
 def modify_robot_note(note_id: str, new_message: str):
 	if valid_robot_note_id(note_id) is False:
 		raise exceptions.InvalidRobotNoteId()
@@ -472,3 +479,18 @@ def team_details(team_number: int):
 		}
 	}
 
+
+def team_notes(team_number: int):
+	session = DBSession()
+	team = session.query(TeamV1).filter(TeamV1.team_number == team_number).first()
+	if team is None:
+		session.close()
+		raise exceptions.InvalidTeamNumber()
+	notes = []
+	for note in session.query(TeamNoteV1).filter(TeamNoteV1.team_number == team_number).all():  # TeamNoteV1
+		notes.append({
+			'note_id': note.note_id,
+			'message': note.note,
+		})
+	session.close()
+	return notes

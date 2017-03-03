@@ -168,6 +168,162 @@ Vue.component('team-options', {
 	'</div>'
 });
 
+Vue.component('team-notes', {
+	mounted: function() {
+		var self = this;
+		self.$data.team_number = $.QueryString.team_number;
+		self.getNotes();
+	},
+	data: function() {
+		return {
+			team_number: 0,
+			notes: [
+				{
+					note_id: '1',
+					message: 'Loading Note Message...'
+				},
+				{
+					note_id: '2',
+					message: 'Loading Note Message...'
+				}
+			]
+		}
+	},
+	methods: {
+		saveChanges: function() {
+			var self = this;
+			console.log(self.notes);
+			for (var i = 0; i < self.notes.length; i++) {
+				var note = self.notes[i];
+				if (note.message == '') {
+					var data = {
+						note_id: note.note_id
+					};
+
+					$.ajax({
+						method: 'POST',
+						url: '/api/team/note/delete',
+						data: JSON.stringify(data),
+						dataType: "json",
+						contentType: "application/json",
+						statusCode: {
+							200: function (data) {
+								console.log('Server Replied: ', data);
+								self.getNotes();
+							},
+							400: function (responseObject) {
+								console.log('Server Replied: ', responseObject);
+								var data = responseObject.responseJSON;
+								toastr["error"](data.message, "Error Deleting Note");
+							}
+						}
+					});
+				} else {
+					var data = {
+						note_id: note.note_id,
+						message: note.message
+					};
+
+					$.ajax({
+						method: 'POST',
+						url: '/api/team/note/edit',
+						data: JSON.stringify(data),
+						dataType: "json",
+						contentType: "application/json",
+						statusCode: {
+							200: function (data) {
+								console.log('Server Replied: ', data);
+								self.getNotes();
+							},
+							400: function (responseObject) {
+								console.log('Server Replied: ', responseObject);
+								var data = responseObject.responseJSON;
+								toastr["error"](data.message, "Error Updating Note");
+							}
+						}
+					});
+				}
+			}
+		},
+		discardChanges: function() {
+			var self = this;
+			self.getNotes();
+		},
+		getNotes: function() {
+			var self = this;
+			var data = {
+				team_number: self.team_number
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/team/notes',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: "application/json",
+				statusCode: {
+					200: function (data) {
+						console.log('Server Replied: ', data);
+						self.$data.notes = data.notes;
+					},
+					400: function (responseObject) {
+						console.log('Server Replied: ', responseObject);
+						var data = responseObject.responseJSON;
+						toastr["error"](data.message, "Error Fetching Notes");
+					}
+				}
+			});
+		},
+		addNote: function() {
+			var self = this;
+			var data = {
+				team_number: self.team_number,
+				message: 'New Note'
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/team/notes/add',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: "application/json",
+				statusCode: {
+					200: function (data) {
+						console.log('Server Replied: ', data);
+						toastr["success"]("", "Added Note");
+						self.getNotes();
+					},
+					400: function (responseObject) {
+						console.log('Server Replied: ', responseObject);
+						var data = responseObject.responseJSON;
+						toastr["error"](data.message, "Error Creating Note");
+						self.getNotes();
+					}
+				}
+			});
+		}
+	},
+	template:
+	'<div class="row">' +
+		'<h3 class="text-center">Team Notes</h3>' +
+		'<p class="text-center">Leave Blank to Delete Note</p>' +
+		'<form class="form-horizontal" role="form">' +
+			'<div v-for="note in notes" class="form-group">' +
+				'<label class="col-lg-3 control-label"> </label>' +
+				'<div class="col-lg-6">' +
+					'<input class="form-control" type="text" v-model="note.message">' +
+				'</div>' +
+			'</div>' +
+			'<div class="form-group">' +
+				'<label class="col-lg-3 control-label">Options:</label>' +
+				'<a class="btn btn-primary" role="button" v-on:click="saveChanges">Save Changes</a> ' +
+				'<a class="btn btn-default" role="button" v-on:click="discardChanges">Discard Changes</a> ' +
+				'<a class="btn btn-default" role="button" v-on:click="addNote">Add Note</a> ' +
+			'</div>' +
+		'</form>' +
+	'</div>'
+});
+
 
 Vue.component('team-page', {
 	mounted: function() {
@@ -225,6 +381,8 @@ Vue.component('team-page', {
 		'<h1 class="text-center">Team #{{ team_number }} - {{ details.team_name }}</h1>' +
 		'<hr>' +
 		'<team-options :team_number="team_number"></team-options>' +
+		'<hr>' +
+		'<team-notes></team-notes>' +
 		'<hr>' +
 		'<robot v-on:refresh-details="fetch_details()" :robot="details.robot"></robot>' +
 		'<hr>' +

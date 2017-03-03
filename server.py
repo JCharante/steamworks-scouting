@@ -342,6 +342,49 @@ def api_team_details():
 	return home_cor(jsonify(**response))
 
 
+@server.route('/api/team/notes', methods=['OPTIONS', 'POST'])
+def api_team_notes():
+	required_parameters = {
+		'team_number': {
+			'valid_types': [int],
+			'value': None
+		}
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	team_number = required_parameters['team_number']['value']  # type: int
+
+	try:
+		notes = db_functions.team_notes(team_number)
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+
+	response['notes'] = notes
+
+	return home_cor(jsonify(**response))
+
+
 @server.route('/api/team/events', methods=['OPTIONS', 'POST'])
 def api_team_events():
 	required_parameters = {
@@ -454,6 +497,46 @@ def api_team_note_edit():
 		return http_400(5, 'Invalid Value', 'note_id')
 
 	response['success'] = True
+	return home_cor(jsonify(**response))
+
+
+@server.route('/api/team/note/delete', methods=['OPTIONS', 'POST'])
+def api_team_note_delete():
+	required_parameters = {
+		'note_id': {
+			'valid_types': [str],
+			'value': None
+		}
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	note_id = required_parameters['note_id']['value']  # type: str
+
+	notes = db_functions.delete_team_note(note_id)
+
+	response['success'] = True
+
 	return home_cor(jsonify(**response))
 
 
@@ -890,6 +973,11 @@ def app_events_event():
 @server.route('/app/matches/match')
 def app_matches_match():
 	return render_template('matches/match/index.html')
+
+
+@server.route('/app/matches/match/scout')
+def app_matches_scout():
+	return render_template('matches/match/scout/index.html')
 
 
 print(f'Using Database: {settings.database_address}')
