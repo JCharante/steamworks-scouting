@@ -1,0 +1,10 @@
+{% extends "navbar/base.html" %}
+
+{% block scripts %}
+	<script src="/static/internal/matches/match/scout/js/script.js"></script>
+{% endblock %}
+
+{% block body_content %}
+	{{ super() }}
+	<div id="vue-app"></div>
+{% endblock %}
