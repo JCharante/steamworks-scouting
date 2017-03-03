@@ -6,7 +6,7 @@ Vue.component('team-entry', {
 	computed: {
 		teamAtMatchPageLink: function() {
 			var self = this;
-			return '/app/matches/match/scout?team_number' + self.team_number + '&match_id=' + self.match_id;
+			return '/app/matches/match/scout?team_number=' + self.team_number + '&match_id=' + self.match_id;
 		}
 	},
 	methods: {
