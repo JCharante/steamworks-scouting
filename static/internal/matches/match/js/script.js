@@ -7,6 +7,10 @@ Vue.component('team-entry', {
 		teamAtMatchPageLink: function() {
 			var self = this;
 			return '/app/matches/match/scout?team_number=' + self.team_number + '&match_id=' + self.match_id;
+		},
+		teamPageLink: function() {
+			var self = this;
+			return '/app/teams/team?team_number=' + self.team_number;
 		}
 	},
 	methods: {
@@ -48,7 +52,7 @@ Vue.component('team-entry', {
 	'<div class="col-md-4 col-sm-6 col-xs-12">' +
 		'<div class="panel panel-default">' +
 			'<div class="panel-heading">' +
-				'<p>Team #{{ team_number }}</p>' +
+				'<p>Team <a :href="teamPageLink">#{{ team_number }}</a></p>' +
 			'</div>' +
 			'<div class="panel-body">' +
 				'<a class="btn btn-primary" :href="teamAtMatchPageLink" role="button">Scout</a>' +
