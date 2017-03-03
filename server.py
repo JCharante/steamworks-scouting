@@ -49,6 +49,10 @@ def http_400(code: int, message: str, fields: str):
 	return response_object
 
 
+### API Routes ####
+
+# Start Event Routes #
+
 @server.route('/api/events/create', methods=['OPTIONS', 'POST'])
 def api_events_create():
 	required_parameters = {
@@ -177,6 +181,45 @@ def api_event_details():
 	response['details'] = event_details
 	return home_cor(jsonify(**response))
 
+
+@server.route('/api/event/teams/add', methods=['OPTIONS', 'POST'])
+def api_event_teams_add():
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+
+	event_id = None
+	team_number = None
+
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			event_id = data.get('event_id', None)
+			team_number = data.get('team_number', None)
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	if event_id is None:
+		return http_400(3, 'Required Parameter is Missing', 'event_id')
+	if team_number is None:
+		return http_400(3, 'Required Parameter is Missing', 'team_number')
+
+	try:
+		db_functions.register_team_at_event(team_number, event_id)
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+	except exceptions.InvalidEventId:
+		return http_400(5, 'Invalid Value', 'event_id')
+
+	response['success'] = True
+	return home_cor(jsonify(**response))
+
+
+# End Event Routes #
+
+# Start Team Routes #
 
 @server.route('/api/teams/all', methods=['OPTIONS', 'GET'])
 def api_teams_all():
@@ -342,6 +385,43 @@ def api_team_details():
 	return home_cor(jsonify(**response))
 
 
+@server.route('/api/team/events', methods=['OPTIONS', 'POST'])
+def api_team_events():
+	required_parameters = {
+		'team_number': None
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				else:
+					required_parameters[parameter_name] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	team_number = required_parameters['team_number']  # type: int
+
+	try:
+		events = db_functions.team_events(team_number)
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+
+	response['events'] = events
+	return home_cor(jsonify(**response))
+
+
 @server.route('/api/team/notes', methods=['OPTIONS', 'POST'])
 def api_team_notes():
 	required_parameters = {
@@ -382,43 +462,6 @@ def api_team_notes():
 
 	response['notes'] = notes
 
-	return home_cor(jsonify(**response))
-
-
-@server.route('/api/team/events', methods=['OPTIONS', 'POST'])
-def api_team_events():
-	required_parameters = {
-		'team_number': None
-	}
-
-	# Generic Start #
-	if request.method == 'POST':
-		data = request.json
-		if data is not None:
-			data = data  # type: Dict
-			for parameter_name in required_parameters:
-				parameter_value = data.get(parameter_name, None)
-				if parameter_value is None:
-					return http_400(3, 'Required Parameter is Missing', parameter_name)
-				else:
-					required_parameters[parameter_name] = parameter_value
-		else:
-			return http_400(2, 'Required JSON Object Not Sent', 'body')
-
-	response = dict()
-
-	if request.method == 'OPTIONS':
-		return home_cor(jsonify(**response))
-	# Generic End #
-
-	team_number = required_parameters['team_number']  # type: int
-
-	try:
-		events = db_functions.team_events(team_number)
-	except exceptions.InvalidTeamNumber:
-		return http_400(5, 'Invalid Value', 'team_number')
-
-	response['events'] = events
 	return home_cor(jsonify(**response))
 
 
@@ -540,39 +583,9 @@ def api_team_note_delete():
 	return home_cor(jsonify(**response))
 
 
-@server.route('/api/event/teams/add', methods=['OPTIONS', 'POST'])
-def api_event_teams_add():
-	response = dict()
+# End Team Routes #
 
-	if request.method == 'OPTIONS':
-		return home_cor(jsonify(**response))
-
-	event_id = None
-	team_number = None
-
-	if request.method == 'POST':
-		data = request.json
-		if data is not None:
-			data = data  # type: Dict
-			event_id = data.get('event_id', None)
-			team_number = data.get('team_number', None)
-		else:
-			return http_400(2, 'Required JSON Object Not Sent', 'body')
-
-	if event_id is None:
-		return http_400(3, 'Required Parameter is Missing', 'event_id')
-	if team_number is None:
-		return http_400(3, 'Required Parameter is Missing', 'team_number')
-
-	try:
-		db_functions.register_team_at_event(team_number, event_id)
-	except exceptions.InvalidTeamNumber:
-		return http_400(5, 'Invalid Value', 'team_number')
-	except exceptions.InvalidEventId:
-		return http_400(5, 'Invalid Value', 'event_id')
-
-	response['success'] = True
-	return home_cor(jsonify(**response))
+# Start Match Routes #
 
 
 @server.route('/api/matches/create', methods=['OPTIONS', 'POST'])
@@ -738,6 +751,54 @@ def api_match_details():
 	return home_cor(jsonify(**response))
 
 
+# End Match Routes #
+
+# Start Robot Routes #
+
+
+@server.route('/api/robot/details', methods=['OPTIONS', 'POST'])
+def api_robot_details():
+	required_parameters = {
+		'team_number': {
+			'valid_types': [int],
+			'value': None
+		}
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	team_number = required_parameters['team_number']['value']  # type: int
+
+	try:
+		details = db_functions.robot_details(team_number)
+	except exceptions.InvalidTeamNumber:
+		return http_400(5, 'Invalid Value', 'team_number')
+
+	response['details'] = details
+
+	return home_cor(jsonify(**response))
+
+
 @server.route('/api/robots/add', methods=['OPTIONS', 'POST'])
 def api_robots_add():
 	required_parameters = {
@@ -787,7 +848,50 @@ def api_robots_add():
 	return home_cor(jsonify(**response))
 
 
-@server.route('/api/robots/notes/add', methods=['OPTIONS', 'POST'])
+@server.route('/api/robot/notes', methods=['OPTIONS', 'POST'])
+def api_robot_notes():
+	required_parameters = {
+		'robot_id': {
+			'valid_types': [str],
+			'value': None
+		}
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	robot_id = required_parameters['robot_id']['value']  # type: str
+
+	try:
+		notes = db_functions.robot_notes(robot_id)
+	except exceptions.InvalidRobotId:
+		return http_400(5, 'Invalid Value', 'robot_id')
+
+	response['notes'] = notes
+
+	return home_cor(jsonify(**response))
+
+
+@server.route('/api/robot/notes/add', methods=['OPTIONS', 'POST'])
 def api_robots_notes_add():
 	required_parameters = {
 		'robot_id': None,
@@ -826,7 +930,7 @@ def api_robots_notes_add():
 	return home_cor(jsonify(**response))
 
 
-@server.route('/api/robots/note/edit', methods=['OPTIONS', 'POST'])
+@server.route('/api/robot/note/edit', methods=['OPTIONS', 'POST'])
 def api_robots_note_edit():
 	required_parameters = {
 		'note_id': None,
@@ -862,6 +966,46 @@ def api_robots_note_edit():
 		return http_400(5, 'Invalid Value', 'note_id')
 
 	response['success'] = True
+	return home_cor(jsonify(**response))
+
+
+@server.route('/api/robot/note/delete', methods=['OPTIONS', 'POST'])
+def api_robot_note_delete():
+	required_parameters = {
+		'note_id': {
+			'valid_types': [str],
+			'value': None
+		}
+	}
+
+	# Generic Start #
+	if request.method == 'POST':
+		data = request.json
+		if data is not None:
+			data = data  # type: Dict
+			for parameter_name in required_parameters:
+				parameter_value = data.get(parameter_name, None)
+				if parameter_value is None:
+					return http_400(3, 'Required Parameter is Missing', parameter_name)
+				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
+					return http_400(10, 'Invalid Type for Required Parameter!', parameter_name)
+				else:
+					required_parameters[parameter_name]['value'] = parameter_value
+		else:
+			return http_400(2, 'Required JSON Object Not Sent', 'body')
+
+	response = dict()
+
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**response))
+	# Generic End #
+
+	note_id = required_parameters['note_id']['value']  # type: str
+
+	db_functions.delete_robot_note(note_id)
+
+	response['success'] = True
+
 	return home_cor(jsonify(**response))
 
 
@@ -929,6 +1073,11 @@ def api_robot_edit():
 
 	response['robot_id'] = robot_id
 	return home_cor(jsonify(**response))
+
+
+# End Robot Routes #
+
+# Web Server Routes #
 
 
 @server.route('/app/')

@@ -297,6 +297,13 @@ def delete_team_note(note_id: str):
 	session.close()
 
 
+def delete_robot_note(note_id: str):
+	session = DBSession()
+	session.query(RobotNoteV1).filter(RobotNoteV1.note_id == note_id).delete()
+	session.commit()
+	session.close()
+
+
 def modify_robot_note(note_id: str, new_message: str):
 	if valid_robot_note_id(note_id) is False:
 		raise exceptions.InvalidRobotNoteId()
@@ -494,3 +501,34 @@ def team_notes(team_number: int):
 		})
 	session.close()
 	return notes
+
+
+def robot_notes(robot_id: str):
+	session = DBSession()
+	robot = session.query(RobotV2).filter(RobotV2.robot_id == robot_id).first()
+	if robot is None:
+		session.close()
+		raise exceptions.InvalidRobotId()
+	notes = []
+	for note in session.query(RobotNoteV1).filter(RobotNoteV1.robot_id == robot_id).all():  # RobotNoteV1
+		notes.append({
+			'note_id': note.note_id,
+			'message': note.note,
+		})
+	session.close()
+	return notes
+
+
+def robot_details(team_number: int):
+	session = DBSession()
+	robot = session.query(RobotV2).filter(RobotV2.team_number == team_number).first()  # type: RobotV2
+	if robot is None:
+		session.close()
+		raise exceptions.InvalidTeamNumber()
+	details = {
+		'robot_id': robot.robot_id,
+		'robot_name': robot.robot_name,
+		'robot_type': robot.robot_type,
+	}
+	session.close()
+	return details

@@ -47,6 +47,190 @@ Vue.component('events', {
 	'</div>'
 });
 
+
+Vue.component('robot-notes', {
+	mounted: function() {
+		var self = this;
+		self.$data.team_number = $.QueryString.team_number;
+		self.getRobotID(self.getNotes);
+	},
+	data: function() {
+		return {
+			team_number: 0,
+			robot_id: '0',
+			notes: [
+				{
+					note_id: '1',
+					message: 'Loading Note Message...'
+				},
+				{
+					note_id: '2',
+					message: 'Loading Note Message...'
+				}
+			]
+		}
+	},
+	methods: {
+		saveChanges: function() {
+			var self = this;
+			console.log(self.notes);
+			for (var i = 0; i < self.notes.length; i++) {
+				var note = self.notes[i];
+				if (note.message == '') {
+					var data = {
+						note_id: note.note_id
+					};
+
+					$.ajax({
+						method: 'POST',
+						url: '/api/robot/note/delete',
+						data: JSON.stringify(data),
+						dataType: "json",
+						contentType: "application/json",
+						statusCode: {
+							200: function (data) {
+								console.log('Server Replied: ', data);
+								self.getNotes();
+							},
+							400: function (responseObject) {
+								console.log('Server Replied: ', responseObject);
+								var data = responseObject.responseJSON;
+								toastr["error"](data.message, "Error Deleting Note");
+							}
+						}
+					});
+				} else {
+					var data = {
+						note_id: note.note_id,
+						message: note.message
+					};
+
+					$.ajax({
+						method: 'POST',
+						url: '/api/robot/note/edit',
+						data: JSON.stringify(data),
+						dataType: "json",
+						contentType: "application/json",
+						statusCode: {
+							200: function (data) {
+								console.log('Server Replied: ', data);
+								self.getNotes();
+							},
+							400: function (responseObject) {
+								console.log('Server Replied: ', responseObject);
+								var data = responseObject.responseJSON;
+								toastr["error"](data.message, "Error Updating Note");
+							}
+						}
+					});
+				}
+			}
+		},
+		discardChanges: function() {
+			var self = this;
+			self.getNotes();
+		},
+		getNotes: function() {
+			var self = this;
+			var data = {
+				robot_id: self.robot_id
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/robot/notes',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: "application/json",
+				statusCode: {
+					200: function (data) {
+						console.log('Server Replied: ', data);
+						self.$data.notes = data.notes;
+					},
+					400: function (responseObject) {
+						console.log('Server Replied: ', responseObject);
+						var data = responseObject.responseJSON;
+						toastr["error"](data.message, "Error Fetching Notes");
+					}
+				}
+			});
+		},
+		addNote: function() {
+			var self = this;
+			var data = {
+				robot_id: self.robot_id,
+				message: 'New Note'
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/robot/notes/add',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: "application/json",
+				statusCode: {
+					200: function (data) {
+						console.log('Server Replied: ', data);
+						toastr["success"]("", "Added Note");
+						self.getNotes();
+					},
+					400: function (responseObject) {
+						console.log('Server Replied: ', responseObject);
+						var data = responseObject.responseJSON;
+						toastr["error"](data.message, "Error Creating Note");
+						self.getNotes();
+					}
+				}
+			});
+		},
+		getRobotID: function(callback) {
+			var self = this;
+			var data = {
+				team_number: self.team_number
+			};
+
+			$.ajax({
+				method: 'POST',
+				url: '/api/robot/details',
+				data: JSON.stringify(data),
+				dataType: "json",
+				contentType: "application/json",
+				statusCode: {
+					200: function (data) {
+						console.log('Server Replied: ', data);
+						self.$data.robot_id = data.details.robot_id;
+						callback();
+					},
+					400: function (responseObject) {
+						console.log('Server Replied: ', responseObject);
+						var data = responseObject.responseJSON;
+						toastr["error"](data.message, "Error Fetching Robot Details");
+					}
+				}
+			});
+		}
+	},
+	template:
+	'<div class="row">' +
+		'<h3 class="text-center">Robot Notes</h3>' +
+		'<p class="text-center">Leave Blank to Delete Note</p>' +
+		'<form class="form-horizontal" role="form">' +
+			'<div v-for="note in notes" class="form-group">' +
+				'<label class="col-lg-3 control-label"> </label>' +
+				'<div class="col-lg-6">' +
+					'<input class="form-control" type="text" v-model="note.message">' +
+				'</div>' +
+			'</div>' +
+			'<div class="form-group">' +
+				'<label class="col-lg-3 control-label">Note Options:</label>' +
+				'<a class="btn btn-primary" role="button" v-on:click="saveChanges">Save Changes</a> ' +
+				'<a class="btn btn-default" role="button" v-on:click="discardChanges">Discard Changes</a> ' +
+				'<a class="btn btn-default" role="button" v-on:click="addNote">Add Note</a> ' +
+			'</div>' +
+		'</form>' +
+	'</div>'
+});
+
 Vue.component('robot', {
 	props: ['robot'],
 	mounted: function() {
@@ -92,6 +276,10 @@ Vue.component('robot', {
 	template:
 	'<div class="row">' +
 		'<h2 class="text-center">Robot</h2>' +
+		'<hr>' +
+		'<robot-notes></robot-notes>' +
+		'<hr>' +
+		'<h3 class="text-center">Robot Details</h3>' +
 		'<form class="form-horizontal" role="form">' +
 			'<div class="form-group">' +
 				'<label class="col-lg-3 control-label">Robot name:</label>' +
