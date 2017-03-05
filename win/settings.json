@@ -1,0 +1,5 @@
+{
+	"database_address": "mysql+pymysql://achilles:achilles@localhost/win",
+	"public_address": "http://localhost:8881",
+	"app_id": "JCharante:statistics:0.1"
+}
