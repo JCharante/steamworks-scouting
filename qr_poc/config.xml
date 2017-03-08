@@ -19,11 +19,7 @@
     <platform name="android">
         <allow-intent href="market:*" />
     </platform>
-    <platform name="ios">
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
-    </platform>
     <icon src="www/static/internal/img/favicon/android-icon-192x192.png" />
-    <engine name="ios" spec="~3.8.0" />
     <engine name="android" spec="~4.0.2" />
+    <plugin name="cordova-plugin-qrscanner" spec="~2.5.0" />
 </widget>
