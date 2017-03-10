@@ -11,6 +11,82 @@
 <div id="achilles-navbar"></div>
 <div class="container">
 	<h1 class="text-center">This is where you can start scouting a match.</h1>
+	<div id="vue-app">
+		<form class="form-horizontal" role="form">
+			<hr>
+			<h2 class="text-center">Meta</h2>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Event:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="event_name">
+							<option value="practice">Practice</option>
+							<option value="granite-state">Granite State</option>
+							<option value="greater-boston">Greater Boston</option>
+							<option value="pine-tree">Pine Tree</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Match Number:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<input type="number" class="form-control" v-model="match_number">
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Team Number:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<input type="number" class="form-control" v-model="team_number">
+					</div>
+				</div>
+			</div>
+			<hr>
+			<h2 class="text-center">Autonomous</h2>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="auto_line_cross"> Line Cross
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="auto_low_goal"> Low Goal
+					</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Gear Position:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="auto_gear_pos">
+							<option value="none">None (lol rip)</option>
+							<option value="left">Left</option>
+							<option value="middle">Middle</option>
+							<option value="right">Right</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">High Goal Shot From:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="auto_high_goal">
+							<option value="none">Didn't Shoot</option>
+							<option value="key">Key</option>
+							<option value="wall">Wall</option>
+							<option value="afar">Afar</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<h2 class="text-center">Telemetry Operated (that's what tele op means, right‽)</h2>
+			<hr>
+		</form>
+	</div>
 </div>
 <!-- Global Scripts -->
 <script src="../static/external/js/jquery-3.1.1.min.js"></script>
@@ -22,5 +98,6 @@
 <script type="text/javascript" src="../cordova.js"></script>
 <script src="../static/internal/js/navbar_component.js"></script>
 <!-- Page Dependant Scripts -->
+<script src="script.js"></script>
 </body>
 </html>
