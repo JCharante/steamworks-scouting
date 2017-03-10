@@ -10,7 +10,7 @@
 <body>
 <div id="achilles-navbar"></div>
 <div class="container">
-	<h1 class="text-center">This is where you can start scouting a match.</h1>
+	<h1 class="text-center">Scout a Match.</h1>
 	<div id="vue-app">
 		<form class="form-horizontal" role="form">
 			<hr>
@@ -29,10 +29,10 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-lg-3 control-label">Match Number:</label>
+				<label class="col-lg-3 control-label">Match (Q1/QF1M2/SF2M3/F1M3):</label>
 				<div class="col-lg-8">
 					<div class="ui-select">
-						<input type="number" class="form-control" v-model="match_number">
+						<input type="text" class="form-control" v-model="match_number">
 					</div>
 				</div>
 			</div>
@@ -56,7 +56,8 @@
 					</label>
 					<label class="checkbox-inline">
 						<input type="checkbox" v-model="auto_hopper"> Hopper
-					</label><label class="checkbox-inline">
+					</label>
+					<label class="checkbox-inline">
 						<input type="checkbox" v-model="auto_collect"> Collect
 					</label>
 				</div>
@@ -78,7 +79,7 @@
 				<label class="col-lg-3 control-label">High Goal Shot From:</label>
 				<div class="col-lg-8">
 					<div class="ui-select">
-						<select class="form-control" v-model="auto_high_goal">
+						<select class="form-control" v-model="auto_high_goal_pos">
 							<option value="none">Didn't Shoot</option>
 							<option value="key">Key</option>
 							<option value="wall">Wall</option>
@@ -89,6 +90,116 @@
 			</div>
 			<hr>
 			<h2 class="text-center">Telemetry Operated (that's what tele op means, right‽)</h2>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Climb Rating:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="climb_rating">
+							<option value="bad">Bad</option>
+							<option value="neutral">Neutral</option>
+							<option value="good">Good</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Gears Rating:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="gear_rating">
+							<option value="bad">Bad</option>
+							<option value="neutral">Neutral</option>
+							<option value="good">Good</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Total Gears:</label>
+				<div class="input-group col-lg-9">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" v-on:click="total_gears -= 1"><span class="glyphicon glyphicon-minus"></span></button>
+					</span>
+					<input type="number" class="form-control col-xs-4" v-model="total_gears">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" v-on:click="total_gears += 1"><span class="glyphicon glyphicon-plus"></span></button>
+					</span>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Gear Dispense Method:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="gear_dispense_method">
+							<option value="none">No Gear Capabilities (lol rip)</option>
+							<option value="actuated">Actuated</option>
+							<option value="passive">Passive</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">High Goal Rating:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="high_goal_rating">
+							<option value="ds">Didn't Shoot</option>
+							<option value="cs">Can't Shoot</option>
+							<option value="bad">Bad</option>
+							<option value="neutral">Neutral</option>
+							<option value="good">Good</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Low Goal Rating:</label>
+				<div class="col-lg-8">
+					<div class="ui-select">
+						<select class="form-control" v-model="low_goal_rating">
+							<option value="ds">Didn't Shoot</option>
+							<option value="cs">Can't Shoot</option>
+							<option value="bad">Bad</option>
+							<option value="neutral">Neutral</option>
+							<option value="good">Good</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-lg-3 control-label">Total Hoppers:</label>
+				<div class="input-group col-lg-9">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" v-on:click="total_hoppers -= 1"><span class="glyphicon glyphicon-minus"></span></button>
+					</span>
+					<input type="number" class="form-control col-xs-4" v-model="total_hoppers">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" v-on:click="total_hoppers += 1"><span class="glyphicon glyphicon-plus"></span></button>
+					</span>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="collected_from_hopper"> Collected from Hopper
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="high_goal_shoot_from_key"> High Goal Shoot from Key
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="high_goal_shoot_from_wall"> High Goal Shoot from Wall
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="high_goal_shoot_from_afar"> High Goal Shoot from Afar
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="got_gear_from_human"> Got gear from Human Player
+					</label>
+					<label class="checkbox-inline">
+						<input type="checkbox" v-model="got_gear_from_floor"> Got gear from Floor
+					</label>
+				</div>
+			</div>
 			<hr>
 		</form>
 	</div>
