@@ -10,6 +10,8 @@ function onceDocumentReady() {
 				match_number: 13,
 				auto_line_cross: false,
 				auto_low_goal: false,
+				auto_hopper: false,
+				auto_collect: false,
 				auto_gear_pos: 'none',
 				auto_high_goal: 'none'
 			}
