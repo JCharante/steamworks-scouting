@@ -1,3 +1,21 @@
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-top-left",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "200",
+  "hideDuration": "200",
+  "timeOut": "1500",
+  "extendedTimeOut": "5000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+}
+
 function toast(occasion, title, body) {
 	var type = null;
 	switch (occasion) {
