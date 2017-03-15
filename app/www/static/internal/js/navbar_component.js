@@ -19,6 +19,7 @@ Vue.component('achilles-navbar', {
 					'<li><a href="../home/index.html">Home</a></li>' +
 					'<li><a href="../qr_scan_demo/index.html">QR Scan Demo</a></li>' +
 					'<li><a href="../scout_match/index.html">Scout Match</a></li>' +
+					'<li><a href="../localStorageDump/index.html">Local Storage Dump</a></li>' +
 				'</ul>' +
 			'</div><!-- /.navbar-collapse -->' +
 		'</div><!-- /.container-fluid -->' +
