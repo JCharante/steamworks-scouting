@@ -21,6 +21,7 @@ Vue.component('achilles-navbar', {
 					'<li><a href="../scout_match/index.html">Scout Match</a></li>' +
 					'<li><a href="../localStorageDump/index.html">Local Storage Dump</a></li>' +
 					'<li><a href="../compressionTest/index.html">Compression Test</a></li>' +
+					'<li><a href="../scoutedMatches/index.html">Scouted Matches</a></li>' +
 				'</ul>' +
 			'</div><!-- /.navbar-collapse -->' +
 		'</div><!-- /.container-fluid -->' +
