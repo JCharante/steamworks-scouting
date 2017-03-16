@@ -1,19 +1,3 @@
-/*
-console.log('Original JSON Size:', JSON.stringify(json).length);
-var compressed = JSONC.compress(json);
-console.log('Compressed JSON Size (compress):', JSON.stringify(compressed).length);
-var uncompressed = JSONC.decompress(compressed);
-console.log('Decompressed JSON Size (decompress):', JSON.stringify(uncompressed).length);
-var gzip_string = JSONC.pack(json);
-console.log('Compressed JSON Size (pack):', gzip_string.length);
-var unpacked_gzip_string = JSONC.unpack(gzip_string);
-console.log('Decompressed JSON Size (unpack):', JSON.stringify(unpacked_gzip_string).length);
-var lzwString = JSONC.pack(json, true);
-console.log('Compress JSON (pack, true):', lzwString.length);
-var unpacked_lzwString = JSONC.unpack(lzwString, true);
-console.log('Decompressed JSON (unpack, true):', JSON.stringify(unpacked_lzwString).length);
-*/
-
 function onceDocumentReady() {
 	var compressionTestPage = new Vue({
 		el: '#vue-app',
