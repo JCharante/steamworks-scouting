@@ -18,6 +18,18 @@ function onceDocumentReady() {
 			self.lzwString = JSONC.pack(self.json, true);
 			self.unpackedLzwString = JSONC.unpack(self.lzwString, true);
 		},
+		methods: {
+			qrCode: function(message) {
+				cordova.plugins.barcodeScanner.encode(cordova.plugins.barcodeScanner.Encode.TEXT_TYPE, message, function(success) {
+						//alert("encode success: " + success);
+						//toast('info', 'Encoding Success', success);
+						console.log(success);
+					}, function(fail) {
+						alert("encoding failed: " + fail);
+					}
+				);
+			}
+		},
 		data: function() {
 			var self = this;
 			return {
