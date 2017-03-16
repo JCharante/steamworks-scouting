@@ -12,9 +12,11 @@
 <div id="achilles-navbar"></div>
 <div class="container">
 	<div id="vue-app">
-
+		<h1 class="text-center">Scouted Matches</h1>
+		<div class="row">
+			<match v-for="match in scoutedMatches" :match="match"></match>
+		</div>
 	</div>
-	<h1 class="text-center">Scouted Matches</h1>
 </div>
 <!-- Global Scripts -->
 <script src="../static/external/js/jquery-3.1.1.min.js"></script>
