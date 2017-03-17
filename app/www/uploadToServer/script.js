@@ -17,7 +17,7 @@ function onceDocumentReady() {
 				console.log(data);
 				$.ajax({
 					method: 'POST',
-					url: 'http://achilles.jcharante.com:9876/match/upload',
+					url: 'http://achilles.jcharante.com/match/upload',
 					data: JSON.stringify(data),
 					dataType: "json",
 					contentType: "application/json",
