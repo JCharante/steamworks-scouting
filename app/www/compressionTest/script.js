@@ -21,8 +21,6 @@ function onceDocumentReady() {
 		methods: {
 			qrCode: function(message) {
 				cordova.plugins.barcodeScanner.encode(cordova.plugins.barcodeScanner.Encode.TEXT_TYPE, message, function(success) {
-						//alert("encode success: " + success);
-						//toast('info', 'Encoding Success', success);
 						console.log(success);
 					}, function(fail) {
 						alert("encoding failed: " + fail);
