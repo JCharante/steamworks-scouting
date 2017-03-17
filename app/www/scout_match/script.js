@@ -2,7 +2,6 @@ function onceDocumentReady() {
 	var scout_match = new Vue({
 		el: '#vue-app',
 		mounted: function() {
-			//toast('info', 'Component Mounted', '');
 			var self = this;
 			self.match_id = $.QueryString.match_id || null;
 			if (self.match_id === null) {
@@ -10,7 +9,7 @@ function onceDocumentReady() {
 			} else {
 				self.loadSavedData();
 			}
-			toast('info', 'Match ID', self.match_id);
+			console.log('info', 'Match ID:', self.match_id);
 		},
 		methods: {
 			generateUUID4: function () {
