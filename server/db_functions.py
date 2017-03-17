@@ -31,7 +31,8 @@ def add_matchv1(match_id: str, event_name: str, team_number: int, match_number: 
 		new_match_last_modified_date = dateutil.parser.parse(last_modified)
 		if stored_match_last_modified_date > new_match_last_modified_date:
 			raise exceptions.MatchDataOutdated()
-
+		else:
+			session.query(MatchV1).filter(MatchV1.match_id == match_id).delete()
 	session.add(MatchV1(
 		match_id=match_id, event_name=event_name, team_number=team_number, match_number=match_number,
 		auto_line_cross=auto_line_cross, auto_low_goal=auto_low_goal, auto_hopper=auto_hopper,
