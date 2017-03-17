@@ -121,7 +121,7 @@
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" v-on:click="total_gears -= 1"><span class="glyphicon glyphicon-minus"></span></button>
 					</span>
-					<input type="number" class="form-control col-xs-4" v-model="total_gears">
+					<input type="number" class="form-control col-xs-4" v-model.number="total_gears">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" v-on:click="total_gears += 1"><span class="glyphicon glyphicon-plus"></span></button>
 					</span>
@@ -173,7 +173,7 @@
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" v-on:click="total_hoppers -= 1"><span class="glyphicon glyphicon-minus"></span></button>
 					</span>
-					<input type="number" class="form-control col-xs-4" v-model="total_hoppers">
+					<input type="number" class="form-control col-xs-4" v-model.number="total_hoppers">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="button" v-on:click="total_hoppers += 1"><span class="glyphicon glyphicon-plus"></span></button>
 					</span>
