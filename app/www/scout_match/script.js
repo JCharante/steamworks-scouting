@@ -44,6 +44,7 @@ function onceDocumentReady() {
 				matches[self.match_id] = {
 					match_id: self.match_id,
 					event_name: self.event_name,
+					team_number: self.team_number,
 					match_number: self.match_number,
 					auto_line_cross: self.auto_line_cross,
 					auto_low_goal: self.auto_low_goal,
@@ -75,6 +76,7 @@ function onceDocumentReady() {
 					toast('info', 'Loading Previous Data', '');
 					var match = matches[self.match_id];
 					self.event_name = match.event_name;
+					self.team_number = match.team_number;
 					self.match_number = match.match_number;
 					self.auto_line_cross = match.auto_line_cross;
 					self.auto_low_goal = match.auto_low_goal;
