@@ -2,11 +2,13 @@ function onceDocumentReady() {
 	var scout_match = new Vue({
 		el: '#vue-app',
 		mounted: function() {
-			toast('info', 'Component Mounted', '');
+			//toast('info', 'Component Mounted', '');
 			var self = this;
 			self.match_id = $.QueryString.match_id || null;
 			if (self.match_id === null) {
 				self.match_id = self.generateUUID4();
+			} else {
+				self.loadSavedData();
 			}
 			toast('info', 'Match ID', self.match_id);
 		},
@@ -38,6 +40,7 @@ function onceDocumentReady() {
 			save: function() {
 				var self = this;
 				toast('info', 'Saving...', '');
+				self.last_modified = new Date().toJSON();
 				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
 				matches[self.match_id] = {
 					match_id: self.match_id,
@@ -61,9 +64,40 @@ function onceDocumentReady() {
 					high_goal_shoot_from_afar: self.high_goal_shoot_from_afar,
 					low_goal_rating: self.low_goal_rating,
 					total_hoppers: self.total_hoppers,
-					collected_from_hopper: self.collected_from_hopper
+					collected_from_hopper: self.collected_from_hopper,
+					last_modified: self.last_modified
 				};
 				localStorage.setItem('matches', JSON.stringify(matches));
+			},
+			loadSavedData: function () {
+				var self = this;
+				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
+				if (self.match_id in matches) {
+					toast('info', 'Loading Previous Data', '');
+					var match = matches[self.match_id];
+					self.event_name = match.event_name;
+					self.match_number = match.match_number;
+					self.auto_line_cross = match.auto_line_cross;
+					self.auto_low_goal = match.auto_low_goal;
+					self.auto_hopper = match.auto_hopper;
+					self.auto_collect = match.auto_collect;
+					self.auto_gear_pos = match.auto_gear_pos;
+					self.auto_high_goal_pos = match.auto_high_goal_pos;
+					self.climb_rating = match.climb_rating;
+					self.gear_rating = match.gear_rating;
+					self.total_gears = match.total_gears;
+					self.gear_dispense_method = match.gear_dispense_method;
+					self.got_gear_from_human = match.got_gear_from_human;
+					self.got_gear_from_floor = match.got_gear_from_floor;
+					self.high_goal_rating = match.high_goal_rating;
+					self.high_goal_shoot_from_key = match.high_goal_shoot_from_key;
+					self.high_goal_shoot_from_wall = match.high_goal_shoot_from_wall;
+					self.high_goal_shoot_from_afar = match.high_goal_shoot_from_afar;
+					self.low_goal_rating = match.low_goal_rating;
+					self.total_hoppers = match.total_hoppers;
+					self.collected_from_hopper = match.collected_from_hopper;
+					self.last_modified = match.last_modified;
+				}
 			}
 		},
 		data: function() {
@@ -90,7 +124,8 @@ function onceDocumentReady() {
 				high_goal_shoot_from_afar: false,
 				low_goal_rating: 'ds',
 				total_hoppers: 0,
-				collected_from_hopper: false
+				collected_from_hopper: false,
+				last_modified: "2017-03-17T00:34:15.415Z"
 			}
 		}
 	})
