@@ -19,6 +19,7 @@ Vue.component('achilles-navbar', {
 					'<li><a href="../home/index.html">Home</a></li>' +
 					'<li><a href="../scout_match/index.html">Scout Match</a></li>' +
 					'<li><a href="../scoutedMatches/index.html">Scouted Matches</a></li>' +
+					'<li><a href="../scanMatch/index.html">Scan Match</a></li>' +
 					'<li class="dropdown">' +
 					'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Developer <span class="caret"></span></a>' +
 						'<ul class="dropdown-menu">' +
