@@ -17,11 +17,17 @@ Vue.component('achilles-navbar', {
 			'<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">' +
 				'<ul class="nav navbar-nav">' +
 					'<li><a href="../home/index.html">Home</a></li>' +
-					'<li><a href="../qr_scan_demo/index.html">QR Scan Demo</a></li>' +
 					'<li><a href="../scout_match/index.html">Scout Match</a></li>' +
-					'<li><a href="../localStorageDump/index.html">Local Storage Dump</a></li>' +
-					'<li><a href="../compressionTest/index.html">Compression Test</a></li>' +
 					'<li><a href="../scoutedMatches/index.html">Scouted Matches</a></li>' +
+					'<li class="dropdown">' +
+					'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Developer <span class="caret"></span></a>' +
+						'<ul class="dropdown-menu">' +
+							'<li><a href="../qr_scan_demo/index.html">QR Scan Demo</a></li>' +
+							'<li><a href="../localStorageDump/index.html">Local Storage Dump</a></li>' +
+							'<li><a href="../compressionTest/index.html">Compression Test</a></li>' +
+						'</ul>' +
+					'</li>' +
+
 				'</ul>' +
 			'</div><!-- /.navbar-collapse -->' +
 		'</div><!-- /.container-fluid -->' +
