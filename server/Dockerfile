@@ -24,6 +24,6 @@ ENV HOME /app
 WORKDIR /app
 
 # Ports
-EXPOSE 9876
+EXPOSE 80
 
 ENTRYPOINT python3.6 server.py
