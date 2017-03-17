@@ -1,4 +1,5 @@
-from flask import Flask, request, make_response, Response, jsonify
+from flask import Flask, request, make_response, Response, jsonify, render_template
+import flask_excel as excel
 import json
 import os
 from typing import List, Dict
@@ -39,9 +40,7 @@ def http_400(code: int, message: str, fields: str):
 
 @app.route('/')
 def api_root():
-	return home_cor(jsonify(**{
-		'message': os.environ['db_address']
-	}))
+	return render_template('index.html')
 
 
 @app.route('/match/upload', methods=['OPTIONS', 'POST'])
@@ -164,5 +163,18 @@ def api_match_upload():
 	response['success'] = True
 	return home_cor(jsonify(**response))
 
+
+@app.route('/events')
+def api_events():
+	response = {
+		'events': db_functions.events_recorded()
+	}
+	return home_cor(jsonify(**response))
+
+
+@app.route('/download_data/<event_name>.csv')
+def api_download_data(event_name):
+	data = db_functions.matrix_data_for_event(event_name)
+	return excel.make_response_from_array(data, 'csv')
 
 app.run(debug=True, host='0.0.0.0', port=9876)

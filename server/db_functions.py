@@ -46,3 +46,26 @@ def add_matchv1(match_id: str, event_name: str, team_number: int, match_number: 
 	))
 	session.commit()
 	session.close()
+
+
+def events_recorded():
+	session = DBSession()
+	events = [event_name for event_name in session.query(MatchV1.event_name).distinct()]
+	session.close()
+	return events
+
+
+def matrix_data_for_event(event_name):
+	session = DBSession()
+	matrix = []
+	header_row = ['Match ID', 'Event Name', 'Team Number', 'Match Number', 'Auto: Crossed Line', 'Auto: Scored Low Goal', 'Auto: Hopper', 'Auto: Collected from Hopper', 'Auto: Gear Position', 'Auto: High Goal Position',
+				  'Climb Rating', 'Gear Rating', 'Total number of Gears', 'Gear Dispense Method', 'Got Gear from Human Play', 'Got Gear from Floor', 'High Goal Shooting Rating', 'Shot High Goal from Key',
+				  'Shot High Goal from Wall', 'Shot High Goal from Afar', 'Low Goal Rating', 'Total number of Hoppers', 'Collected from Hopper', 'Data last Modified']
+	matrix.append(header_row)
+	for match in session.query(MatchV1).filter(MatchV1.event_name == event_name).all():  # type: MatchV1
+		row = [match.match_id, match.event_name, match.team_number, match.match_number, match.auto_line_cross, match.auto_low_goal, match.auto_hopper, match.auto_collect, match.auto_gear_pos,
+			   match.auto_high_goal_pos, match.climb_rating, match.gear_rating, match.total_gears, match.gear_dispense_method, match.got_gear_from_human, match.got_gear_from_floor, match.high_goal_rating,
+			   match.high_goal_shoot_from_key, match.high_goal_shoot_from_wall, match.high_goal_shoot_from_afar, match.low_goal_rating, match.total_hoppers, match.collected_from_hopper, match.last_modified]
+		matrix.append(row)
+	session.close()
+	return matrix
