@@ -1,5 +1,18 @@
 Vue.component('match', {
 	props: ['match'],
+	methods: {
+		viewQrCode: function() {
+			var self = this;
+			var packed_json_string = JSONC.pack(self.match);
+			cordova.plugins.barcodeScanner.encode(cordova.plugins.barcodeScanner.Encode.TEXT_TYPE, packed_json_string, function(success) {
+					console.log(success);
+				}, function(fail) {
+					toast('error', 'Error', 'Generating QR Code Failed');
+					console.log(fail);
+				}
+			);
+		}
+	},
 	computed: {
 		linkToMatch: function() {
 			var self = this;
@@ -11,6 +24,9 @@ Vue.component('match', {
 			switch (self.match.event_name) {
 				case 'greater-boston':
 					name = 'Greater Boston';
+					break;
+				case 'pine-tree':
+					name = 'Pine Tree';
 					break;
 				default:
 					name = self.match.event_name;
@@ -27,6 +43,7 @@ Vue.component('match', {
 			'</div>' +
 			'<div class="panel-body">' +
 				'<a class="btn btn-primary" :href="linkToMatch" role="button">View Match</a>' +
+				'<a class="btn btn-default" v-on:click="viewQrCode" role="button">View QR Code</a>' +
 			'</div>' +
 		'</div>' +
 	'</div>'
