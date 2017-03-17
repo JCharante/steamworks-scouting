@@ -16,6 +16,8 @@ To test non-phone features, you can simply open the local file as all imports ar
 
 ## Building Release
 
+[This SO answer](http://stackoverflow.com/a/26450074/5006133) was adapted to suit our needs.
+
 ### 1. Create a keystore
 
 ```
