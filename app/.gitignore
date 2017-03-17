@@ -2,3 +2,4 @@
 plugins
 hooks
 platforms
+*.keystore
