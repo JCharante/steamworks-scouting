@@ -11,6 +11,13 @@ Vue.component('match', {
 					console.log(fail);
 				}
 			);
+		},
+		deleteMatch: function() {
+			var self = this;
+			var matches = JSON.parse(localStorage.getItem('matches') || '{}');
+			delete matches[self.match.match_id];
+			localStorage.setItem('matches', JSON.stringify(matches));
+			self.$emit('load-scouted-matches');
 		}
 	},
 	computed: {
@@ -42,8 +49,10 @@ Vue.component('match', {
 				'<p>{{ eventName }} - {{ match.match_number }}</p>' +
 			'</div>' +
 			'<div class="panel-body">' +
-				'<a class="btn btn-primary" :href="linkToMatch" role="button">View Match</a>' +
-				'<a class="btn btn-default" v-on:click="viewQrCode" role="button">View QR Code</a>' +
+				'<a class="btn btn-primary" :href="linkToMatch" role="button">Edit / View Match</a> ' +
+				'<a class="btn btn-default" v-on:click="viewQrCode" role="button">View QR Code</a> ' +
+				'<hr>' +
+				'<a class="btn btn-danger" v-on:click="deleteMatch" role="button">Delete Match</a>' +
 			'</div>' +
 		'</div>' +
 	'</div>'
@@ -55,7 +64,13 @@ function onceDocumentReady() {
 		el: '#vue-app',
 		mounted: function() {
 			var self = this;
-			self.scoutedMatches = JSON.parse(localStorage.getItem('matches') || '{}')
+			self.loadScoutedMatches();
+		},
+		methods: {
+			loadScoutedMatches: function() {
+				var self = this;
+				self.scoutedMatches = JSON.parse(localStorage.getItem('matches') || '{}')
+			}
 		},
 		data: function () {
 			return {

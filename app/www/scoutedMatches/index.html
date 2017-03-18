@@ -14,7 +14,7 @@
 	<div id="vue-app">
 		<h1 class="text-center">Scouted Matches</h1>
 		<div class="row">
-			<match v-for="match in scoutedMatches" :match="match"></match>
+			<match v-for="match in scoutedMatches" :match="match" v-on:load-scouted-matches="loadScoutedMatches()"></match>
 		</div>
 	</div>
 </div>
