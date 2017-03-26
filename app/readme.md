@@ -2,7 +2,17 @@ achilles app
 ============
 
 
-## Development Setup
+## View on Desktop
+
+When you are working on something not related to QR encoding / QR scanning, you can simply use Chromium.
+
+Just open the home/index.html file in Chromium.
+
+For example, `file:///home/jcharante/Projects/achilles/app/www/compressionTest/index.html`
+
+This also means you can view the current version in the master branch [here with rawgit.com](https://rawgit.com/JCharante/achilles/master/app/www/home/index.html)
+
+## Android Development Setup
 
 ```
 $ npm install cordova

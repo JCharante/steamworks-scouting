@@ -51,6 +51,13 @@ function onceDocumentReady() {
 					},
 					function (error) {
 						alert("Scanning failed: " + error);
+					},
+					{
+						formats: "QR_CODE",
+						showTorchButton: true,
+						showFlipCameraButton : true,
+						prompt : "Place a qr code inside the scan area",
+						resultDisplayDuration: 0
 					}
 				);
 			}
