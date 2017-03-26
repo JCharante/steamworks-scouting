@@ -21,6 +21,7 @@ Vue.component('achilles-navbar', {
 					'<li><a href="../scoutedMatches/index.html">Scouted Matches</a></li>' +
 					'<li><a href="../scanMatch/index.html">Scan Match</a></li>' +
 					'<li><a href="../uploadToServer/index.html">Upload Data</a></li>' +
+					'<li><a href="../fun/index.html">Fun</a></li>' +
 					'<li class="dropdown">' +
 					'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Developer <span class="caret"></span></a>' +
 						'<ul class="dropdown-menu">' +
