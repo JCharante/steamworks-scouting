@@ -12,6 +12,14 @@ function onceDocumentReady() {
 					if(!matches.hasOwnProperty(key)) continue;
 
 					var match = matches[key];
+
+					if (match.team_number == null) {
+						var audio = new Audio('../static/external/media/fog-blast.wav');
+						audio.play();
+						toast('error', 'Preflight Check Failed', 'Team Number is blank in ' + match.event_name + ' - ' + match.match_number);
+						return null;
+					}
+
 					data.matches.push(match)
 				}
 				console.log(data);
@@ -24,10 +32,12 @@ function onceDocumentReady() {
 					statusCode: {
 						200: function (data) {
 							console.log('Server Replied: ', data);
+							toast('success', 'Success!', 'Scouted Matches Successfully Uploaded');
 						},
 						400: function (responseObject) {
 							console.log('Server Replied: ', responseObject);
 							var data = responseObject.responseJSON;
+							toast('error', 'Oh no!', 'Error while uploading matches');
 						}
 					}
 				});
