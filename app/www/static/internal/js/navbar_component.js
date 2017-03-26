@@ -25,7 +25,6 @@ Vue.component('achilles-navbar', {
 					'<li class="dropdown">' +
 					'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Developer <span class="caret"></span></a>' +
 						'<ul class="dropdown-menu">' +
-							'<li><a href="../qr_scan_demo/index.html">QR Scan Demo</a></li>' +
 							'<li><a href="../localStorageDump/index.html">Local Storage Dump</a></li>' +
 							'<li><a href="../compressionTest/index.html">Compression Test</a></li>' +
 						'</ul>' +
