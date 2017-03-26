@@ -14,10 +14,12 @@ Vue.component('match', {
 		},
 		deleteMatch: function() {
 			var self = this;
-			var matches = JSON.parse(localStorage.getItem('matches') || '{}');
-			delete matches[self.match.match_id];
-			localStorage.setItem('matches', JSON.stringify(matches));
-			self.$emit('load-scouted-matches');
+			if (confirm("You sure you want to delete " + self.eventName + ' - ' + self.match.match_number)){
+				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
+				delete matches[self.match.match_id];
+				localStorage.setItem('matches', JSON.stringify(matches));
+				self.$emit('load-scouted-matches');
+			}
 		}
 	},
 	computed: {
