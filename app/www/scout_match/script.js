@@ -106,7 +106,7 @@ function onceDocumentReady() {
 				match_id: 'place510-hold-ere7-uuid-92361f002671',
 				event_name: 'practice',
 				team_number: null,
-				match_number: 'Q1',
+				match_number: null,
 				auto_line_cross: false,
 				auto_low_goal: false,
 				auto_hopper: false,

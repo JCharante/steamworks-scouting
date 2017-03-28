@@ -13,10 +13,17 @@ function onceDocumentReady() {
 
 					var match = matches[key];
 
-					if (match.team_number == null) {
+					if (!match.team_number) {
 						var audio = new Audio('../static/external/media/fog-blast.wav');
 						audio.play();
-						toast('error', 'Preflight Check Failed', 'Team Number is blank in ' + match.event_name + ' - ' + match.match_number);
+						toast('error', 'Preflight Check Failed', 'Team Number is blank in ' + match.event_name + ' - Q' + match.match_number);
+						return null;
+					}
+
+					if (!match.match_number) {
+						var audio = new Audio('../static/external/media/fog-blast.wav');
+						audio.play();
+						toast('error', 'Preflight Check Failed', 'Match Number is blank in ' + match.event_name + ' - Q' + match.match_number);
 						return null;
 					}
 
