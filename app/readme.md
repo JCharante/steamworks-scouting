@@ -24,7 +24,7 @@ If you aren't using an emulator, then I recommend using [this](https://developer
 
 To test non-phone features, you can simply open the local file as all imports are relative.
 
-## Building Release
+## Building Releases
 
 [This SO answer](http://stackoverflow.com/a/26450074/5006133) was adapted to suit our needs.
 
@@ -48,7 +48,24 @@ Move a copy of your keystore (in this case, `JCharante.keystore`) to `platforms/
 
 (*.keystore is in the .gitignore so you don't have to worry about accidentally committing your .keystore file)
 
-### 2. Generating the unsigned APK
+
+### 2a. The Automated Way
+
+You can use the bash script to automate the building, signing, and compression of the apk.
+
+First set your environment variables
+
+```bash
+export "ksp=YOUR_KEY_STORE_PASSWORD"  # example: h@I#HROIJijfowi@#$%@fsG$33efUH3hur#R#~&
+export vnum=APP_VERSION  # example v1.1.5.1
+export ksf=KEY_STORE_FILE  # example: JCharante.keystore
+export ksa=KEY_STORE_ALIAS  # example: JCharante
+./buildSigned.sh
+```
+
+Your signed apk will available at `builds/achilles-$vnum.apk`
+
+### 2b. Generating the unsigned APK
 
 ```bash
 $ cordova build --release android
@@ -67,7 +84,7 @@ $ cd platforms/android/build/outputs/apk/
 Now to sign it
 
 ```bash
-$ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <keystorename <Unsigned APK file> <Keystore Alias name>
+$ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <keystorename> <Unsigned APK file> <Keystore Alias name>
 ```
 
 So in this case
