@@ -15,7 +15,7 @@ This also means you can view the current version in the master branch [here with
 ## Android Development Setup
 
 ```
-$ npm install cordova
+$ npm install -g cordova
 $ cordova prepare
 $ cordova run android
 ```
@@ -30,14 +30,14 @@ To test non-phone features, you can simply open the local file as all imports ar
 
 ### 1. Create a keystore
 
-```
-keytool -genkey -v -keystore <keystoreName>.keystore -alias <Keystore AliasName> -keyalg <Key algorithm> -keysize <Key size> -validity <Key Validity in Days>
+```bash
+$ keytool -genkey -v -keystore <keystoreName>.keystore -alias <Keystore AliasName> -keyalg <Key algorithm> -keysize <Key size> -validity <Key Validity in Days>
 ```
 
 So for this example
 
-```
- keytool -genkey -v -keystore JCharante.keystore -alias JCharante -keyalg RSA -keysize 2048 -validity 10000
+```bash
+$ keytool -genkey -v -keystore JCharante.keystore -alias JCharante -keyalg RSA -keysize 2048 -validity 10000
 ```
 
 and answer the prompts.
@@ -50,7 +50,7 @@ Move a copy of your keystore (in this case, `JCharante.keystore`) to `platforms/
 
 ### 2. Generating the unsigned APK
 
-```
+```bash
 $ cordova build --release android
 ```
 
@@ -60,19 +60,19 @@ The built file will be at `platforms/android/build/outputs/apk/android-release-u
 
 Change your active directory into the one with your keystore & apk.
 
-```
+```bash
 $ cd platforms/android/build/outputs/apk/
 ```
 
 Now to sign it
 
-```
+```bash
 $ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <keystorename <Unsigned APK file> <Keystore Alias name>
 ```
 
 So in this case
 
-```
+```bash
 $ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore JCharante.keystore android-release-unsigned.apk JCharante
 ```
 
@@ -80,8 +80,8 @@ Follow the prompts and now it's signed.
 
 One last thing, which is to use zipalign.
 
-```
-zipalign -v 4 android-release-unsigned.apk achilles-v1.0.4.0.apk
+```bash
+$ zipalign -v 4 android-release-unsigned.apk achilles-v1.0.4.0.apk
 ```
 
 And we're done. Now you can upload it to a server for people to download or do stuff to get it on the app store.
