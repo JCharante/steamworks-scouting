@@ -51,7 +51,7 @@ Vue.component('match', {
 	'<div class="col-lg4 col-md-6 col-xs-12">' +
 		'<div class="panel panel-default">' +
 			'<div class="panel-heading">' +
-				'<p>{{ eventName }} - {{ match.match_number }} - {{ match.team_number }}</p>' +
+				'<p>{{ eventName }} - Q{{ match.match_number }} - {{ match.team_number }}</p>' +
 			'</div>' +
 			'<div class="panel-body">' +
 				'<a class="btn btn-primary" :href="linkToMatch" role="button">Edit / View Match</a> ' +
