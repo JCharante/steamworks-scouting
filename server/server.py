@@ -7,6 +7,7 @@ import db_functions
 import exceptions
 
 db_functions.migrate_from_matchv1_to_matchv2()
+db_functions.migrate_matchv2_to_matchv3()
 app = Flask(__name__)
 
 
@@ -102,6 +103,8 @@ def api_match_upload():
 		total_hoppers = match.get('total_hoppers', None)
 		collected_from_hopper = match.get('collected_from_hopper', None)
 		last_modified = match.get('last_modified', None)
+		notes = match.get('notes', None)
+
 		if type(match_id) is not str:
 			return http_400(1, 'Invalid Data Type', 'match_id')
 		if type(event_name) is not str:
@@ -150,14 +153,35 @@ def api_match_upload():
 			return http_400(1, 'Invalid Data Type', 'collected_from_hopper')
 		if type(last_modified) is not str:
 			return http_400(1, 'Invalid Data Type', 'last_modified')
+		if type(notes) is not str:
+			return http_400(1, 'Invalid Data Type', 'notes')
 
 		try:
-			db_functions.add_matchv2(match_id, event_name, team_number, match_number, auto_line_cross, auto_low_goal,
-									 auto_hopper, auto_collect, auto_gear_pos, auto_high_goal_pos, climb_rating,
-									 gear_rating, total_gears, gear_dispense_method, got_gear_from_human,
-									 got_gear_from_floor, high_goal_rating, high_goal_shoot_from_key,
-									 high_goal_shoot_from_wall, high_goal_shoot_from_afar, low_goal_rating,
-									 total_hoppers, collected_from_hopper, last_modified)
+			db_functions.add_matchv3(match_id,
+									 event_name,
+									 team_number,
+									 match_number,
+									 auto_line_cross,
+									 auto_low_goal,
+									 auto_hopper,
+									 auto_collect,
+									 auto_gear_pos,
+									 auto_high_goal_pos,
+									 climb_rating,
+									 gear_rating,
+									 total_gears,
+									 gear_dispense_method,
+									 got_gear_from_human,
+									 got_gear_from_floor,
+									 high_goal_rating,
+									 high_goal_shoot_from_key,
+									 high_goal_shoot_from_wall,
+									 high_goal_shoot_from_afar,
+									 low_goal_rating,
+									 total_hoppers,
+									 collected_from_hopper,
+									 last_modified,
+									 notes)
 		except exceptions.MatchDataOutdated:
 			pass
 
