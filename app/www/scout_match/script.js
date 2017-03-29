@@ -38,7 +38,13 @@ function onceDocumentReady() {
 			},
 			save: function() {
 				var self = this;
-				toast('info', 'Saving...', '');
+
+				if (self.notes.length > 200) {
+					playFieldFault();
+					toast('error', 'Match Not Saved', 'Notes too Long!');
+					return null;
+				}
+
 				self.last_modified = new Date().toJSON();
 				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
 				matches[self.match_id] = {
@@ -65,9 +71,11 @@ function onceDocumentReady() {
 					low_goal_rating: self.low_goal_rating,
 					total_hoppers: self.total_hoppers,
 					collected_from_hopper: self.collected_from_hopper,
-					last_modified: self.last_modified
+					last_modified: self.last_modified,
+					notes: self.notes
 				};
 				localStorage.setItem('matches', JSON.stringify(matches));
+				toast('success', 'Match Saved', '');
 			},
 			loadSavedData: function () {
 				var self = this;
@@ -98,6 +106,7 @@ function onceDocumentReady() {
 					self.total_hoppers = match.total_hoppers;
 					self.collected_from_hopper = match.collected_from_hopper;
 					self.last_modified = match.last_modified;
+					self.notes = match.notes;
 				}
 			}
 		},
@@ -126,7 +135,8 @@ function onceDocumentReady() {
 				low_goal_rating: 'ds',
 				total_hoppers: 0,
 				collected_from_hopper: false,
-				last_modified: "2017-03-17T00:34:15.415Z"
+				last_modified: "2017-03-17T00:34:15.415Z",
+				notes: ''
 			}
 		}
 	})
