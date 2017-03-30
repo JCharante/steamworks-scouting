@@ -121,10 +121,12 @@ function onceDocumentReady() {
 				auto_hopper: false,
 				auto_collect: false,
 				auto_gear_pos: 'none',
+				auto_kpa: 0,
 				auto_high_goal_pos: 'none',
 				climb_rating: 'neutral',
 				gear_rating: 'neutral',
 				total_gears: 0,
+				total_kpa: 0,
 				gear_dispense_method: 'none',
 				got_gear_from_human: false,
 				got_gear_from_floor: false,
@@ -135,6 +137,7 @@ function onceDocumentReady() {
 				low_goal_rating: 'ds',
 				total_hoppers: 0,
 				collected_from_hopper: false,
+				collected_fuel_from_floor: false,
 				last_modified: "2017-03-17T00:34:15.415Z",
 				notes: ''
 			}
