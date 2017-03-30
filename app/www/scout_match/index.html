@@ -14,7 +14,7 @@
 <body>
 <div id="achilles-navbar"></div>
 <div class="container">
-	<h1 class="text-center">Scout a Match.</h1>
+	<h1 class="text-center">Scout a Match</h1>
 	<div id="vue-app">
 		<form class="form-horizontal" role="form">
 			<hr>
@@ -102,6 +102,18 @@
 						</div>
 					</div>
 				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 control-label">Autnomous kPa:</label>
+					<div class="input-group col-lg-8">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" v-on:click="auto_kpa -= 1; total_kpa -=1"><span class="glyphicon glyphicon-minus"></span></button>
+						</span>
+						<input type="number" class="form-control col-xs-4" v-model.number="auto_kpa" readonly="true">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" v-on:click="auto_kpa += 1; total_kpa += 1"><span class="glyphicon glyphicon-plus"></span></button>
+						</span>
+					</div>
+				</div>
 			</div>
 			<hr>
 
@@ -109,8 +121,20 @@
 			<div>
 				<h2 class="text-center">Tele Op</h2>
 				<div class="form-group row">
+					<label class="col-lg-3 control-label">Total kPa:</label>
+					<div class="input-group col-lg-8">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" v-on:click="total_kpa -= 1"><span class="glyphicon glyphicon-minus"></span></button>
+						</span>
+						<input type="number" class="form-control col-xs-4" v-model.number="total_kpa" readonly="true">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" v-on:click="total_kpa += 1"><span class="glyphicon glyphicon-plus"></span></button>
+						</span>
+					</div>
+				</div>
+				<div class="form-group row">
 					<label class="col-lg-3 control-label">Total Hoppers:</label>
-					<div class="input-group col-lg-9">
+					<div class="input-group col-lg-8">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="button" v-on:click="total_hoppers -= 1"><span class="glyphicon glyphicon-minus"></span></button>
 						</span>
@@ -121,15 +145,20 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
+					<div class="col-md-offset-2 col-xs-6 col-md-5">
 						<label class="checkbox-inline">
 							<input type="checkbox" v-model="collected_from_hopper"> Collected from Hopper
+						</label>
+					</div>
+					<div class="col-xs-6 col-md-5">
+						<label class="checkbox-inline">
+							<input type="checkbox" v-model="collected_fuel_from_floor"> Collected Fuel from Floor
 						</label>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-lg-3 control-label">Total Gears:</label>
-					<div class="input-group col-lg-9">
+					<div class="input-group col-lg-8">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="button" v-on:click="total_gears -= 1"><span class="glyphicon glyphicon-minus"></span></button>
 						</span>
@@ -153,15 +182,15 @@
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<label class="checkbox-inline">
-							<input type="checkbox" v-model="high_goal_shoot_from_key"> High Goal Shoot from Key
+							<input type="checkbox" v-model="high_goal_shoot_from_key"> Shot High Goal from Key
 						</label>
 						<br>
 						<label class="checkbox-inline">
-							<input type="checkbox" v-model="high_goal_shoot_from_wall"> High Goal Shoot from Wall
+							<input type="checkbox" v-model="high_goal_shoot_from_wall"> Shot High Goal from Wall
 						</label>
 						<br>
 						<label class="checkbox-inline">
-							<input type="checkbox" v-model="high_goal_shoot_from_afar"> High Goal Shoot from Afar
+							<input type="checkbox" v-model="high_goal_shoot_from_afar"> Shot High Goal from Afar
 						</label>
 					</div>
 				</div>
