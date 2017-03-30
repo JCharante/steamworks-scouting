@@ -57,10 +57,12 @@ function onceDocumentReady() {
 					auto_hopper: self.auto_hopper,
 					auto_collect: self.auto_collect,
 					auto_gear_pos: self.auto_gear_pos,
+					auto_kpa: self.auto_kpa,
 					auto_high_goal_pos: self.auto_high_goal_pos,
 					climb_rating: self.climb_rating,
 					gear_rating: self.gear_rating,
 					total_gears: self.total_gears,
+					total_kpa: self.total_kpa,
 					gear_dispense_method: self.gear_dispense_method,
 					got_gear_from_human: self.got_gear_from_human,
 					got_gear_from_floor: self.got_gear_from_floor,
@@ -71,6 +73,7 @@ function onceDocumentReady() {
 					low_goal_rating: self.low_goal_rating,
 					total_hoppers: self.total_hoppers,
 					collected_from_hopper: self.collected_from_hopper,
+					collected_fuel_from_floor: self.collected_fuel_from_floor,
 					last_modified: self.last_modified,
 					notes: self.notes
 				};
@@ -91,10 +94,12 @@ function onceDocumentReady() {
 					self.auto_hopper = match.auto_hopper;
 					self.auto_collect = match.auto_collect;
 					self.auto_gear_pos = match.auto_gear_pos;
+					self.auto_kpa = match.auto_kpa;
 					self.auto_high_goal_pos = match.auto_high_goal_pos;
 					self.climb_rating = match.climb_rating;
 					self.gear_rating = match.gear_rating;
 					self.total_gears = match.total_gears;
+					self.total_kpa = match.total_kpa;
 					self.gear_dispense_method = match.gear_dispense_method;
 					self.got_gear_from_human = match.got_gear_from_human;
 					self.got_gear_from_floor = match.got_gear_from_floor;
@@ -105,6 +110,7 @@ function onceDocumentReady() {
 					self.low_goal_rating = match.low_goal_rating;
 					self.total_hoppers = match.total_hoppers;
 					self.collected_from_hopper = match.collected_from_hopper;
+					self.collected_fuel_from_floor = match.collected_fuel_from_floor;
 					self.last_modified = match.last_modified;
 					self.notes = match.notes;
 				}
