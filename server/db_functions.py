@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, MatchV4
+from db_setup import Base, MatchV5
 import util
 import uuid
 from typing import Tuple, List, Dict
@@ -17,7 +17,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
 
-def add_matchv4(match_id: str,
+def add_matchv5(match_id: str,
 				event_name: str,
 				team_number: int,
 				match_number: int,
@@ -44,19 +44,20 @@ def add_matchv4(match_id: str,
 				collected_from_hopper: bool,
 				collected_fuel_from_floor: bool,
 				last_modified: str,
-				notes: str) -> None:
+				notes: str,
+                scout_name: str) -> None:
 
 	session = DBSession()
-	stored_match = session.query(MatchV4).filter(MatchV4.match_id == match_id).first()
+	stored_match = session.query(MatchV5).filter(MatchV5.match_id == match_id).first()
 	if stored_match is not None:
-		stored_match = stored_match  # type: MatchV4
+		stored_match = stored_match  # type: MatchV5
 		stored_match_last_modified_date = dateutil.parser.parse(stored_match.last_modified)
 		new_match_last_modified_date = dateutil.parser.parse(last_modified)
 		if stored_match_last_modified_date > new_match_last_modified_date:
 			raise exceptions.MatchDataOutdated()
 		else:
-			session.query(MatchV4).filter(MatchV4.match_id == match_id).delete()
-	session.add(MatchV4(
+			session.query(MatchV5).filter(MatchV5.match_id == match_id).delete()
+	session.add(MatchV5(
 		match_id=match_id,
 		event_name=event_name,
 		team_number=team_number,
@@ -84,7 +85,8 @@ def add_matchv4(match_id: str,
 		collected_from_hopper=collected_from_hopper,
 		collected_fuel_from_floor=collected_fuel_from_floor,
 		last_modified=last_modified,
-		notes=notes
+		notes=notes,
+		scout_name=scout_name
 	))
 	session.commit()
 	session.close()
@@ -92,7 +94,7 @@ def add_matchv4(match_id: str,
 
 def events_recorded():
 	session = DBSession()
-	events = [event_name for event_name in session.query(MatchV4.event_name).distinct()]
+	events = [event_name for event_name in session.query(MatchV5.event_name).distinct()]
 	session.close()
 	return events
 
@@ -127,9 +129,10 @@ def matrix_data_for_event(event_name):
 				  'Collected from Hopper',
 				  'Collected Fuel from Floor',
 				  'Data last Modified',
-				  'Notes']
+				  'Notes',
+	              'Scout Name']
 	matrix.append(header_row)
-	for match in session.query(MatchV4).filter(MatchV4.event_name == event_name).all():  # type: MatchV4
+	for match in session.query(MatchV5).filter(MatchV5.event_name == event_name).all():  # type: MatchV5
 		row = [match.match_id,
 			   match.event_name,
 			   match.team_number,
@@ -157,7 +160,47 @@ def matrix_data_for_event(event_name):
 			   match.collected_from_hopper,
 			   match.collected_fuel_from_floor,
 			   match.last_modified,
-			   match.notes]
+			   match.notes,
+		       match.scout_name]
 		matrix.append(row)
 	session.close()
 	return matrix
+
+
+def matches_array():
+	session = DBSession()
+	matches = []
+	for match in session.query(MatchV5).all():
+		matches.append({
+			'match_id': match.match_id,
+			'event_name': match.event_name,
+			'team_number': match.team_number,
+			'match_number': match.match_number,
+			'auto_line_cross': match.auto_line_cross,
+			'auto_low_goal': match.auto_low_goal,
+			'auto_hopper': match.auto_hopper,
+			'auto_collect': match.auto_collect,
+			'auto_gear_pos': match.auto_gear_pos,
+			'auto_kpa': match.auto_kpa,
+			'auto_high_goal_pos': match.auto_high_goal_pos,
+			'climb_rating': match.climb_rating,
+			'gear_rating': match.gear_rating,
+			'total_gears': match.total_gears,
+			'total_kpa': match.total_kpa,
+			'gear_dispense_method': match.gear_dispense_method,
+			'got_gear_from_human': match.got_gear_from_human,
+			'got_gear_from_floor': match.got_gear_from_floor,
+			'high_goal_rating': match.high_goal_rating,
+			'high_goal_shoot_from_key': match.high_goal_shoot_from_key,
+			'high_goal_shoot_from_wall': match.high_goal_shoot_from_wall,
+			'high_goal_shoot_from_afar': match.high_goal_shoot_from_afar,
+			'low_goal_rating': match.low_goal_rating,
+			'total_hoppers': match.total_hoppers,
+			'collected_from_hopper': match.collected_from_hopper,
+			'collected_fuel_from_floor': match.collected_fuel_from_floor,
+			'last_modified': match.last_modified,
+			'notes': match.notes,
+			'scout_name': match.scout_name
+		})
+	session.close()
+	return matches

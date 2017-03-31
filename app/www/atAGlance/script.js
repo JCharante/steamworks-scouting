@@ -65,38 +65,83 @@ Vue.component('match', {
 
 
 function onceDocumentReady() {
-	if ((localStorage.getItem('scoutName') || '') === '') {
-		alert('Please set your name in the settings page.');
-		window.location.replace('../settings/index.html');
-	}
-
-	var scouted_matches = new Vue({
+	var app = new Vue({
 		el: '#vue-app',
 		mounted: function() {
 			var self = this;
-			self.scout_name = localStorage.getItem('scoutName');
-			self.loadScoutedMatches();
 		},
 		methods: {
-			loadScoutedMatches: function() {
+			loadMatches: function() {
 				var self = this;
+				self.matches = [];
+
 				var all_matches = JSON.parse(localStorage.getItem('matches') || '{}');
+
 				for (var key in all_matches) {
-					if (!all_matches.hasOwnProperty(key)) continue;
+					if(!all_matches.hasOwnProperty(key)) continue;
 
 					var match = all_matches[key];
-					if (match.scout_name == self.scout_name) {
-						self.scoutedMatches.push(match);
+
+					if (match.team_number === self.team_number && match.event_name != 'practice') {
+						self.matches.push(match);
 					}
 				}
-				console.log(self.scoutedMatches);
+			},
+			calculateStats: function() {
 
+			}
+		},
+		watch: {
+			team_number: function(val, oldVal){
+				var self = this;
+				self.loadMatches();
+				self.calculateStats();
+
+				var currentEvent = 'pine-tree';  // TODO: Make this an option in the settings page.
+
+				var totalAutokPa = 0;
+				var totalTotalkPa = 0;
+				var totalGears = 0;
+
+				for (var i = 0; i < self.matches.length; i++) {
+					var match = self.matches[i];
+
+					if (match.event_name == 'greater-boston' || match.event_name == 'pine-tree') {
+						totalGears += match.total_gears;
+						self.matches_scouted_gears +=1 ;
+
+						if (match.got_gear_from_floor) {
+							self.can_pickup_gears_from_floor = true;
+						}
+					}
+
+					if (match.event_name == 'pine-tree') {
+						totalAutokPa += match.auto_kpa;
+						totalTotalkPa += match.total_kpa;
+						self.matches_scouted_fuel +=1 ;
+
+						if (match.collected_fuel_from_floor) {
+							self.can_pickup_fuel_from_floor = true;
+						}
+					}
+				}
+
+				self.averageAutokPa = (totalAutokPa / self.matches_scouted_fuel) || 0;
+				self.averageTotalkPa = (totalTotalkPa / self.matches_scouted_fuel) || 0;
+				self.averageGears = (totalGears / self.matches_scouted_gears) || 0;
 			}
 		},
 		data: function () {
 			return {
-				scoutedMatches: [],
-				scout_name: ''
+				team_number: null,
+				matches: [],
+				can_pickup_fuel_from_floor: false,
+				can_pickup_gears_from_floor: false,
+				averageAutokPa: 0,
+				averageTotalkPa: 0,
+				averageGears: 0,
+				matches_scouted_gears: 0,
+				matches_scouted_fuel: 0
 			}
 		}
 	})

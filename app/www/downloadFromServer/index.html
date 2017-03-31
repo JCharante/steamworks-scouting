@@ -12,19 +12,8 @@
 <div id="achilles-navbar"></div>
 <div class="container">
 	<div id="vue-app">
-		<h3>Key: matches</h3>
-		<div class="well">
-			{{ matches_string }}
-		</div>
-
-		<h3>Key: scoutName</h3>
-		<div class="well">
-			{{ scoutName }}
-		</div>
-
-		<hr>
-		<button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="wipe_data">Wipe Data</button>
-		<br>
+		<h1 class="text-center">Download Match Data</h1>
+		<button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="download">Download</button>
 	</div>
 </div>
 <!-- Global Scripts -->

@@ -3,6 +3,14 @@ function onceDocumentReady() {
 		el: '#vue-app',
 		mounted: function() {
 			var self = this;
+
+			if ((localStorage.getItem('scoutName') || '') === '') {
+				alert('Please set your name in the settings page.');
+				window.location.replace('../settings/index.html');
+			}
+
+			self.scout_name = localStorage.getItem('scoutName');
+
 			self.match_id = $.QueryString.match_id || null;
 			if (self.match_id === null) {
 				self.match_id = self.generateUUID4();
@@ -75,7 +83,8 @@ function onceDocumentReady() {
 					collected_from_hopper: self.collected_from_hopper,
 					collected_fuel_from_floor: self.collected_fuel_from_floor,
 					last_modified: self.last_modified,
-					notes: self.notes
+					notes: self.notes,
+					scout_name: self.scout_name
 				};
 				localStorage.setItem('matches', JSON.stringify(matches));
 				toast('success', 'Match Saved', '');
@@ -145,7 +154,8 @@ function onceDocumentReady() {
 				collected_from_hopper: false,
 				collected_fuel_from_floor: false,
 				last_modified: "2017-03-17T00:34:15.415Z",
-				notes: ''
+				notes: '',
+				scout_name: ''
 			}
 		}
 	})
