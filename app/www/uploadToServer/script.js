@@ -62,6 +62,10 @@ function onceDocumentReady() {
 							console.log('Server Replied: ', responseObject);
 							var data = responseObject.responseJSON;
 							toast('error', 'Oh no!', 'Error while uploading matches');
+						},
+						500: function (responseObject) {
+							console.log('Server Replied: ', responseObject);
+							toast('error', 'Oh No!', 'The Server Encountered An Error')
 						}
 					}
 				});
