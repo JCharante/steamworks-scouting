@@ -34,7 +34,7 @@ Vue.component('achilles-navbar', {
 					'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Server <span class="caret"></span></a>' +
 						'<ul class="dropdown-menu">' +
 							'<li><a href="../uploadToServer/index.html">Upload Data</a></li>' +
-							'<li><a href="#">Download Data</a></li>' +
+							'<li><a href="../downloadFromServer/index.html">Download Data</a></li>' +
 						'</ul>' +
 					'</li>' +
 

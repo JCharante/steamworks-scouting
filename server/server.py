@@ -265,7 +265,7 @@ def api_match_upload():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/download')
+@app.route('/download', methods=['OPTIONS', 'GET'])
 def api_download():
 	response = {
 		'matches': db_functions.matches_array()
@@ -273,7 +273,7 @@ def api_download():
 	return home_cor(jsonify(**response))
 
 
-@app.route('/events')
+@app.route('/events', methods=['OPTIONS', 'GET'])
 def api_events():
 	response = {
 		'events': db_functions.events_recorded()

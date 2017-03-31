@@ -82,7 +82,7 @@ function onceDocumentReady() {
 
 					var match = all_matches[key];
 
-					if (match.team_number === self.team_number) {
+					if (match.team_number === self.team_number && match.event_name != 'practice') {
 						self.matches.push(match);
 					}
 				}
@@ -107,7 +107,7 @@ function onceDocumentReady() {
 				for (var i = 0; i < self.matches.length; i++) {
 					var match = self.matches[i];
 
-					if (match.event_name === currentEvent) {
+					if (match.event_name != 'practice') {
 						matches += 1;
 						totalAutokPa += match.auto_kpa;
 						totalTotalkPa += match.total_kpa;
