@@ -112,13 +112,17 @@ def api_match_upload():
 		notes = match.get('notes', None)
 		scout_name = match.get('scout_name', None)
 
-		if type(match_id) is not str and len(match_id) <= 36:
+		if type(match_id) is not str:
 			return http_400(1, 'Invalid Data Type', 'match_id')
 		match_id = match_id  # type: str
+		if len(match_id) > 36:
+			return http_400(2, 'String Too Long', 'match_id')
 
-		if type(event_name) is not str and len(event_name) <= 100:
+		if type(event_name) is not str:
 			return http_400(1, 'Invalid Data Type', 'event_name')
 		event_name = event_name  # type: str
+		if len(event_name) > 100:
+			return http_400(2, 'String Too Long', 'event_name')
 
 		if type(team_number) is not int:
 			return http_400(1, 'Invalid Data Type', 'team_number')
@@ -144,21 +148,27 @@ def api_match_upload():
 			return http_400(1, 'Invalid Data Type', 'auto_collect')
 		auto_collect = auto_collect  # type: bool
 
-		if type(auto_gear_pos) is not str and len(auto_gear_pos) <= 10:
+		if type(auto_gear_pos) is not str:
 			return http_400(1, 'Invalid Data Type', 'auto_gear_pos')
 		auto_gear_pos = auto_gear_pos  # type: str
+		if len(auto_gear_pos) > 10:
+			return http_400(2, 'String Too Long', 'auto_gear_pos')
 
 		if type(auto_kpa) is not int:
 			return http_400(1, 'Invalid Data Type', 'auto_kpa')
 		auto_kpa = auto_kpa  # type: int
 
-		if type(auto_high_goal_pos) is not str and len(auto_high_goal_pos) <= 10:
+		if type(auto_high_goal_pos) is not str:
 			return http_400(1, 'Invalid Data Type', 'auto_high_goal_pos')
 		auto_high_goal_pos = auto_high_goal_pos  # type: str
+		if len(auto_high_goal_pos) > 10:
+			return http_400(2, 'String Too Long', 'auto_high_goal_pos')
 
-		if type(climb_rating) is not str and len(climb_rating) <= 10:
+		if type(climb_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'climb_rating')
 		climb_rating = climb_rating  # type: str
+		if len(climb_rating) > 10:
+			return http_400(2, 'String Too Long', 'climb_rating')
 
 		if type(gear_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'gear_rating')
@@ -187,6 +197,8 @@ def api_match_upload():
 		if type(high_goal_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'high_goal_rating')
 		high_goal_rating = high_goal_rating  # type: str
+		if len(high_goal_rating) > 10:
+			return http_400(2, 'String Too Long', 'high_goal_rating')
 
 		if type(high_goal_shoot_from_key) is not bool:
 			return http_400(1, 'Invalid Data Type', 'high_goal_shoot_from_key')
@@ -203,6 +215,8 @@ def api_match_upload():
 		if type(low_goal_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'low_goal_rating')
 		low_goal_rating = low_goal_rating  # type: str
+		if len(low_goal_rating) > 10:
+			return http_400(2, 'String Too Long', 'low_goal_rating')
 
 		if type(total_hoppers) is not int:
 			return http_400(1, 'Invalid Data Type', 'total_hoppers')
@@ -219,14 +233,20 @@ def api_match_upload():
 		if type(last_modified) is not str:
 			return http_400(1, 'Invalid Data Type', 'last_modified')
 		last_modified = last_modified  # type: str
+		if len(last_modified) > 30:
+			return http_400(2, 'String Too Long', 'climb_rating')
 
 		if type(notes) is not str:
 			return http_400(1, 'Invalid Data Type', 'notes')
 		notes = notes  # type: str
+		if len(notes) > 200:
+			return http_400(2, 'String Too Long', 'notes')
 
 		if type(scout_name) is not str:
 			return http_400(1, 'Invalid Data Type', 'scout_name')
 		scout_name = scout_name  # type: str
+		if len(scout_name) > 30:
+			return http_400(2, 'String Too Long', 'scout_name')
 
 		try:
 			db_functions.add_matchv5(match_id=match_id,
