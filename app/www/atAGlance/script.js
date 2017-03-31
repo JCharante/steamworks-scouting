@@ -102,30 +102,33 @@ function onceDocumentReady() {
 				var totalAutokPa = 0;
 				var totalTotalkPa = 0;
 				var totalGears = 0;
-				self.matches_scouted = 0;
 
 				for (var i = 0; i < self.matches.length; i++) {
 					var match = self.matches[i];
 
-					if (match.event_name != 'practice') {
-						self.matches_scouted += 1;
-						totalAutokPa += match.auto_kpa;
-						totalTotalkPa += match.total_kpa;
+					if (match.event_name == 'greater-boston' || match.event_name == 'pine-tree') {
 						totalGears += match.total_gears;
-
-						if (match.collected_fuel_from_floor) {
-							self.can_pickup_fuel_from_floor = true;
-						}
+						self.matches_scouted_gears +=1 ;
 
 						if (match.got_gear_from_floor) {
 							self.can_pickup_gears_from_floor = true;
 						}
 					}
+
+					if (match.event_name == 'pine-tree') {
+						totalAutokPa += match.auto_kpa;
+						totalTotalkPa += match.total_kpa;
+						self.matches_scouted_fuel +=1 ;
+
+						if (match.collected_fuel_from_floor) {
+							self.can_pickup_fuel_from_floor = true;
+						}
+					}
 				}
 
-				self.averageAutokPa = (totalAutokPa / self.matches_scouted) || 0;
-				self.averageTotalkPa = (totalTotalkPa / self.matches_scouted) || 0;
-				self.averageGears = (totalGears / self.matches_scouted) || 0;
+				self.averageAutokPa = (totalAutokPa / self.matches_scouted_fuel) || 0;
+				self.averageTotalkPa = (totalTotalkPa / self.matches_scouted_fuel) || 0;
+				self.averageGears = (totalGears / self.matches_scouted_gears) || 0;
 			}
 		},
 		data: function () {
@@ -137,7 +140,8 @@ function onceDocumentReady() {
 				averageAutokPa: 0,
 				averageTotalkPa: 0,
 				averageGears: 0,
-				matches_scouted: 0
+				matches_scouted_gears: 0,
+				matches_scouted_fuel: 0
 			}
 		}
 	})
