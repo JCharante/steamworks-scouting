@@ -74,25 +74,29 @@ function onceDocumentReady() {
 		el: '#vue-app',
 		mounted: function() {
 			var self = this;
+			self.scout_name = localStorage.getItem('scoutName');
 			self.loadScoutedMatches();
 		},
 		methods: {
 			loadScoutedMatches: function() {
 				var self = this;
 				var all_matches = JSON.parse(localStorage.getItem('matches') || '{}');
-				var scout_name = localStorage.getItem('scoutName');
-				for (var i = 0; i < all_matches.length; i++) {
-					var match = all_matches[i];
-					if (match.scout_name == scout_name) {
-						self.scoutedMatches[match.match_id] = match;
+				for (var key in all_matches) {
+					if (!all_matches.hasOwnProperty(key)) continue;
+
+					var match = all_matches[key];
+					if (match.scout_name == self.scout_name) {
+						self.scoutedMatches.push(match);
 					}
 				}
+				console.log(self.scoutedMatches);
 
 			}
 		},
 		data: function () {
 			return {
-				scoutedMatches: {}
+				scoutedMatches: [],
+				scout_name: ''
 			}
 		}
 	})

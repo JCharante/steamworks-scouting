@@ -9,7 +9,7 @@ function onceDocumentReady() {
 				window.location.replace('../settings/index.html');
 			}
 
-			self.scoutName = localStorage.getItem('scoutName');
+			self.scout_name = localStorage.getItem('scoutName');
 
 			self.match_id = $.QueryString.match_id || null;
 			if (self.match_id === null) {
@@ -122,7 +122,6 @@ function onceDocumentReady() {
 					self.collected_fuel_from_floor = match.collected_fuel_from_floor;
 					self.last_modified = match.last_modified;
 					self.notes = match.notes;
-					self.scout_name = match.scout_name;
 				}
 			}
 		},
