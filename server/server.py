@@ -109,66 +109,126 @@ def api_match_upload():
 		collected_fuel_from_floor = match.get('collected_fuel_from_floor', None)
 		last_modified = match.get('last_modified', None)
 		notes = match.get('notes', None)
+		scout_name = match.get('scout_name', None)
 
 		if type(match_id) is not str:
 			return http_400(1, 'Invalid Data Type', 'match_id')
+		match_id = match_id  # type: str
+
 		if type(event_name) is not str:
 			return http_400(1, 'Invalid Data Type', 'event_name')
+		event_name = event_name  # type: str
+
 		if type(team_number) is not int:
 			return http_400(1, 'Invalid Data Type', 'team_number')
+		team_number = team_number  # type: int
+
 		if type(match_number) is not int:
 			return http_400(1, 'Invalid Data Type', 'match_number')
+		match_number = match_number  # type: int
+
 		if type(auto_line_cross) is not bool:
 			return http_400(1, 'Invalid Data Type', 'auto_line_cross')
+		auto_line_cross = auto_line_cross  # type: bool
+
 		if type(auto_low_goal) is not bool:
 			return http_400(1, 'Invalid Data Type', 'auto_low_goal')
+		auto_low_goal = auto_low_goal  # type: bool
+
 		if type(auto_hopper) is not bool:
 			return http_400(1, 'Invalid Data Type', 'auto_hopper')
+		auto_hopper = auto_hopper  # type: bool
+
 		if type(auto_collect) is not bool:
 			return http_400(1, 'Invalid Data Type', 'auto_collect')
+		auto_collect = auto_collect  # type: bool
+
 		if type(auto_gear_pos) is not str:
 			return http_400(1, 'Invalid Data Type', 'auto_gear_pos')
+		auto_gear_pos = auto_gear_pos  # type: str
+
 		if type(auto_kpa) is not int:
 			return http_400(1, 'Invalid Data Type', 'auto_kpa')
+		auto_kpa = auto_kpa  # type: int
+
 		if type(auto_high_goal_pos) is not str:
 			return http_400(1, 'Invalid Data Type', 'auto_high_goal_pos')
+		auto_high_goal_pos = auto_high_goal_pos  # type: str
+
 		if type(climb_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'climb_rating')
+		climb_rating = climb_rating  # type: str
+
 		if type(gear_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'gear_rating')
+		gear_rating = gear_rating  # type: str
+
 		if type(total_gears) is not int:
 			return http_400(1, 'Invalid Data Type', 'total_gears')
+		total_gears = total_gears  # type: int
+
 		if type(total_kpa) is not int:
 			return http_400(1, 'Invalid Data Type', 'total_kpa')
+		total_kpa = total_kpa  # type: int
+
 		if type(gear_dispense_method) is not str:
 			return http_400(1, 'Invalid Data Type', 'gear_dispense_method')
+		gear_dispense_method = gear_dispense_method  # type: str
+
 		if type(got_gear_from_human) is not bool:
 			return http_400(1, 'Invalid Data Type', 'got_gear_from_human')
+		got_gear_from_human = got_gear_from_human  # type: bool
+
 		if type(got_gear_from_floor) is not bool:
 			return http_400(1, 'Invalid Data Type', 'got_gear_from_floor')
+		got_gear_from_floor = got_gear_from_floor  # type: bool
+
 		if type(high_goal_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'high_goal_rating')
+		high_goal_rating = high_goal_rating  # type: str
+
 		if type(high_goal_shoot_from_key) is not bool:
 			return http_400(1, 'Invalid Data Type', 'high_goal_shoot_from_key')
+		high_goal_shoot_from_key = high_goal_shoot_from_key  # type: bool
+
 		if type(high_goal_shoot_from_wall) is not bool:
 			return http_400(1, 'Invalid Data Type', 'high_goal_shoot_from_wall')
+		high_goal_shoot_from_wall = high_goal_shoot_from_wall  # type: bool
+
 		if type(high_goal_shoot_from_afar) is not bool:
 			return http_400(1, 'Invalid Data Type', 'high_goal_shoot_from_afar')
+		high_goal_shoot_from_afar = high_goal_shoot_from_afar  # type: bool
+
 		if type(low_goal_rating) is not str:
 			return http_400(1, 'Invalid Data Type', 'low_goal_rating')
+		low_goal_rating = low_goal_rating  # type: str
+
 		if type(total_hoppers) is not int:
 			return http_400(1, 'Invalid Data Type', 'total_hoppers')
+		total_hoppers = total_hoppers  # type: int
+
 		if type(collected_from_hopper) is not bool:
 			return http_400(1, 'Invalid Data Type', 'collected_from_hopper')
+		collected_from_hopper = collected_from_hopper  # type: bool
+
 		if type(collected_fuel_from_floor) is not bool:
 			return http_400(1, 'Invalid Data Type', 'collected_fuel_from_floor')
+		collected_fuel_from_floor = collected_fuel_from_floor  # type: bool
+
 		if type(last_modified) is not str:
 			return http_400(1, 'Invalid Data Type', 'last_modified')
+		last_modified = last_modified  # type: str
+
 		if type(notes) is not str:
 			return http_400(1, 'Invalid Data Type', 'notes')
+		notes = notes  # type: str
+
+		if type(scout_name) is not str:
+			return http_400(1, 'Invalid Data Type', 'scout_name')
+		scout_name = scout_name  # type: str
 
 		try:
-			db_functions.add_matchv4(match_id=match_id,
+			db_functions.add_matchv5(match_id=match_id,
 									 event_name=event_name,
 									 team_number=team_number,
 									 match_number=match_number,
@@ -195,7 +255,8 @@ def api_match_upload():
 									 collected_from_hopper=collected_from_hopper,
 									 collected_fuel_from_floor=collected_fuel_from_floor,
 									 last_modified=last_modified,
-									 notes=notes)
+									 notes=notes,
+			                         scout_name=scout_name)
 		except exceptions.MatchDataOutdated:
 			pass
 
