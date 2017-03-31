@@ -26,9 +26,26 @@
 
 		<hr>
 
+		<h1 class="text-center">Showing data for Team #{{ team_number }}</h1>
 		<div class="row">
-			<h1 class="text-center">Showing data for Team #{{ team_number }}</h1>
-			<matches :team_number="team_number"></matches>
+			<match v-for="match in matches" :match="match" v-on:load-scouted-matches="loadScoutedMatches()"></match>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				Can pick up gears from floor: {{ can_pickup_gears_from_floor }}
+			</div>
+			<div class="col-xs-12 col-md-6">
+				Can pickup fuel from floor: {{ can_pickup_fuel_from_floor }}
+			</div>
+			<div class="col-xs-12 col-md-6">
+				Avg. Autonomous kPa: {{ averageAutokPa }}
+			</div>
+			<div class="col-xs-12 col-md-6">
+				Avg. Total kPa: {{ averageTotalkPa }}
+			</div>
+			<div class="col-xs-12 col-md-6">
+				Avg. Gears: {{ averageGears }}
+			</div>
 		</div>
 	</div>
 </div>
