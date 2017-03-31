@@ -1,5 +1,5 @@
 function onceDocumentReady() {
-	var scout_match = new Vue({
+	var localStorageDump = new Vue({
 		el: '#vue-app',
 		mounted: function () {
 			var self = this;
