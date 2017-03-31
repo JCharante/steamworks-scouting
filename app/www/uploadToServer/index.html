@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
 	<!-- Global CSS -->
 	<link rel="stylesheet" href="../static/external/css/bootstrap.min.css">
@@ -13,11 +13,6 @@
 <div class="container">
 	<div id="vue-app">
 		<h1 class="text-center">Upload to Server.</h1>
-		<div class="well">
-			What does this do? It uploads the data from the matches you've scouted
-			to a server, and from there the Scout Master can download
-			the data to plug into spreadsheets.
-		</div>
 		<button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="upload">Upload</button>
 	</div>
 </div>
