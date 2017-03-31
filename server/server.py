@@ -10,6 +10,7 @@ import migration
 migration.migrate_from_matchv1_to_matchv2()
 migration.migrate_matchv2_to_matchv3()
 migration.migrate_matchv3_to_matchv4()
+migration.migrate_matchv4_to_matchv5()
 app = Flask(__name__)
 
 
@@ -261,6 +262,14 @@ def api_match_upload():
 			pass
 
 	response['success'] = True
+	return home_cor(jsonify(**response))
+
+
+@app.route('/download')
+def api_download():
+	response = {
+		'matches': db_functions.matches_array()
+	}
 	return home_cor(jsonify(**response))
 
 
