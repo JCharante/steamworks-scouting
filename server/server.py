@@ -112,11 +112,11 @@ def api_match_upload():
 		notes = match.get('notes', None)
 		scout_name = match.get('scout_name', None)
 
-		if type(match_id) is not str:
+		if type(match_id) is not str and len(match_id) <= 36:
 			return http_400(1, 'Invalid Data Type', 'match_id')
 		match_id = match_id  # type: str
 
-		if type(event_name) is not str:
+		if type(event_name) is not str and len(event_name) <= 100:
 			return http_400(1, 'Invalid Data Type', 'event_name')
 		event_name = event_name  # type: str
 
@@ -144,7 +144,7 @@ def api_match_upload():
 			return http_400(1, 'Invalid Data Type', 'auto_collect')
 		auto_collect = auto_collect  # type: bool
 
-		if type(auto_gear_pos) is not str:
+		if type(auto_gear_pos) is not str and len(auto_gear_pos) <= 10:
 			return http_400(1, 'Invalid Data Type', 'auto_gear_pos')
 		auto_gear_pos = auto_gear_pos  # type: str
 
@@ -152,11 +152,11 @@ def api_match_upload():
 			return http_400(1, 'Invalid Data Type', 'auto_kpa')
 		auto_kpa = auto_kpa  # type: int
 
-		if type(auto_high_goal_pos) is not str:
+		if type(auto_high_goal_pos) is not str and len(auto_high_goal_pos) <= 10:
 			return http_400(1, 'Invalid Data Type', 'auto_high_goal_pos')
 		auto_high_goal_pos = auto_high_goal_pos  # type: str
 
-		if type(climb_rating) is not str:
+		if type(climb_rating) is not str and len(climb_rating) <= 10:
 			return http_400(1, 'Invalid Data Type', 'climb_rating')
 		climb_rating = climb_rating  # type: str
 
