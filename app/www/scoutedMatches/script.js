@@ -65,6 +65,11 @@ Vue.component('match', {
 
 
 function onceDocumentReady() {
+	if ((localStorage.getItem('scoutName') || '') === '') {
+		alert('Please set your name in the settings page.');
+		window.location.replace('../settings/index.html');
+	}
+
 	var scouted_matches = new Vue({
 		el: '#vue-app',
 		mounted: function() {
@@ -74,7 +79,15 @@ function onceDocumentReady() {
 		methods: {
 			loadScoutedMatches: function() {
 				var self = this;
-				self.scoutedMatches = JSON.parse(localStorage.getItem('matches') || '{}')
+				var all_matches = JSON.parse(localStorage.getItem('matches') || '{}');
+				var scout_name = localStorage.getItem('scoutName');
+				for (var i = 0; i < all_matches.length; i++) {
+					var match = all_matches[i];
+					if (match.scout_name == scout_name) {
+						self.scoutedMatches[match.match_id] = match;
+					}
+				}
+
 			}
 		},
 		data: function () {
