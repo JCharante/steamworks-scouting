@@ -54,6 +54,7 @@ def add_matchv5(match_id: str,
 		stored_match_last_modified_date = dateutil.parser.parse(stored_match.last_modified)
 		new_match_last_modified_date = dateutil.parser.parse(last_modified)
 		if stored_match_last_modified_date > new_match_last_modified_date:
+			session.close()
 			raise exceptions.MatchDataOutdated()
 		else:
 			session.query(MatchV5).filter(MatchV5.match_id == match_id).delete()
