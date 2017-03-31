@@ -15,6 +15,7 @@ function onceDocumentReady() {
 				}
 
 				localStorage.setItem('scoutName', self.scoutName);
+				toast('success', 'Saved Changes', '');
 			},
 			loadSavedData: function() {
 				var self = this;
