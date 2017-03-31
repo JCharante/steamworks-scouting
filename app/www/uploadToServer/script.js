@@ -1,8 +1,23 @@
 function onceDocumentReady() {
+	if ((localStorage.getItem('scoutName') || '') === '') {
+		alert('Please set your name in the settings page.');
+		window.location.replace('../settings/index.html');
+	}
+
 	var upload_page = new Vue({
 		el: '#vue-app',
+		mounted: function() {
+			var self = this;
+			self.scout_name = localStorage.getItem('scoutName');
+		},
+		data: function() {
+			return {
+				scout_name: ''
+			}
+		},
 		methods: {
 			upload: function () {
+				var self = this;
 				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
 				var data = {
 					'matches': []
@@ -27,7 +42,9 @@ function onceDocumentReady() {
 						return null;
 					}
 
-					data.matches.push(match)
+					if (match.scout_name == self.scout_name) {
+						data.matches.push(match)
+					}
 				}
 				console.log(data);
 				$.ajax({
