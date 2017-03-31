@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
 	<!-- Global CSS -->
 	<link rel="stylesheet" href="../static/external/css/bootstrap.min.css">
@@ -12,7 +12,7 @@
 <div id="achilles-navbar"></div>
 <div class="container">
 	<div id="vue-app">
-		<form class="form-horizontal">
+		<form class="form-horizontal" @submit.prevent>
 			<h1 class="text-center">At a Glance</h1>
 			<div class="form-group row">
 				<label class="col-lg-3 control-label">Team Number:</label>
@@ -23,6 +23,13 @@
 				</div>
 			</div>
 		</form>
+
+		<hr>
+
+		<div class="row">
+			<h1 class="text-center">Showing data for Team #{{ team_number }}</h1>
+			<matches :team_number="team_number"></matches>
+		</div>
 	</div>
 </div>
 <!-- Global Scripts -->
