@@ -102,13 +102,13 @@ function onceDocumentReady() {
 				var totalAutokPa = 0;
 				var totalTotalkPa = 0;
 				var totalGears = 0;
-				var matches = 0;
+				self.matches_scouted = 0;
 
 				for (var i = 0; i < self.matches.length; i++) {
 					var match = self.matches[i];
 
 					if (match.event_name != 'practice') {
-						matches += 1;
+						self.matches_scouted += 1;
 						totalAutokPa += match.auto_kpa;
 						totalTotalkPa += match.total_kpa;
 						totalGears += match.total_gears;
@@ -123,9 +123,9 @@ function onceDocumentReady() {
 					}
 				}
 
-				self.averageAutokPa = (totalAutokPa / matches) || 0;
-				self.averageTotalkPa = (totalTotalkPa / matches) || 0;
-				self.averageGears = (totalGears / matches) || 0;
+				self.averageAutokPa = (totalAutokPa / self.matches_scouted) || 0;
+				self.averageTotalkPa = (totalTotalkPa / self.matches_scouted) || 0;
+				self.averageGears = (totalGears / self.matches_scouted) || 0;
 			}
 		},
 		data: function () {
@@ -136,7 +136,8 @@ function onceDocumentReady() {
 				can_pickup_gears_from_floor: false,
 				averageAutokPa: 0,
 				averageTotalkPa: 0,
-				averageGears: 0
+				averageGears: 0,
+				matches_scouted: 0
 			}
 		}
 	})
