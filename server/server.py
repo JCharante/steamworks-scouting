@@ -306,4 +306,4 @@ def api_download_data(event_name):
 	data = db_functions.matrix_data_for_event(event_name)
 	return excel.make_response_from_array(data, 'csv')
 
-app.run(debug=True, host='0.0.0.0', port=80)
+app.run(debug=True, host='0.0.0.0', port=80, threaded=True)
