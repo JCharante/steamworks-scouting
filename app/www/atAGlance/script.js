@@ -106,7 +106,7 @@ function onceDocumentReady() {
 				for (var i = 0; i < self.matches.length; i++) {
 					var match = self.matches[i];
 
-					if (match.event_name == 'greater-boston' || match.event_name == 'pine-tree') {
+					if (match.event_name == 'greater-boston' || match.event_name == 'pine-tree' || match.event_name == 'nec') {
 						totalGears += match.total_gears;
 						self.matches_scouted_gears +=1 ;
 
@@ -115,7 +115,7 @@ function onceDocumentReady() {
 						}
 					}
 
-					if (match.event_name == 'pine-tree') {
+					if (match.event_name == 'pine-tree' || match.event_name == 'nec') {
 						totalAutokPa += match.auto_kpa;
 						totalTotalkPa += match.total_kpa;
 						self.matches_scouted_fuel +=1 ;
