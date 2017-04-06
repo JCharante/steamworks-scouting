@@ -97,8 +97,6 @@ function onceDocumentReady() {
 				self.loadMatches();
 				self.calculateStats();
 
-				var currentEvent = 'pine-tree';  // TODO: Make this an option in the settings page.
-
 				var totalAutokPa = 0;
 				var totalTotalkPa = 0;
 				var totalGears = 0;
