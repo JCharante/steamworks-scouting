@@ -5,6 +5,7 @@ function onceDocumentReady() {
 			var self = this;
 			self.matches = JSON.parse(localStorage.getItem('matches') || '{}');
 			self.scoutName = localStorage.getItem('scoutName') || '';
+			self.serverPassword = localStorage.getItem('serverPassword') || '';
 		},
 		methods: {
 			wipe_data: function() {
@@ -12,8 +13,10 @@ function onceDocumentReady() {
 				toast('info', 'Wiping Data.', '');
 				localStorage.setItem('matches', '{}');
 				localStorage.setItem('scoutName', '');
+				localStorage.setItem('serverPassword', '');
 				self.matches = JSON.parse(localStorage.getItem('matches') || '{}');
-				self.scoutName = localStorage.getItem('scoutName')
+				self.scoutName = localStorage.getItem('scoutName');
+				self.serverPassword = localStorage.getItem('serverPassword');
 			}
 		},
 		computed: {
@@ -30,7 +33,8 @@ function onceDocumentReady() {
 			var self = this;
 			return {
 				matches: {},
-				scoutName: ''
+				scoutName: '',
+				serverPassword: ''
 			}
 		}
 	})
