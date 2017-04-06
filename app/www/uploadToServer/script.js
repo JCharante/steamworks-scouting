@@ -4,15 +4,22 @@ function onceDocumentReady() {
 		window.location.replace('../settings/index.html');
 	}
 
+	if ((localStorage.getItem('serverPassword') || '') === '') {
+		alert('Please set the server password in the settings page.');
+		window.location.replace('../settings/index.html');
+	}
+
 	var upload_page = new Vue({
 		el: '#vue-app',
 		mounted: function() {
 			var self = this;
 			self.scout_name = localStorage.getItem('scoutName');
+			self.serverPassword = localStorage.getItem('serverPassword');
 		},
 		data: function() {
 			return {
-				scout_name: ''
+				scout_name: '',
+				serverPassword: ''
 			}
 		},
 		methods: {
@@ -20,7 +27,8 @@ function onceDocumentReady() {
 				var self = this;
 				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
 				var data = {
-					'matches': []
+					'matches': [],
+					'serverPassword': self.serverPassword
 				};
 
 				for (var key in matches) {
@@ -61,7 +69,10 @@ function onceDocumentReady() {
 						400: function (responseObject) {
 							console.log('Server Replied: ', responseObject);
 							var data = responseObject.responseJSON;
-							toast('error', 'Oh no!', 'Error while uploading matches');
+							toast('error', 'Error Code', data.error.error_code);
+							toast('error', 'Message', data.error.message);
+							toast('error', 'Fields', data.error.fields);
+							playFieldFault();
 						},
 						500: function (responseObject) {
 							console.log('Server Replied: ', responseObject);
