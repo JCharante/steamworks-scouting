@@ -17,6 +17,211 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
 
+def upload_matches(matches: List[Dict], server_password) -> None:
+	if server_password != os.environ['serverPassword']:
+		raise exceptions.GenericException(3, 'Not Authorized', 'serverPassword')
+
+	for match in matches:
+		match_id = match.get('match_id', None)
+		event_name = match.get('event_name', None)
+		team_number = match.get('team_number', None)
+		match_number = match.get('match_number', None)
+		auto_line_cross = match.get('auto_line_cross', None)
+		auto_low_goal = match.get('auto_low_goal', None)
+		auto_hopper = match.get('auto_hopper', None)
+		auto_collect = match.get('auto_collect', None)
+		auto_gear_pos = match.get('auto_gear_pos', None)
+		auto_kpa = match.get('auto_kpa', None)
+		auto_high_goal_pos = match.get('auto_high_goal_pos', None)
+		climb_rating = match.get('climb_rating', None)
+		gear_rating = match.get('gear_rating', None)
+		total_gears = match.get('total_gears', None)
+		total_kpa = match.get('total_kpa', None)
+		gear_dispense_method = match.get('gear_dispense_method', None)
+		got_gear_from_human = match.get('got_gear_from_human', None)
+		got_gear_from_floor = match.get('got_gear_from_floor', None)
+		high_goal_rating = match.get('high_goal_rating', None)
+		high_goal_shoot_from_key = match.get('high_goal_shoot_from_key', None)
+		high_goal_shoot_from_wall = match.get('high_goal_shoot_from_wall', None)
+		high_goal_shoot_from_afar = match.get('high_goal_shoot_from_afar', None)
+		low_goal_rating = match.get('low_goal_rating', None)
+		total_hoppers = match.get('total_hoppers', None)
+		collected_from_hopper = match.get('collected_from_hopper', None)
+		collected_fuel_from_floor = match.get('collected_fuel_from_floor', None)
+		last_modified = match.get('last_modified', None)
+		notes = match.get('notes', None)
+		scout_name = match.get('scout_name', None)
+
+		if type(match_id) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'match_id')
+		match_id = match_id  # type: str
+		if len(match_id) > 36:
+			raise exceptions.GenericException(2, 'String Too Long', 'match_id')
+
+		if type(event_name) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'event_name')
+		event_name = event_name  # type: str
+		if len(event_name) > 100:
+			raise exceptions.GenericException(2, 'String Too Long', 'event_name')
+
+		if type(team_number) is not int:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'team_number')
+		team_number = team_number  # type: int
+
+		if type(match_number) is not int:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'match_number')
+		match_number = match_number  # type: int
+
+		if type(auto_line_cross) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_line_cross')
+		auto_line_cross = auto_line_cross  # type: bool
+
+		if type(auto_low_goal) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_low_goal')
+		auto_low_goal = auto_low_goal  # type: bool
+
+		if type(auto_hopper) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_hopper')
+		auto_hopper = auto_hopper  # type: bool
+
+		if type(auto_collect) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_collect')
+		auto_collect = auto_collect  # type: bool
+
+		if type(auto_gear_pos) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_gear_pos')
+		auto_gear_pos = auto_gear_pos  # type: str
+		if len(auto_gear_pos) > 10:
+			raise exceptions.GenericException(2, 'String Too Long', 'auto_gear_pos')
+
+		if type(auto_kpa) is not int:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_kpa')
+		auto_kpa = auto_kpa  # type: int
+
+		if type(auto_high_goal_pos) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_high_goal_pos')
+		auto_high_goal_pos = auto_high_goal_pos  # type: str
+		if len(auto_high_goal_pos) > 10:
+			raise exceptions.GenericException(2, 'String Too Long', 'auto_high_goal_pos')
+
+		if type(climb_rating) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'climb_rating')
+		climb_rating = climb_rating  # type: str
+		if len(climb_rating) > 10:
+			raise exceptions.GenericException(2, 'String Too Long', 'climb_rating')
+
+		if type(gear_rating) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'gear_rating')
+		gear_rating = gear_rating  # type: str
+
+		if type(total_gears) is not int:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'total_gears')
+		total_gears = total_gears  # type: int
+
+		if type(total_kpa) is not int:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'total_kpa')
+		total_kpa = total_kpa  # type: int
+
+		if type(gear_dispense_method) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'gear_dispense_method')
+		gear_dispense_method = gear_dispense_method  # type: str
+
+		if type(got_gear_from_human) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'got_gear_from_human')
+		got_gear_from_human = got_gear_from_human  # type: bool
+
+		if type(got_gear_from_floor) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'got_gear_from_floor')
+		got_gear_from_floor = got_gear_from_floor  # type: bool
+
+		if type(high_goal_rating) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'high_goal_rating')
+		high_goal_rating = high_goal_rating  # type: str
+		if len(high_goal_rating) > 10:
+			raise exceptions.GenericException(2, 'String Too Long', 'high_goal_rating')
+
+		if type(high_goal_shoot_from_key) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'high_goal_shoot_from_key')
+		high_goal_shoot_from_key = high_goal_shoot_from_key  # type: bool
+
+		if type(high_goal_shoot_from_wall) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'high_goal_shoot_from_wall')
+		high_goal_shoot_from_wall = high_goal_shoot_from_wall  # type: bool
+
+		if type(high_goal_shoot_from_afar) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'high_goal_shoot_from_afar')
+		high_goal_shoot_from_afar = high_goal_shoot_from_afar  # type: bool
+
+		if type(low_goal_rating) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'low_goal_rating')
+		low_goal_rating = low_goal_rating  # type: str
+		if len(low_goal_rating) > 10:
+			raise exceptions.GenericException(2, 'String Too Long', 'low_goal_rating')
+
+		if type(total_hoppers) is not int:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'total_hoppers')
+		total_hoppers = total_hoppers  # type: int
+
+		if type(collected_from_hopper) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'collected_from_hopper')
+		collected_from_hopper = collected_from_hopper  # type: bool
+
+		if type(collected_fuel_from_floor) is not bool:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'collected_fuel_from_floor')
+		collected_fuel_from_floor = collected_fuel_from_floor  # type: bool
+
+		if type(last_modified) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'last_modified')
+		last_modified = last_modified  # type: str
+		if len(last_modified) > 30:
+			raise exceptions.GenericException(2, 'String Too Long', 'climb_rating')
+
+		if type(notes) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'notes')
+		notes = notes  # type: str
+		if len(notes) > 200:
+			raise exceptions.GenericException(2, 'String Too Long', 'notes')
+
+		if type(scout_name) is not str:
+			raise exceptions.GenericException(1, 'Invalid Data Type', 'scout_name')
+		scout_name = scout_name  # type: str
+		if len(scout_name) > 30:
+			raise exceptions.GenericException(2, 'String Too Long', 'scout_name')
+
+		try:
+			add_matchv5(match_id=match_id,
+						event_name=event_name,
+						team_number=team_number,
+						match_number=match_number,
+						auto_line_cross=auto_line_cross,
+						auto_low_goal=auto_low_goal,
+						auto_hopper=auto_hopper,
+						auto_collect=auto_collect,
+						auto_gear_pos=auto_gear_pos,
+						auto_kpa=auto_kpa,
+						auto_high_goal_pos=auto_high_goal_pos,
+						climb_rating=climb_rating,
+						gear_rating=gear_rating,
+						total_gears=total_gears,
+						total_kpa=total_kpa,
+						gear_dispense_method=gear_dispense_method,
+						got_gear_from_human=got_gear_from_human,
+						got_gear_from_floor=got_gear_from_floor,
+						high_goal_rating=high_goal_rating,
+						high_goal_shoot_from_key=high_goal_shoot_from_key,
+						high_goal_shoot_from_wall=high_goal_shoot_from_wall,
+						high_goal_shoot_from_afar=high_goal_shoot_from_afar,
+						low_goal_rating=low_goal_rating,
+						total_hoppers=total_hoppers,
+						collected_from_hopper=collected_from_hopper,
+						collected_fuel_from_floor=collected_fuel_from_floor,
+						last_modified=last_modified,
+						notes=notes,
+						scout_name=scout_name)
+		except exceptions.MatchDataOutdated:
+			pass
+
+
 def add_matchv5(match_id: str,
 				event_name: str,
 				team_number: int,
