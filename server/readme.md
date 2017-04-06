@@ -5,7 +5,9 @@ The achilles app uploads matches to this server, and this server allows you to g
 
 ## Running on Docker
 
-First setup your environmental variables.
+### Environmental Variables.
+
+#### db_address
 
 The address of the mysql server in the format of:
 
@@ -17,12 +19,22 @@ Example:
 $ export db_address=mysql+pymysql://achilles:achilles@localhost/achilles
 ```
 
+#### serverPassword
+
+The password for the server (will also have to be manually set in client)
+
+```bash
+$ export serverPassword=yee
+```
+
+### Running
+
 Then to run on docker
 ```bash
-$ docker run -d --restart=always -e "db_address=$db_address" -p 80:80 --name achilles-api-server jcharante/achilles-server
+$ docker run -d --restart=always -e "db_address=$db_address" -e "serverPassword=$serverPassword" -p 80:80 --name achilles-api-server jcharante/achilles-server
 ```
 
 Deploying to hyper.sh
 ```bash
-$ hyper run -d --restart=always -e "db_address=$db_address" -p 80:80 --size=s4 --name achilles-api-server jcharante/achilles-server
+$ hyper run -d --restart=always -e "db_address=$db_address" -e "serverPassword=$serverPassword" -p 80:80 --size=s4 --name achilles-api-server jcharante/achilles-server
 ```
