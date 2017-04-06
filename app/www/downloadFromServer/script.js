@@ -17,10 +17,10 @@ function onceDocumentReady() {
 						toast('info', 'Saved updated Data', '');
 					} else if (scanned_match_date.getTime() === stored_match_date.getTime()) {
 						console.log('Scanned Match was modified at the same time as Stored Match');
-						toast('info', 'Nothing Changed', 'Scanned Data modified at the same time as Stored Data.');
+						//toast('info', 'Nothing Changed', 'Scanned Data modified at the same time as Stored Data.');
 					} else {
 						console.log('Stored Match was modified more recently');
-						toast('info', 'Nothing Changed', 'Stored Data more recent than Scanned Data');
+						//toast('info', 'Nothing Changed', 'Stored Data more recent than Scanned Data');
 					}
 				} else {
 					matches[scanned_match_id] = scanned_match;
@@ -32,7 +32,7 @@ function onceDocumentReady() {
 				var self = this;
 				$.ajax({
 					method: 'GET',
-					url: 'http://achilles.jcharante.com/download',
+					url: 'http://achilles.jcharante.com/download/app?serverPassword=' + (localStorage.getItem('serverPassword') || 'yee'),
 					contentType: "application/json",
 					statusCode: {
 						200: function (data) {
@@ -42,6 +42,14 @@ function onceDocumentReady() {
 								self.saveMatch(match);
 							}
 							toast('success', 'Success!', 'Scouted Matches Successfully Downloaded');
+						},
+						400: function (responseObject) {
+							console.log('Server Replied: ', responseObject);
+							var data = responseObject.responseJSON;
+							toast('error', 'Error Code', data.error.error_code);
+							toast('error', 'Message', data.error.message);
+							toast('error', 'Fields', data.error.fields);
+							playFieldFault();
 						}
 					}
 				});
