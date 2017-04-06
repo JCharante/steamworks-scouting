@@ -8,23 +8,27 @@ function onceDocumentReady() {
 		methods: {
 			save: function() {
 				var self = this;
-				if (self.scoutName === '' || !self.scoutName) {
-					toast('error', 'Didn\'t Save', 'Invalid Scout Name');
+				if (!(/\S/.test(self.scoutName))) {
+					toast('error', 'Didn\'t Save', 'Scout name cannot be Blank');
 					playFieldFault();
 					return null;
 				}
 
+
 				localStorage.setItem('scoutName', self.scoutName);
+				localStorage.setItem('serverPassword', self.serverPassword);
 				toast('success', 'Saved Changes', '');
 			},
 			loadSavedData: function() {
 				var self = this;
 				self.scoutName = localStorage.getItem('scoutName') || '';
+				self.serverPassword = localStorage.getItem('serverPassword') || '';
 			}
 		},
 		data: function () {
 			return {
-				scoutName: ''
+				scoutName: '',
+				serverPassword: ''
 			}
 		}
 	});
