@@ -67,7 +67,8 @@ function onceDocumentReady() {
 						return null;
 					}
 
-					if (match.scout_name == self.scout_name && match.changedSinceUpload) {
+					var uploadOthersMatches = JSON.parse(localStorage.getItem('preferences') || '{}').uploadOthersMatches || false;
+					if ((uploadOthersMatches || match.scout_name == self.scout_name) && match.changedSinceUpload) {
 						data.matches.push(match)
 					}
 				}
