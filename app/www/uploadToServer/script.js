@@ -23,6 +23,23 @@ function onceDocumentReady() {
 			}
 		},
 		methods: {
+			markMatchesAsUploaded: function(uploadedMatches) {
+				var self = this;
+				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
+				for (var key in matches) {
+					if(!matches.hasOwnProperty(key)) continue;
+
+					var match = matches[key];
+
+					uploadedMatches.forEach( function (uploadedMatch) {
+						if (match.match_id === uploadedMatch.match_id) {
+							match.changedSinceUpload = false;
+						}
+					});
+				}
+
+				localStorage.setItem('matches', JSON.stringify(matches));
+			},
 			upload: function () {
 				var self = this;
 				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
@@ -50,7 +67,7 @@ function onceDocumentReady() {
 						return null;
 					}
 
-					if (match.scout_name == self.scout_name) {
+					if (match.scout_name == self.scout_name && match.changedSinceUpload) {
 						data.matches.push(match)
 					}
 				}
@@ -62,8 +79,9 @@ function onceDocumentReady() {
 					dataType: "json",
 					contentType: "application/json",
 					statusCode: {
-						200: function (data) {
-							console.log('Server Replied: ', data);
+						200: function (response) {
+							console.log('Server Replied: ', response);
+							self.markMatchesAsUploaded(data.matches);
 							toast('success', 'Success!', 'Scouted Matches Successfully Uploaded');
 						},
 						400: function (responseObject) {

@@ -98,7 +98,8 @@ function onceDocumentReady() {
 					collected_fuel_from_floor: self.collected_fuel_from_floor,
 					last_modified: self.last_modified,
 					notes: self.notes,
-					scout_name: self.scout_name
+					scout_name: self.scout_name,
+					changedSinceUpload: true
 				};
 				localStorage.setItem('matches', JSON.stringify(matches));
 				toast('success', 'Match Saved', '');
@@ -136,6 +137,7 @@ function onceDocumentReady() {
 					self.collected_fuel_from_floor = match.collected_fuel_from_floor;
 					self.last_modified = match.last_modified;
 					self.notes = match.notes;
+					self.changedSinceUpload = match.changedSinceUpload;
 				}
 			}
 		},
@@ -169,7 +171,8 @@ function onceDocumentReady() {
 				collected_fuel_from_floor: false,
 				last_modified: "2017-03-17T00:34:15.415Z",
 				notes: '',
-				scout_name: ''
+				scout_name: '',
+				changedSinceUpload: true
 			}
 		}
 	})
