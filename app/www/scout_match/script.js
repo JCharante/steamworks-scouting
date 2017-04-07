@@ -53,6 +53,18 @@ function onceDocumentReady() {
 					return null;
 				}
 
+				if (!self.match_number) {
+					playFieldFault();
+					toast('error', 'Match Not Saved', 'Match Number Cannot be Empty');
+					return null;
+				}
+
+				if (!self.team_number) {
+					playFieldFault();
+					toast('error', 'Match Not Saved', 'Team Number Cannot be Empty');
+					return null;
+				}
+
 				self.last_modified = new Date().toJSON();
 				var matches = JSON.parse(localStorage.getItem('matches') || '{}');
 				matches[self.match_id] = {
