@@ -9,6 +9,8 @@ function onceDocumentReady() {
 				window.location.replace('../settings/index.html');
 			}
 
+			self.event_name = JSON.parse(localStorage.getItem('preferences') || '{}').defaultEvent || 'practice';
+
 			self.scout_name = localStorage.getItem('scoutName');
 
 			self.match_id = $.QueryString.match_id || null;

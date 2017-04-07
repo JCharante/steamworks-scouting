@@ -6,6 +6,7 @@ function onceDocumentReady() {
 			self.matches = JSON.parse(localStorage.getItem('matches') || '{}');
 			self.scoutName = localStorage.getItem('scoutName') || '';
 			self.serverPassword = localStorage.getItem('serverPassword') || '';
+			self.preferences = localStorage.getItem('preferences') || '';
 		},
 		methods: {
 			wipe_data: function() {
@@ -14,9 +15,11 @@ function onceDocumentReady() {
 				localStorage.setItem('matches', '{}');
 				localStorage.setItem('scoutName', '');
 				localStorage.setItem('serverPassword', '');
+				localStorage.setItem('preferences', '{}');
 				self.matches = JSON.parse(localStorage.getItem('matches') || '{}');
 				self.scoutName = localStorage.getItem('scoutName');
 				self.serverPassword = localStorage.getItem('serverPassword');
+				self.preferences = localStorage.getItem('preferences');
 			}
 		},
 		computed: {
@@ -34,7 +37,8 @@ function onceDocumentReady() {
 			return {
 				matches: {},
 				scoutName: '',
-				serverPassword: ''
+				serverPassword: '',
+				preferences: ''
 			}
 		}
 	})

@@ -14,21 +14,23 @@ function onceDocumentReady() {
 					return null;
 				}
 
-
 				localStorage.setItem('scoutName', self.scoutName);
 				localStorage.setItem('serverPassword', self.serverPassword);
+				localStorage.setItem('preferences', JSON.stringify(self.preferences));
 				toast('success', 'Saved Changes', '');
 			},
 			loadSavedData: function() {
 				var self = this;
 				self.scoutName = localStorage.getItem('scoutName') || '';
 				self.serverPassword = localStorage.getItem('serverPassword') || '';
+				self.preferences = JSON.parse(localStorage.getItem('preferences') || '{}');
 			}
 		},
 		data: function () {
 			return {
 				scoutName: '',
-				serverPassword: ''
+				serverPassword: '',
+				preferences: {}
 			}
 		}
 	});
