@@ -1,4 +1,11 @@
 Vue.component('achilles-navbar', {
+	mounted: function () {
+		var self = this;
+		var preferences = JSON.parse(localStorage.getItem('preferences') || '{}');
+		if (preferences.fixedNavbar || false) {
+			$('nav').addClass('navbar-fixed-top');
+		}
+	},
 	template:
 	'<nav class="navbar navbar-default">' +
 		'<div class="container-fluid">' +

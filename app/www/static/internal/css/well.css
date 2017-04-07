@@ -1,3 +1,7 @@
 .well {
     overflow: auto;
 }
+
+.container {
+    padding-top: 50px;
+}
