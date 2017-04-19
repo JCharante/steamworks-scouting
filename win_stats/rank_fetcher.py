@@ -26,7 +26,7 @@ class RankFetcher:
 		print(f'Fetching Event Winner Data for {self.event_code}..')
 		data = requests.get(self.url + '/awards', headers=self.headers).json()
 		winner_award_names = ['District Event Winner', 'Regional Winners', 'Championship Subdivision Winner']
-		if len(data) > 0:  # Some Events have 0 Data, Lol Blue Alliance
+		if len(data) > 0:  # Some Events have 0 Data
 			found_winning_award = False
 			for award in data:
 				award_name = award.get('name', '')
@@ -51,19 +51,10 @@ class RankFetcher:
 				try:
 					db_functions.add_ranking(self.event_code, team, ranking, won)
 				except exceptions.TeamAtEventAlreadyRecorded:
-					#print(f'We already have the ranking of team {team} saved at {self.event_code} with rank {ranking}')1
 					break
 			except Exception as e:
 				print(repr(e))
 		print(f'Done Saving Data for {self.event_code}')
-
-
-def output_data_in_tsv():
-	data = db_functions.get_rankings()
-	print('Rank\tWinPct')
-	for ranking, value in data.items():
-		win_pct = float(value.get('wins', 0) / value.get('instances'))
-		print(f'{ranking}\t{win_pct}')
 
 
 def get_2016_event_codes():
@@ -86,6 +77,7 @@ def get_2016_data():
 		RankFetcher(event_code)
 
 get_2016_data()
-print(output_data_in_tsv())
 
-#RankFetcher('2016ncmcl')
+data = [['Rank', 'WinPct']] + [[ranking, float(value.get('wins', 0) / value.get('instances'))] for ranking, value in db_functions.get_rankings().items()]
+util.save_as_csv(data, name='2016-chances-of-winning-at-a-ranking')
+
