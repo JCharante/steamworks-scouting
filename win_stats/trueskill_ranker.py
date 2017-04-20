@@ -6,15 +6,17 @@ from typing import Tuple, List, Dict
 from settings import Settings
 import requests
 import re
+from trueskill import Rating, quality, rate
+
 
 Base = declarative_base()
 
 
 def tie_breaker_steam_works(red_foul_points: int, blue_foul_points: int,
-			   red_auto_points: int, blue_auto_points: int,
-			   red_total_rotor_points: int, blue_total_rotor_points: int,
-			   red_touchpad_points: int, blue_touchpad_points: int,
-			   red_total_pressure: int, blue_total_pressure: int) -> str:
+							red_auto_points: int, blue_auto_points: int,
+							red_total_rotor_points: int, blue_total_rotor_points: int,
+							red_touchpad_points: int, blue_touchpad_points: int,
+							red_total_pressure: int, blue_total_pressure: int) -> str:
 	"""
 	Taken from the Game Manual
 	Table 10-2: Quarterfinal, Semifinal, and Overtime Tiebreaker Criteria
@@ -67,6 +69,14 @@ class TrueSkillMatchV1(Base):
 	red_3 = Column(Integer)
 	event_key = Column(String(10))
 	match_key = Column(String(20))
+
+
+class TrueSkillTeamV1(Base):
+	__tablename__ = 'TrueSkillTeamV1'
+	pk = Column(Integer, primary_key=True)
+	team_number = Column(Integer)
+	mu = Column(Float)
+	sigma = Column(Float)
 
 
 settings = Settings()
@@ -214,7 +224,7 @@ class MatchDataFetcher:
 			blue_score = match.get('alliances', {}).get('blue', {}).get('score', None)
 
 			if match_key is None or comp_level is None or blue_1 is None or blue_2 is None or blue_3 is None or red_1 is None or red_2 is None or red_3 is None or red_score is None or blue_score is None:
-				print('Error Processing Match. Raw data:', match)
+				print('Error Processing Match. Invalid Data Type. Raw data:', match)
 				return
 			winner = ''
 
@@ -255,8 +265,10 @@ class MatchDataFetcher:
 
 					if tie_breaker_winner == 'red' or tie_breaker_winner == 'blue':
 						winner = tie_breaker_winner
+					elif tie_breaker_winner == 'replay':
+						winner = 'draw'
 					else:
-						print('Error Processing Match. Raw data:', match)
+						print('Error Determining Tie Breaker. Match Key:', match_key)
 						return
 
 			session.add(TrueSkillMatchV1(
@@ -275,4 +287,98 @@ class MatchDataFetcher:
 		print(f'Saved Data for {self.event_code}')
 		session.close()
 
-a = MatchDataFetcher('2017necmp')
+
+def retrieve_rating(team_number):
+	session = DBSession()
+	row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == team_number).first()
+	session.close()
+	if row is None:
+		return Rating()
+	else:
+		return Rating(mu=row.mu, sigma=row.sigma)
+
+
+def save_rating(team_number: int, mu: float, sigma: float):
+	session = DBSession()
+	row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == team_number).first()
+	if row is None:
+		session.add(TrueSkillTeamV1(
+			team_number=team_number,
+			mu=mu,
+			sigma=sigma
+		))
+	else:
+		row.mu = mu
+		row.sigma = sigma
+	session.commit()
+	session.close()
+
+
+def save_ratings(rankings: List[List]):
+	session = DBSession()
+	for ranking in rankings:
+		row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == ranking[0]).first()
+		if row is None:
+			session.add(TrueSkillTeamV1(
+				team_number=ranking[0],
+				mu=ranking[1],
+				sigma=ranking[2]
+			))
+		else:
+			row.mu = ranking[1]
+			row.sigma = ranking[2]
+	session.commit()
+	session.close()
+
+
+def get_event_codes_for_district(district_code):
+	url = f'https://www.thebluealliance.com/api/v2/district/{district_code}/2017/events'
+	headers = {
+		'X-TBA-App-Id': settings.app_id
+	}
+	events = requests.get(url, headers=headers).json()
+	return [event['key'] for event in events]
+
+
+for event_code in get_event_codes_for_district('ne'):
+	MatchDataFetcher(event_code)
+
+
+def calculate_ratings():
+	session = DBSession()
+	print('Deleting Stored Ratings')
+	session.query(TrueSkillTeamV1).delete()
+	session.commit()
+
+	print('Calculating Ratings...')
+	for match in session.query(TrueSkillMatchV1).all():
+		old_blue_1_rating = retrieve_rating(match.blue_1)
+		old_blue_2_rating = retrieve_rating(match.blue_2)
+		old_blue_3_rating = retrieve_rating(match.blue_3)
+		old_red_1_rating = retrieve_rating(match.red_1)
+		old_red_2_rating = retrieve_rating(match.red_2)
+		old_red_3_rating = retrieve_rating(match.red_3)
+		blue_alliance = [old_blue_1_rating, old_blue_2_rating, old_blue_3_rating]
+		red_alliance = [old_red_1_rating, old_red_2_rating, old_red_3_rating]
+
+		ranks = [0, 0]
+		if match.winning_alliance == 'red':
+			ranks = [1, 0]
+		elif match.winning_alliance == 'blue':
+			ranks = [0, 1]
+
+		(new_blue_1_rating, new_blue_2_rating, new_blue_3_rating), (new_red_1_rating, new_red_2_rating, new_red_3_rating) = rate([blue_alliance, red_alliance], ranks=ranks)
+
+		save_ratings([
+			[match.blue_1, new_blue_1_rating.mu, new_blue_1_rating.sigma],
+			[match.blue_2, new_blue_2_rating.mu, new_blue_2_rating.sigma],
+			[match.blue_3, new_blue_3_rating.mu, new_blue_3_rating.sigma],
+			[match.red_1, new_red_1_rating.mu, new_red_1_rating.sigma],
+			[match.red_2, new_red_2_rating.mu, new_red_2_rating.sigma],
+			[match.red_3, new_red_3_rating.mu, new_red_3_rating.sigma]
+		])
+
+	session.close()
+	print('Finished Calculating Ratings')
+
+calculate_ratings()
