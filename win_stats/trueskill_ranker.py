@@ -381,4 +381,13 @@ def calculate_ratings():
 	session.close()
 	print('Finished Calculating Ratings')
 
+
+def save_ratings_to_csv():
+	session = DBSession()
+	two_d_list = [['Team Number', 'Mu', 'Sigma']]
+	for team in session.query(TrueSkillTeamV1).all():  # type: TrueSkillTeamV1
+		two_d_list.append([team.team_number, team.mu, team.sigma])
+	util.save_as_csv(two_d_list, name='NE Team Rankings', append_timestamp=False)
+
 calculate_ratings()
+save_ratings_to_csv()

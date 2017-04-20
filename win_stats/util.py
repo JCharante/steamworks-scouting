@@ -3,6 +3,8 @@ import json
 from typing import List
 from subprocess import run
 import csv
+from datetime import datetime
+
 
 def path_to_this_files_directory():
 	dir_path = os.path.dirname(os.path.realpath(__file__))
