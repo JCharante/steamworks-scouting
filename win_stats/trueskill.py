@@ -261,12 +261,12 @@ class MatchDataFetcher:
 
 			session.add(TrueSkillMatchV1(
 				winning_alliance=winner,
-				blue_1=re.sub("\D", "", blue_1),
-				blue_2=re.sub("\D", "", blue_2),
-				blue_3=re.sub("\D", "", blue_3),
-				red_1=re.sub("\D", "", red_1),
-				red_2=re.sub("\D", "", red_2),
-				red_3=re.sub("\D", "", red_3),
+				blue_1=int(re.sub("\D", "", blue_1)),
+				blue_2=int(re.sub("\D", "", blue_2)),
+				blue_3=int(re.sub("\D", "", blue_3)),
+				red_1=int(re.sub("\D", "", red_1)),
+				red_2=int(re.sub("\D", "", red_2)),
+				red_3=int(re.sub("\D", "", red_3)),
 				event_key=self.event_code,
 				match_key=match_key
 			))
