@@ -50,7 +50,7 @@ function main() {
 				hideEdgesOnDrag: false
 			}
 		};
-		var data = {nodes: nodesDataset, edges: edgesDataset} // Note: data is coming from ./datasources/WorldCup2014.js
+		var data = {nodes: nodesDataset, edges: edgesDataset};
 
 
 		network = new vis.Network(container, data, options);

@@ -38,6 +38,16 @@ pip install -r requirements.txt
 Running
 =======
 
+### TrueSkill Network Graph
+
+#### Description
+
+A network node graph, where the size of the node is based on the trueskill score, the color is based off of the region, and the edges are based off of matches played between notes/teams.
+
+#### Results
+
+[A very resource intensive graph using data for all teams from 2017-04-20-05:23:10.747165](connections/index.html)
+
 ### TrueSkill Ratings for 2017
 
 #### Description
