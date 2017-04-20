@@ -38,6 +38,16 @@ pip install -r requirements.txt
 Running
 =======
 
+### TrueSkill Ratings for 2017
+
+#### Description
+
+This uses the TrueSkill library with off the shelf default values to see how teams rank against each other when it comes to winning matches.
+
+#### Results
+
+[Available Here](exports/world-trueskill-rankings-2017-04-20-05:23:10.747165.csv)
+
 ### Rank Fetcher
 
 #### Description

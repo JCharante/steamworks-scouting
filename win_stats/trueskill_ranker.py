@@ -415,40 +415,30 @@ def calculate_ratings():
 	print('Finished Calculating Ratings')
 
 
-def save_ratings_to_csv(name='untitled-rankings'):
+def save_ratings_to_csv(name='untitled-rankings', append_timestamp=False):
 	session = DBSession()
 	two_d_list = [['Team Number', 'Mu', 'Sigma']]
 	for team in session.query(TrueSkillTeamV1).all():  # type: TrueSkillTeamV1
 		two_d_list.append([team.team_number, team.mu, team.sigma])
-	util.save_as_csv(two_d_list, name=name, append_timestamp=False)
+	util.save_as_csv(two_d_list, name=name, append_timestamp=append_timestamp)
 
 # NE District Rankings
+# This takes into account datasets outside of NE events, which is why it is commented out.
+# TODO: Calculate Ratings for teams in matches in a specified set of events
 """
 for event_code in get_event_codes_for_district('ne'):
 	MatchDataFetcher(event_code)
 
 calculate_ratings()
+save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
 save_ratings_to_csv(name='ne-district-rankings')
 """
 
 # World Rankings
-"""
+
 for event_code in get_all_event_codes():
 	MatchDataFetcher(event_code)
 
 calculate_ratings()
-save_ratings_to_csv(name='world-rankings')
-"""
-
-# Some World Rankings
-import random
-
-all_event_codes = get_all_event_codes()
-for i in range(5):
-	MatchDataFetcher(random.choice(all_event_codes))
-
-calculate_ratings()
-
-print(len(ratings))
 save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
-save_ratings_to_csv(name='some-world-rankings')
+save_ratings_to_csv(name='world-trueskill-rankings', append_timestamp=True)
