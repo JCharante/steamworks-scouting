@@ -2,11 +2,15 @@ appdirs==1.4.3
 curio==0.7
 curio-http==0.1.0
 h11==0.7.0
+mpmath==0.19
 multidict==2.1.4
 packaging==16.8
+py==1.4.33
 PyMySQL==0.7.11
+pytest==3.0.7
 requests==2.13.0
 six==1.10.0
 SQLAlchemy==1.1.9
+tqdm==4.11.2
 trueskill==0.4.4
 yarl==0.10.0

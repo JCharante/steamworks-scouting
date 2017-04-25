@@ -9,7 +9,8 @@ from db_setup import Base, TrueSkillMatchV1, TrueSkillTeamV1
 from asynchronous_fetcher import DataFetcher, EventCodeFetcher
 import requests
 import re
-from trueskill import Rating, quality, rate
+from tqdm import tqdm
+from trueskill import Rating, TrueSkill
 
 
 settings = Settings()
@@ -17,7 +18,7 @@ engine = create_engine(settings.database_address)
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
-
+trueskill = TrueSkill(backend='mpmath')
 ratings = {}
 
 
@@ -62,7 +63,7 @@ def save_rating_to_db(team_number: int, mu: float, sigma: float):
 
 def save_ratings_to_db(rankings: List[List]):
 	session = DBSession()
-	for ranking in rankings:
+	for ranking in tqdm(rankings, desc='Saving ratings to database '):
 		row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == ranking[0]).first()
 		if row is None:
 			session.add(TrueSkillTeamV1(
@@ -107,8 +108,7 @@ def calculate_ratings():
 	session.query(TrueSkillTeamV1).delete()
 	session.commit()
 
-	print('Calculating Ratings...')
-	for match in session.query(TrueSkillMatchV1).all():
+	for match in tqdm(session.query(TrueSkillMatchV1).all(), desc="Calculating Ratings "):
 		old_blue_1_rating = retrieve_rating(match.blue_1)
 		old_blue_2_rating = retrieve_rating(match.blue_2)
 		old_blue_3_rating = retrieve_rating(match.blue_3)
@@ -124,7 +124,7 @@ def calculate_ratings():
 		elif match.winning_alliance == 'blue':
 			ranks = [0, 1]
 
-		(new_blue_1_rating, new_blue_2_rating, new_blue_3_rating), (new_red_1_rating, new_red_2_rating, new_red_3_rating) = rate([blue_alliance, red_alliance], ranks=ranks)
+		(new_blue_1_rating, new_blue_2_rating, new_blue_3_rating), (new_red_1_rating, new_red_2_rating, new_red_3_rating) = trueskill.rate([blue_alliance, red_alliance], ranks=ranks)
 
 		save_ratings([
 			[match.blue_1, new_blue_1_rating],
@@ -136,13 +136,12 @@ def calculate_ratings():
 		])
 
 	session.close()
-	print('Finished Calculating Ratings')
 
 
 def save_ratings_to_csv(name='untitled-rankings', append_timestamp=False):
 	session = DBSession()
 	two_d_list = [['Team Number', 'Mu', 'Sigma']]
-	for team in session.query(TrueSkillTeamV1).all():  # type: TrueSkillTeamV1
+	for team in tqdm(session.query(TrueSkillTeamV1).all(), desc='Exporting ratings to csv '):  # type: TrueSkillTeamV1
 		two_d_list.append([team.team_number, team.mu, team.sigma])
 	util.save_as_csv(two_d_list, name=name, append_timestamp=append_timestamp)
 
@@ -364,7 +363,7 @@ def save_match_data():
 	data_fetcher.get_match_data_for_events(event_code_fetcher.list_of_all_event_codes(), fetch_and_save_data)
 
 if __name__ == '__main__':
-	save_match_data()
+	#save_match_data()
 	calculate_ratings()
 	save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
 	save_ratings_to_csv(name='world-trueskill-rankings', append_timestamp=True)
