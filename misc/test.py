@@ -1,4 +1,4 @@
-from asynchronous_demo import DataFetcher, set_of_team_names_at_events
+from asynchronous_demo import DataFetcher
 import pytest
 
 
