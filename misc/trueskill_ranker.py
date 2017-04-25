@@ -363,8 +363,8 @@ def save_match_data():
 	event_code_fetcher = EventCodeFetcher()
 	data_fetcher.get_match_data_for_events(event_code_fetcher.list_of_all_event_codes(), fetch_and_save_data)
 
-save_match_data()
-
-calculate_ratings()
-save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
-save_ratings_to_csv(name='world-trueskill-rankings', append_timestamp=True)
+if __name__ == '__main__':
+	save_match_data()
+	calculate_ratings()
+	save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
+	save_ratings_to_csv(name='world-trueskill-rankings', append_timestamp=True)
