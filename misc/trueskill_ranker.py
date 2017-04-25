@@ -1,87 +1,18 @@
 import util
+from util import tie_breaker_steam_works
 from sqlalchemy import Column, Integer, String, Float, Boolean, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from typing import Tuple, List, Dict
 from settings import Settings
+from db_setup import Base, TrueSkillMatchV1, TrueSkillTeamV1
 import requests
 import re
 from trueskill import Rating, quality, rate
 
 
-Base = declarative_base()
-
-
-def tie_breaker_steam_works(red_foul_points: int, blue_foul_points: int,
-							red_auto_points: int, blue_auto_points: int,
-							red_total_rotor_points: int, blue_total_rotor_points: int,
-							red_touchpad_points: int, blue_touchpad_points: int,
-							red_total_pressure: int, blue_total_pressure: int) -> str:
-	"""
-	Taken from the Game Manual
-	Table 10-2: Quarterfinal, Semifinal, and Overtime Tiebreaker Criteria
-	Order Sort Criteria
-	1st Fewer FOUL points
-	2nd Cumulative sum of AUTO points
-	3rd Cumulative ROTOR engagement score (AUTO and TELEOP)
-	4th Cumulative TOUCHPAD score
-	5th Total accumulated pressure
-	6th MATCH is replayed
-	"""
-
-	if red_foul_points > blue_foul_points:
-		return 'red'
-	elif blue_foul_points > red_foul_points:
-		return 'blue'
-
-	if red_auto_points > blue_auto_points:
-		return 'red'
-	elif blue_auto_points > red_auto_points:
-		return 'blue'
-
-	if red_total_rotor_points > blue_total_rotor_points:
-		return 'red'
-	elif blue_total_rotor_points > red_total_rotor_points:
-		return 'blue'
-
-	if red_touchpad_points > blue_touchpad_points:
-		return 'red'
-	elif blue_touchpad_points > red_touchpad_points:
-		return 'blue'
-
-	if red_total_pressure > blue_total_pressure:
-		return 'red'
-	elif blue_total_pressure > red_total_pressure:
-		return 'blue'
-
-	return 'replay'
-
-
-class TrueSkillMatchV1(Base):
-	__tablename__ = 'TrueSkillMatchV1'
-	pk = Column(Integer, primary_key=True)
-	winning_alliance = Column(String(4))
-	blue_1 = Column(Integer)
-	blue_2 = Column(Integer)
-	blue_3 = Column(Integer)
-	red_1 = Column(Integer)
-	red_2 = Column(Integer)
-	red_3 = Column(Integer)
-	event_key = Column(String(10))
-	match_key = Column(String(20))
-
-
-class TrueSkillTeamV1(Base):
-	__tablename__ = 'TrueSkillTeamV1'
-	pk = Column(Integer, primary_key=True)
-	team_number = Column(Integer)
-	mu = Column(Float)
-	sigma = Column(Float)
-
-
 settings = Settings()
 engine = create_engine(settings.database_address)
-Base.metadata.create_all(engine)
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
