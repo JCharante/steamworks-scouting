@@ -52,11 +52,11 @@ A network node graph, where the size of the node is based on the trueskill score
 
 #### Description
 
-This uses the TrueSkill library with off the shelf default values to see how teams rank against each other when it comes to winning matches.
+This uses the TrueSkill library to see how teams rank against each other if FRC were an xbox live game (TrueSkill's main purpose).
 
 #### Results
 
-[Available Here](exports/world-trueskill-rankings-2017-04-20-05:23:10.747165.csv)
+[Available Here](exports/world-trueskill-rankings-2017-04-25-03:56:34.107261.csv)
 
 ### Rank Fetcher
 
