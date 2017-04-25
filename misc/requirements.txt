@@ -4,7 +4,6 @@ curio-http==0.1.0
 h11==0.7.0
 multidict==2.1.4
 packaging==16.8
-pkg-resources==0.0.0
 PyMySQL==0.7.11
 requests==2.13.0
 six==1.10.0
