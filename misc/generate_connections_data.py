@@ -4,41 +4,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from typing import Tuple, List, Dict
 from settings import Settings
+from db_setup import GraphTeamInfoV4, TrueSkillTeamV1, TrueSkillMatchV1
 import requests
 import re
 import json
 
 Base = declarative_base()
-
-
-class TrueSkillMatchV1(Base):
-	__tablename__ = 'TrueSkillMatchV1'
-	pk = Column(Integer, primary_key=True)
-	winning_alliance = Column(String(4))
-	blue_1 = Column(Integer)
-	blue_2 = Column(Integer)
-	blue_3 = Column(Integer)
-	red_1 = Column(Integer)
-	red_2 = Column(Integer)
-	red_3 = Column(Integer)
-	event_key = Column(String(10))
-	match_key = Column(String(20))
-
-
-class TrueSkillTeamV1(Base):
-	__tablename__ = 'TrueSkillTeamV1'
-	pk = Column(Integer, primary_key=True)
-	team_number = Column(Integer)
-	mu = Column(Float)
-	sigma = Column(Float)
-
-
-class GraphTeamInfoV4(Base):
-	__tablename__ = 'GraphTeamInfoV4'
-	pk = Column(Integer, primary_key=True)
-	team_number = Column(Integer)
-	region = Column(Text(collation='utf8_general_ci'))
-	nickname = Column(Text(collation='utf8_general_ci'))
 
 
 settings = Settings()
@@ -140,7 +111,8 @@ def generate_nodes_and_edges(instance_thickness=False):
 	session.close()
 	return [node for team, node in nodes.items()], edges
 
-nodes_, edges_ = generate_nodes_and_edges()
+nodes_, edges_ = generate_nodes_and_edges_filtered(5687)
+
 data = {
 	'nodes': nodes_,
 	'edges': edges_
