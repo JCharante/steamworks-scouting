@@ -20,7 +20,7 @@ class EventCodeFetcher:
 		return [event['key'] for event in events]
 
 
-class EventDataFetcher:
+class DataFetcher:
 
 	def __init__(self):
 		self.settings = Settings()
@@ -49,18 +49,13 @@ class EventDataFetcher:
 		url_list = [f'https://www.thebluealliance.com/api/v2/event/{event_code}' for event_code in event_codes]
 		curio.run(self.main(url_list, callback))
 
+	def get_team_data(self, team_numbers: List[int], callback: any) -> None:
+		url_list = [f'https://www.thebluealliance.com/api/v2/team/frc{team_number}' for team_number in team_numbers]
+		curio.run(self.main(url_list, callback))
 
-def print_all_event_data():
-
-	def print_event_data(response, content):
-		print('GET %s' % response.url)
-		print(content)
-		print()
-
-	event_code_fetcher = EventCodeFetcher()
-	event_data_fetcher = EventDataFetcher()
-
-	event_data_fetcher.get_event_data(event_code_fetcher.list_of_all_event_codes(), print_event_data)
+	def get_event_teams_data(self, event_codes: List[str], callback: any) -> None:
+		url_list = [f'https://www.thebluealliance.com/api/v2/event/{event_code}/teams' for event_code in event_codes]
+		curio.run(self.main(url_list, callback))
 
 
 def list_of_all_event_data():
@@ -70,12 +65,31 @@ def list_of_all_event_data():
 		response_list.append(content)
 
 	event_code_fetcher = EventCodeFetcher()
-	event_data_fetcher = EventDataFetcher()
+	data_fetcher = DataFetcher()
 
-	event_data_fetcher.get_event_data(event_code_fetcher.list_of_all_event_codes(), add_to_list)
+	data_fetcher.get_event_data(event_code_fetcher.list_of_all_event_codes(), add_to_list)
 
 	return response_list
 
-a = list_of_all_event_data()
-print(len(a))  # 179
-print(json.dumps(a, indent=4, sort_keys=True))
+
+def set_of_team_names_at_events(event_codes):
+	response_list = set()
+
+	def add_to_set(response, content):
+		for team in content:
+			response_list.add(team['nickname'])
+
+	data_fetcher = DataFetcher()
+
+	data_fetcher.get_event_teams_data(event_codes, add_to_set)
+
+	return response_list
+
+if __name__ == '__main__':
+	#  Example A: Printing the list of team names that have been to events that we've gone to
+	[print(team_name) for team_name in set_of_team_names_at_events(['2017week0', '2017nhgrs', '2017mabos', '2017melew', '2017necmp'])]
+
+	# Example B: Getting a list of responses for /event/{event_code} from every event in 2017.
+	a = list_of_all_event_data()
+	print(len(a))  # 179
+	print(json.dumps(a, indent=4, sort_keys=True))
