@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from typing import Tuple, List, Dict
 from settings import Settings
 from db_setup import Base, TrueSkillMatchV1, TrueSkillTeamV1
+from asynchronous_demo import DataFetcher, EventCodeFetcher
 import requests
 import re
 from trueskill import Rating, quality, rate
@@ -17,29 +18,162 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
 
-class MatchDataFetcher:
+ratings = {}
 
-	def __init__(self, event_code: str):
-		self.settings = Settings()
-		self.event_code = event_code
-		self.url = f'https://www.thebluealliance.com/api/v2/event/{event_code}'
-		self.headers = {
-			'X-TBA-App-Id': self.settings.app_id
-		}
 
-		self.fetch_and_save_data()
+def retrieve_rating(team_number):
+	global ratings
+	if team_number in ratings:
+		return ratings[team_number]
+	else:
+		return Rating()
 
-	def fetch_and_save_data(self):
+
+def retrieve_rating_from_db(team_number):
+	session = DBSession()
+	row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == team_number).first()
+	session.close()
+	if row is None:
+		return Rating()
+	else:
+		return Rating(mu=row.mu, sigma=row.sigma)
+
+
+def save_rating(team_number, rating_obj):
+	global ratings
+	ratings[team_number] = rating_obj
+
+
+def save_rating_to_db(team_number: int, mu: float, sigma: float):
+	session = DBSession()
+	row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == team_number).first()
+	if row is None:
+		session.add(TrueSkillTeamV1(
+			team_number=team_number,
+			mu=mu,
+			sigma=sigma
+		))
+	else:
+		row.mu = mu
+		row.sigma = sigma
+	session.commit()
+	session.close()
+
+
+def save_ratings_to_db(rankings: List[List]):
+	session = DBSession()
+	for ranking in rankings:
+		row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == ranking[0]).first()
+		if row is None:
+			session.add(TrueSkillTeamV1(
+				team_number=ranking[0],
+				mu=ranking[1],
+				sigma=ranking[2]
+			))
+		else:
+			row.mu = ranking[1]
+			row.sigma = ranking[2]
+	session.commit()
+	session.close()
+
+
+def save_ratings(rankings: List[List]):
+	global ratings
+	for ranking in rankings:
+		ratings[ranking[0]] = ranking[1]
+
+
+def get_event_codes_for_district(district_code):
+	url = f'https://www.thebluealliance.com/api/v2/district/{district_code}/2017/events'
+	headers = {
+		'X-TBA-App-Id': settings.app_id
+	}
+	events = requests.get(url, headers=headers).json()
+	return [event['key'] for event in events]
+
+
+def get_all_event_codes():
+	url = 'https://www.thebluealliance.com/api/v2/events/2017'
+	headers = {
+		'X-TBA-App-Id': settings.app_id
+	}
+	events = requests.get(url, headers=headers).json()
+	return [event['key'] for event in events]
+
+
+def calculate_ratings():
+	session = DBSession()
+	print('Deleting Stored Ratings')
+	session.query(TrueSkillTeamV1).delete()
+	session.commit()
+
+	print('Calculating Ratings...')
+	for match in session.query(TrueSkillMatchV1).all():
+		old_blue_1_rating = retrieve_rating(match.blue_1)
+		old_blue_2_rating = retrieve_rating(match.blue_2)
+		old_blue_3_rating = retrieve_rating(match.blue_3)
+		old_red_1_rating = retrieve_rating(match.red_1)
+		old_red_2_rating = retrieve_rating(match.red_2)
+		old_red_3_rating = retrieve_rating(match.red_3)
+		blue_alliance = [old_blue_1_rating, old_blue_2_rating, old_blue_3_rating]
+		red_alliance = [old_red_1_rating, old_red_2_rating, old_red_3_rating]
+
+		ranks = [0, 0]
+		if match.winning_alliance == 'red':
+			ranks = [1, 0]
+		elif match.winning_alliance == 'blue':
+			ranks = [0, 1]
+
+		(new_blue_1_rating, new_blue_2_rating, new_blue_3_rating), (new_red_1_rating, new_red_2_rating, new_red_3_rating) = rate([blue_alliance, red_alliance], ranks=ranks)
+
+		save_ratings([
+			[match.blue_1, new_blue_1_rating],
+			[match.blue_2, new_blue_2_rating],
+			[match.blue_3, new_blue_3_rating],
+			[match.red_1, new_red_1_rating],
+			[match.red_2, new_red_2_rating],
+			[match.red_3, new_red_3_rating]
+		])
+
+	session.close()
+	print('Finished Calculating Ratings')
+
+
+def save_ratings_to_csv(name='untitled-rankings', append_timestamp=False):
+	session = DBSession()
+	two_d_list = [['Team Number', 'Mu', 'Sigma']]
+	for team in session.query(TrueSkillTeamV1).all():  # type: TrueSkillTeamV1
+		two_d_list.append([team.team_number, team.mu, team.sigma])
+	util.save_as_csv(two_d_list, name=name, append_timestamp=append_timestamp)
+
+# NE District Rankings
+# This takes into account datasets outside of NE events, which is why it is commented out.
+# TODO: Calculate Ratings for teams in matches in a specified set of events
+"""
+for event_code in get_event_codes_for_district('ne'):
+	MatchDataFetcher(event_code)
+
+calculate_ratings()
+save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
+save_ratings_to_csv(name='ne-district-rankings')
+"""
+
+# World Rankings
+
+
+def save_match_data():
+	def fetch_and_save_data(response, content):
 		session = DBSession()
-		print(f'Fetching Ranking Data for {self.event_code}..')
-		matches = requests.get(self.url + '/matches', headers=self.headers).json()
-		recorded_matches = session.query(TrueSkillMatchV1).filter(TrueSkillMatchV1.event_key == self.event_code).count()
+		event_code = response.url.split('/')[4]  # www.thebluealliance.com/api/v2/event/{event_code}/matches
+		print(f'Fetched Ranking Data for {event_code}..')
+		matches = content
+		recorded_matches = session.query(TrueSkillMatchV1).filter(TrueSkillMatchV1.event_key == event_code).count()
 		if recorded_matches == len(matches):
-			print(f'All matches for {self.event_code} already recorded')
+			print(f'All matches for {event_code} already recorded')
 			session.close()
 			return
 		elif recorded_matches > 0:
-			session.query(TrueSkillMatchV1).filter(TrueSkillMatchV1.event_key == self.event_code).delete()
+			session.query(TrueSkillMatchV1).filter(TrueSkillMatchV1.event_key == event_code).delete()
 			session.commit()
 		for match in matches:
 			"""
@@ -217,158 +351,19 @@ class MatchDataFetcher:
 				red_1=int(re.sub("\D", "", red_1)),
 				red_2=int(re.sub("\D", "", red_2)),
 				red_3=int(re.sub("\D", "", red_3)),
-				event_key=self.event_code,
+				event_key=event_code,
 				match_key=match_key
 			))
-		print(f'Saving Data for {self.event_code}')
+		print(f'Saving Data for {event_code}')
 		session.commit()
-		print(f'Saved Data for {self.event_code}')
+		print(f'Saved Data for {event_code}')
 		session.close()
 
-ratings = {}
+	data_fetcher = DataFetcher()
+	event_code_fetcher = EventCodeFetcher()
+	data_fetcher.get_match_data_for_events(event_code_fetcher.list_of_all_event_codes(), fetch_and_save_data)
 
-
-def retrieve_rating(team_number):
-	global ratings
-	if team_number in ratings:
-		return ratings[team_number]
-	else:
-		return Rating()
-
-
-def retrieve_rating_from_db(team_number):
-	session = DBSession()
-	row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == team_number).first()
-	session.close()
-	if row is None:
-		return Rating()
-	else:
-		return Rating(mu=row.mu, sigma=row.sigma)
-
-
-def save_rating(team_number, rating_obj):
-	global ratings
-	ratings[team_number] = rating_obj
-
-
-def save_rating_to_db(team_number: int, mu: float, sigma: float):
-	session = DBSession()
-	row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == team_number).first()
-	if row is None:
-		session.add(TrueSkillTeamV1(
-			team_number=team_number,
-			mu=mu,
-			sigma=sigma
-		))
-	else:
-		row.mu = mu
-		row.sigma = sigma
-	session.commit()
-	session.close()
-
-
-def save_ratings_to_db(rankings: List[List]):
-	session = DBSession()
-	for ranking in rankings:
-		row = session.query(TrueSkillTeamV1).filter(TrueSkillTeamV1.team_number == ranking[0]).first()
-		if row is None:
-			session.add(TrueSkillTeamV1(
-				team_number=ranking[0],
-				mu=ranking[1],
-				sigma=ranking[2]
-			))
-		else:
-			row.mu = ranking[1]
-			row.sigma = ranking[2]
-	session.commit()
-	session.close()
-
-
-def save_ratings(rankings: List[List]):
-	global ratings
-	for ranking in rankings:
-		ratings[ranking[0]] = ranking[1]
-
-
-def get_event_codes_for_district(district_code):
-	url = f'https://www.thebluealliance.com/api/v2/district/{district_code}/2017/events'
-	headers = {
-		'X-TBA-App-Id': settings.app_id
-	}
-	events = requests.get(url, headers=headers).json()
-	return [event['key'] for event in events]
-
-
-def get_all_event_codes():
-	url = 'https://www.thebluealliance.com/api/v2/events/2017'
-	headers = {
-		'X-TBA-App-Id': settings.app_id
-	}
-	events = requests.get(url, headers=headers).json()
-	return [event['key'] for event in events]
-
-
-def calculate_ratings():
-	session = DBSession()
-	print('Deleting Stored Ratings')
-	session.query(TrueSkillTeamV1).delete()
-	session.commit()
-
-	print('Calculating Ratings...')
-	for match in session.query(TrueSkillMatchV1).all():
-		old_blue_1_rating = retrieve_rating(match.blue_1)
-		old_blue_2_rating = retrieve_rating(match.blue_2)
-		old_blue_3_rating = retrieve_rating(match.blue_3)
-		old_red_1_rating = retrieve_rating(match.red_1)
-		old_red_2_rating = retrieve_rating(match.red_2)
-		old_red_3_rating = retrieve_rating(match.red_3)
-		blue_alliance = [old_blue_1_rating, old_blue_2_rating, old_blue_3_rating]
-		red_alliance = [old_red_1_rating, old_red_2_rating, old_red_3_rating]
-
-		ranks = [0, 0]
-		if match.winning_alliance == 'red':
-			ranks = [1, 0]
-		elif match.winning_alliance == 'blue':
-			ranks = [0, 1]
-
-		(new_blue_1_rating, new_blue_2_rating, new_blue_3_rating), (new_red_1_rating, new_red_2_rating, new_red_3_rating) = rate([blue_alliance, red_alliance], ranks=ranks)
-
-		save_ratings([
-			[match.blue_1, new_blue_1_rating],
-			[match.blue_2, new_blue_2_rating],
-			[match.blue_3, new_blue_3_rating],
-			[match.red_1, new_red_1_rating],
-			[match.red_2, new_red_2_rating],
-			[match.red_3, new_red_3_rating]
-		])
-
-	session.close()
-	print('Finished Calculating Ratings')
-
-
-def save_ratings_to_csv(name='untitled-rankings', append_timestamp=False):
-	session = DBSession()
-	two_d_list = [['Team Number', 'Mu', 'Sigma']]
-	for team in session.query(TrueSkillTeamV1).all():  # type: TrueSkillTeamV1
-		two_d_list.append([team.team_number, team.mu, team.sigma])
-	util.save_as_csv(two_d_list, name=name, append_timestamp=append_timestamp)
-
-# NE District Rankings
-# This takes into account datasets outside of NE events, which is why it is commented out.
-# TODO: Calculate Ratings for teams in matches in a specified set of events
-"""
-for event_code in get_event_codes_for_district('ne'):
-	MatchDataFetcher(event_code)
-
-calculate_ratings()
-save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
-save_ratings_to_csv(name='ne-district-rankings')
-"""
-
-# World Rankings
-
-for event_code in get_all_event_codes():
-	MatchDataFetcher(event_code)
+save_match_data()
 
 calculate_ratings()
 save_ratings_to_db([[team_number, rating.mu, rating.sigma] for team_number, rating in ratings.items()])
