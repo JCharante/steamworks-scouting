@@ -57,6 +57,10 @@ class DataFetcher:
 		url_list = [f'https://www.thebluealliance.com/api/v2/event/{event_code}/teams' for event_code in event_codes]
 		curio.run(self.main(url_list, callback))
 
+	def get_match_data_for_events(self, event_codes: List[str], callback: any) -> None:
+		url_list = [f'https://www.thebluealliance.com/api/v2/event/{event_code}/matches' for event_code in event_codes]
+		curio.run(self.main(url_list, callback))
+
 
 def list_of_all_event_data():
 	response_list = []
