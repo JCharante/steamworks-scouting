@@ -6,8 +6,12 @@ from typing import List, Dict
 from settings import Settings
 
 
-class EventCodeFetcher:
+MAX_CONNECTIONS_PER_HOST = 6
+sema = curio.BoundedSemaphore(MAX_CONNECTIONS_PER_HOST)
 
+
+class EventCodeFetcher:
+c
 	def __init__(self):
 		self.settings = Settings()
 
@@ -29,7 +33,8 @@ class DataFetcher:
 		headers = {
 			'X-TBA-App-Id': self.settings.app_id
 		}
-		async with curio_http.ClientSession() as session:
+		#async with curio_http.ClientSession() as session:
+		async with sema, curio_http.ClientSession() as session:
 			response = await session.get(url, headers=headers)
 			content = await response.json()
 			return response, content
