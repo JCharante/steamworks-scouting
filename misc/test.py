@@ -1,4 +1,4 @@
-from asynchronous_demo import DataFetcher
+from asynchronous_fetcher import DataFetcher
 import pytest
 
 

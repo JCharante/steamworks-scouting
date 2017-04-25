@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from typing import Tuple, List, Dict
 from settings import Settings
 from db_setup import Base, TrueSkillMatchV1, TrueSkillTeamV1
-from asynchronous_demo import DataFetcher, EventCodeFetcher
+from asynchronous_fetcher import DataFetcher, EventCodeFetcher
 import requests
 import re
 from trueskill import Rating, quality, rate
