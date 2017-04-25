@@ -11,7 +11,7 @@ sema = curio.BoundedSemaphore(MAX_CONNECTIONS_PER_HOST)
 
 
 class EventCodeFetcher:
-c
+
 	def __init__(self):
 		self.settings = Settings()
 
