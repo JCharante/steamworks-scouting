@@ -16,8 +16,7 @@ Setting up mysql database to use (modify settings.json w/ address)
 Example:
 
 ```bash
-$ mysql -u root -p
-Enter Password: root
+$ mysql -u root -proot
 mysql> CREATE USER 'achilles' IDENTIFIED BY 'achilles';
 mysql> GRANT ALL PRIVILEGES ON *.* TO 'achilles';
 mysql> FLUSH PRIVILEGES;
