@@ -1,5 +1,5 @@
-The Red Alliance
-================
+The Green Alliance
+==================
 
 An invite only website to bet\* on frc matches.
 
