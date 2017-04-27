@@ -15,7 +15,7 @@ This also means you can view the current version in the master branch [here with
 ## Android Development Setup
 
 ```
-$ sudo apt install default-jdk gradle
+$ sudo apt install default-jdk gradle zipalign
 $ npm install -g cordova
 $ cordova prepare
 $ cordova platform update android@6.2.1
