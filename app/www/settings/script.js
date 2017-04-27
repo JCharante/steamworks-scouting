@@ -9,7 +9,14 @@ function onceDocumentReady() {
 			save: function() {
 				var self = this;
 				if (!(/\S/.test(self.scoutName))) {
-					toast('error', 'Didn\'t Save', 'Scout name cannot be Blank');
+					window.plugins.toast.showWithOptions({
+						message: 'Scout name cannot be blank',
+						duration: 'short',
+						position: 'bottom',
+						styling: {
+							backgroundColor: toastColors.error
+						}
+					});
 					playFieldFault();
 					return null;
 				}
@@ -17,7 +24,15 @@ function onceDocumentReady() {
 				localStorage.setItem('scoutName', self.scoutName);
 				localStorage.setItem('serverPassword', self.serverPassword);
 				localStorage.setItem('preferences', JSON.stringify(self.preferences));
-				toast('success', 'Saved Changes', '');
+
+				window.plugins.toast.showWithOptions({
+					message: 'Saved Settings',
+					duration: 'short',
+					position: 'bottom',
+					styling: {
+						backgroundColor: toastColors.success
+					}
+				});
 			},
 			loadSavedData: function() {
 				var self = this;
