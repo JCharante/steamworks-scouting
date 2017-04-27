@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:17.04
 MAINTAINER JCharante (contactme@jcharante.com)
 
 # Installing Python
@@ -6,8 +6,6 @@ RUN apt-get update
 RUN apt-get install -y \
 	software-properties-common \
 	python-software-properties
-RUN add-apt-repository -y ppa:jonathonf/python-3.6
-RUN apt-get update
 RUN apt-get install -y \
 	python3.6 \
 	python3.6-dev \
