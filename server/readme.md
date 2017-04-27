@@ -11,12 +11,12 @@ The achilles app uploads matches to this server, and this server allows you to g
 
 The address of the mysql server in the format of:
 
-`db_address=mysql+pymysql://<username>:<password>@<host>/<database_name>`
+`db_address=mysql+pymysql://<username>:<password>@<host>/<database_name>?charset=utf8mb4`
 
 Example:
 
 ```bash
-$ export db_address=mysql+pymysql://achilles:achilles@localhost/achilles
+$ export db_address=mysql+pymysql://achilles:achilles@localhost/achilles?charset=utf8mb4
 ```
 
 #### serverPassword

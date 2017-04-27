@@ -22,6 +22,7 @@ migration.migrate_matchv2_to_matchv3()
 migration.migrate_matchv3_to_matchv4()
 migration.migrate_matchv4_to_matchv5()
 migration.migrate_matchv5_to_matchv6()
+migration.migrate_matchv6_to_matchv7()
 app = Flask(__name__)
 
 

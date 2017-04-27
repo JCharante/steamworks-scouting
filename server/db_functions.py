@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, MatchV6
+from db_setup import Base, MatchV7
 import util
 import uuid
 from typing import Tuple, List, Dict
@@ -61,8 +61,6 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 		if type(event_name) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'event_name')
 		event_name = event_name  # type: str
-		if len(event_name) > 100:
-			raise exceptions.GenericException(2, 'String Too Long', 'event_name')
 
 		if type(team_number) is not int:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'team_number')
@@ -91,8 +89,6 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 		if type(auto_gear_pos) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_gear_pos')
 		auto_gear_pos = auto_gear_pos  # type: str
-		if len(auto_gear_pos) > 10:
-			raise exceptions.GenericException(2, 'String Too Long', 'auto_gear_pos')
 
 		if type(auto_kpa) is not int:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'auto_kpa')
@@ -107,8 +103,6 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 		if type(climb_rating) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'climb_rating')
 		climb_rating = climb_rating  # type: str
-		if len(climb_rating) > 10:
-			raise exceptions.GenericException(2, 'String Too Long', 'climb_rating')
 
 		if type(gear_rating) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'gear_rating')
@@ -137,8 +131,6 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 		if type(high_goal_rating) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'high_goal_rating')
 		high_goal_rating = high_goal_rating  # type: str
-		if len(high_goal_rating) > 10:
-			raise exceptions.GenericException(2, 'String Too Long', 'high_goal_rating')
 
 		if type(high_goal_shoot_from_key) is not bool:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'high_goal_shoot_from_key')
@@ -155,8 +147,6 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 		if type(low_goal_rating) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'low_goal_rating')
 		low_goal_rating = low_goal_rating  # type: str
-		if len(low_goal_rating) > 10:
-			raise exceptions.GenericException(2, 'String Too Long', 'low_goal_rating')
 
 		if type(total_hoppers) is not int:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'total_hoppers')
@@ -173,23 +163,17 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 		if type(last_modified) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'last_modified')
 		last_modified = last_modified  # type: str
-		if len(last_modified) > 30:
-			raise exceptions.GenericException(2, 'String Too Long', 'climb_rating')
 
 		if type(notes) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'notes')
 		notes = notes  # type: str
-		if len(notes) > 200:
-			raise exceptions.GenericException(2, 'String Too Long', 'notes')
 
 		if type(scout_name) is not str:
 			raise exceptions.GenericException(1, 'Invalid Data Type', 'scout_name')
 		scout_name = scout_name  # type: str
-		if len(scout_name) > 30:
-			raise exceptions.GenericException(2, 'String Too Long', 'scout_name')
 
 		try:
-			add_matchv6(match_id=match_id,
+			add_matchv7(match_id=match_id,
 						event_name=event_name,
 						team_number=team_number,
 						match_number=match_number,
@@ -222,7 +206,7 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 			pass
 
 
-def add_matchv6(match_id: str,
+def add_matchv7(match_id: str,
 				event_name: str,
 				team_number: int,
 				match_number: int,
@@ -253,17 +237,17 @@ def add_matchv6(match_id: str,
 				scout_name: str) -> None:
 
 	session = DBSession()
-	stored_match = session.query(MatchV6).filter(MatchV6.match_id == match_id).first()
+	stored_match = session.query(MatchV7).filter(MatchV7.match_id == match_id).first()
 	if stored_match is not None:
-		stored_match = stored_match  # type: MatchV6
+		stored_match = stored_match  # type: MatchV7
 		stored_match_last_modified_date = dateutil.parser.parse(stored_match.last_modified)
 		new_match_last_modified_date = dateutil.parser.parse(last_modified)
 		if stored_match_last_modified_date > new_match_last_modified_date:
 			session.close()
 			raise exceptions.MatchDataOutdated()
 		else:
-			session.query(MatchV6).filter(MatchV6.match_id == match_id).delete()
-	session.add(MatchV6(
+			session.query(MatchV7).filter(MatchV7.match_id == match_id).delete()
+	session.add(MatchV7(
 		match_id=match_id,
 		event_name=event_name,
 		team_number=team_number,
@@ -300,7 +284,7 @@ def add_matchv6(match_id: str,
 
 def events_recorded():
 	session = DBSession()
-	events = [event_name for event_name in session.query(MatchV6.event_name).distinct()]
+	events = [event_name for event_name in session.query(MatchV7.event_name).distinct()]
 	session.close()
 	return events
 
@@ -338,7 +322,7 @@ def matrix_data_for_event(event_name):
 				  'Notes',
 				  'Scout Name']
 	matrix.append(header_row)
-	for match in session.query(MatchV6).filter(MatchV6.event_name == event_name).all():  # type: MatchV6
+	for match in session.query(MatchV7).filter(MatchV7.event_name == event_name).all():  # type: MatchV7
 		row = [match.match_id,
 			   match.event_name,
 			   match.team_number,
@@ -376,7 +360,7 @@ def matrix_data_for_event(event_name):
 def matches_array():
 	session = DBSession()
 	matches = []
-	for match in session.query(MatchV6).all():
+	for match in session.query(MatchV7).all():
 		matches.append({
 			'match_id': match.match_id,
 			'event_name': match.event_name,
