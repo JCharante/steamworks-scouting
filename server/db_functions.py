@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, MatchV5
+from db_setup import Base, MatchV6
 import util
 import uuid
 from typing import Tuple, List, Dict
@@ -189,7 +189,7 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 			raise exceptions.GenericException(2, 'String Too Long', 'scout_name')
 
 		try:
-			add_matchv5(match_id=match_id,
+			add_matchv6(match_id=match_id,
 						event_name=event_name,
 						team_number=team_number,
 						match_number=match_number,
@@ -222,7 +222,7 @@ def upload_matches(matches: List[Dict], server_password) -> None:
 			pass
 
 
-def add_matchv5(match_id: str,
+def add_matchv6(match_id: str,
 				event_name: str,
 				team_number: int,
 				match_number: int,
@@ -250,20 +250,20 @@ def add_matchv5(match_id: str,
 				collected_fuel_from_floor: bool,
 				last_modified: str,
 				notes: str,
-                scout_name: str) -> None:
+				scout_name: str) -> None:
 
 	session = DBSession()
-	stored_match = session.query(MatchV5).filter(MatchV5.match_id == match_id).first()
+	stored_match = session.query(MatchV6).filter(MatchV6.match_id == match_id).first()
 	if stored_match is not None:
-		stored_match = stored_match  # type: MatchV5
+		stored_match = stored_match  # type: MatchV6
 		stored_match_last_modified_date = dateutil.parser.parse(stored_match.last_modified)
 		new_match_last_modified_date = dateutil.parser.parse(last_modified)
 		if stored_match_last_modified_date > new_match_last_modified_date:
 			session.close()
 			raise exceptions.MatchDataOutdated()
 		else:
-			session.query(MatchV5).filter(MatchV5.match_id == match_id).delete()
-	session.add(MatchV5(
+			session.query(MatchV6).filter(MatchV6.match_id == match_id).delete()
+	session.add(MatchV6(
 		match_id=match_id,
 		event_name=event_name,
 		team_number=team_number,
@@ -300,7 +300,7 @@ def add_matchv5(match_id: str,
 
 def events_recorded():
 	session = DBSession()
-	events = [event_name for event_name in session.query(MatchV5.event_name).distinct()]
+	events = [event_name for event_name in session.query(MatchV6.event_name).distinct()]
 	session.close()
 	return events
 
@@ -336,9 +336,9 @@ def matrix_data_for_event(event_name):
 				  'Collected Fuel from Floor',
 				  'Data last Modified',
 				  'Notes',
-	              'Scout Name']
+				  'Scout Name']
 	matrix.append(header_row)
-	for match in session.query(MatchV5).filter(MatchV5.event_name == event_name).all():  # type: MatchV5
+	for match in session.query(MatchV6).filter(MatchV6.event_name == event_name).all():  # type: MatchV6
 		row = [match.match_id,
 			   match.event_name,
 			   match.team_number,
@@ -367,7 +367,7 @@ def matrix_data_for_event(event_name):
 			   match.collected_fuel_from_floor,
 			   match.last_modified,
 			   match.notes,
-		       match.scout_name]
+			   match.scout_name]
 		matrix.append(row)
 	session.close()
 	return matrix
@@ -376,7 +376,7 @@ def matrix_data_for_event(event_name):
 def matches_array():
 	session = DBSession()
 	matches = []
-	for match in session.query(MatchV5).all():
+	for match in session.query(MatchV6).all():
 		matches.append({
 			'match_id': match.match_id,
 			'event_name': match.event_name,
