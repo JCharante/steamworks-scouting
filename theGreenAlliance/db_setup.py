@@ -6,6 +6,19 @@ import os
 Base = declarative_base()
 
 
+class EventV1(Base):
+	__tablename__ = 'EventV1'
+	pk = Column(Integer, primary_key=True)
+	key = Column(Text())
+	official = Column(Boolean)
+	has_ended = Column(Boolean)
+	start_date = Column(Text())
+	end_date = Column(Text())
+	name = Column(Text())
+	event_type_string = Column(Text())
+	blacklisted = Column(Boolean)
+
+
 class MatchV1(Base):
 	__tablename__ = 'MatchV1'
 	pk = Column(Integer, primary_key=True)
@@ -19,6 +32,7 @@ class MatchV1(Base):
 	red_1 = Column(Integer)
 	red_2 = Column(Integer)
 	red_3 = Column(Integer)
+	result = Column(Text())
 
 
 class InviteCodeV1(Base):
