@@ -27,6 +27,14 @@ The password for the server (will also have to be manually set in client)
 $ export serverPassword=yee
 ```
 
+#### loaderio
+
+Set to true if you want to allow loaderio tests.
+
+```bash
+$ export loaderio=true
+```
+
 ### Running
 
 Then to run on docker

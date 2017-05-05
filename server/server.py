@@ -44,14 +44,6 @@ def return_json(request, response):
 	return json.dumps(response)
 
 
-def home_cor(obj):
-	return_response = make_response(obj)
-	return_response.headers['Access-Control-Allow-Origin'] = "*"
-	return_response.headers['Access-Control-Allow-Methods'] = 'POST,GET,OPTIONS,PUT,DELETE'
-	return_response.headers['Access-Control-Allow-Headers'] = "Content-Type, Access-Control-Allow-Origin, Accept"
-	return return_response
-
-
 def http_400(request, response):
 	request.setResponseCode(400)
 	return return_json(request, response)
@@ -213,6 +205,14 @@ def api_download_data(request):
 		save_data(io, data)
 		request.responseHeaders.addRawHeader(b'Content-Disposition', str.encode(f'attachment; filename="{dataset}-{datetime.datetime.utcnow()}.csv"'))
 		return io.getvalue()
+
+
+@app.route('/loaderio-<code>/')
+def loaderio_verification(code):
+	if 'loaderio' in os.environ:
+		if os.environ['loaderio'] == 'true':
+			return f'loaderio-{code}'
+	return 'Not Allowed'
 
 if __name__ == '__main__':
 	app.run('0.0.0.0', 80)
