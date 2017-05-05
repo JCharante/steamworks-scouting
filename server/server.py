@@ -208,7 +208,7 @@ def api_download_data(request):
 
 
 @app.route('/loaderio-<code>/')
-def loaderio_verification(code):
+def loaderio_verification(request, code):
 	if 'loaderio' in os.environ:
 		if os.environ['loaderio'] == 'true':
 			return f'loaderio-{code}'
