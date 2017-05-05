@@ -357,40 +357,39 @@ def matrix_data_for_event(event_name):
 	return matrix
 
 
-def matches_array():
+def matches_array(event_codes=None):
 	session = DBSession()
-	matches = []
-	for match in session.query(MatchV7).all():
-		matches.append({
-			'match_id': match.match_id,
-			'event_name': match.event_name,
-			'team_number': match.team_number,
-			'match_number': match.match_number,
-			'auto_line_cross': match.auto_line_cross,
-			'auto_low_goal': match.auto_low_goal,
-			'auto_hopper': match.auto_hopper,
-			'auto_collect': match.auto_collect,
-			'auto_gear_pos': match.auto_gear_pos,
-			'auto_kpa': match.auto_kpa,
-			'auto_high_goal_pos': match.auto_high_goal_pos,
-			'climb_rating': match.climb_rating,
-			'gear_rating': match.gear_rating,
-			'total_gears': match.total_gears,
-			'total_kpa': match.total_kpa,
-			'gear_dispense_method': match.gear_dispense_method,
-			'got_gear_from_human': match.got_gear_from_human,
-			'got_gear_from_floor': match.got_gear_from_floor,
-			'high_goal_rating': match.high_goal_rating,
-			'high_goal_shoot_from_key': match.high_goal_shoot_from_key,
-			'high_goal_shoot_from_wall': match.high_goal_shoot_from_wall,
-			'high_goal_shoot_from_afar': match.high_goal_shoot_from_afar,
-			'low_goal_rating': match.low_goal_rating,
-			'total_hoppers': match.total_hoppers,
-			'collected_from_hopper': match.collected_from_hopper,
-			'collected_fuel_from_floor': match.collected_fuel_from_floor,
-			'last_modified': match.last_modified,
-			'notes': match.notes,
-			'scout_name': match.scout_name
-		})
+	query = session.query(MatchV7) if event_codes is None else session.query(MatchV7).filter(MatchV7.event_name.in_(event_codes))
+	matches = [{
+		'match_id': match.match_id,
+		'event_name': match.event_name,
+		'team_number': match.team_number,
+		'match_number': match.match_number,
+		'auto_line_cross': match.auto_line_cross,
+		'auto_low_goal': match.auto_low_goal,
+		'auto_hopper': match.auto_hopper,
+		'auto_collect': match.auto_collect,
+		'auto_gear_pos': match.auto_gear_pos,
+		'auto_kpa': match.auto_kpa,
+		'auto_high_goal_pos': match.auto_high_goal_pos,
+		'climb_rating': match.climb_rating,
+		'gear_rating': match.gear_rating,
+		'total_gears': match.total_gears,
+		'total_kpa': match.total_kpa,
+		'gear_dispense_method': match.gear_dispense_method,
+		'got_gear_from_human': match.got_gear_from_human,
+		'got_gear_from_floor': match.got_gear_from_floor,
+		'high_goal_rating': match.high_goal_rating,
+		'high_goal_shoot_from_key': match.high_goal_shoot_from_key,
+		'high_goal_shoot_from_wall': match.high_goal_shoot_from_wall,
+		'high_goal_shoot_from_afar': match.high_goal_shoot_from_afar,
+		'low_goal_rating': match.low_goal_rating,
+		'total_hoppers': match.total_hoppers,
+		'collected_from_hopper': match.collected_from_hopper,
+		'collected_fuel_from_floor': match.collected_fuel_from_floor,
+		'last_modified': match.last_modified,
+		'notes': match.notes,
+		'scout_name': match.scout_name
+	} for match in query.all()]
 	session.close()
 	return matches

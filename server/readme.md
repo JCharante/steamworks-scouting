@@ -16,7 +16,7 @@ The address of the mysql server in the format of:
 Example:
 
 ```bash
-$ export db_address=mysql+pymysql://achilles:achilles@localhost/achilles?charset=utf8mb4
+$ export db_address=mysql+pymysql://root:root@localhost/steamworks_scouting?charset=utf8mb4
 ```
 
 #### serverPassword
