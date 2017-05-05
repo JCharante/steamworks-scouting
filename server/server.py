@@ -1,5 +1,8 @@
-from flask import Flask, request, make_response, Response, jsonify, render_template
-import flask_excel as excel
+from klein import Klein
+import pyexcel
+from io import StringIO
+from pyexcel_io import save_data
+from twisted.web.static import File
 import json
 import os
 from typing import List, Dict
@@ -20,7 +23,25 @@ migration.migrate_matchv3_to_matchv4()
 migration.migrate_matchv4_to_matchv5()
 migration.migrate_matchv5_to_matchv6()
 migration.migrate_matchv6_to_matchv7()
-app = Flask(__name__)
+
+
+app = Klein()
+templates_folder = dir_path = os.path.dirname(os.path.realpath(__file__)) + '/templates'
+
+
+def get_arg(request, key, default_value):
+	list = request.args.get(str.encode(key), default_value)
+	if list == default_value:
+		return default_value
+	else:
+		return list[0].decode('utf-8')
+
+
+def return_json(request, response):
+	request.responseHeaders.addRawHeader(b'content-type', b'application/json')
+	request.responseHeaders.addRawHeader(b'Access-Control-Allow-Origin', b'*')
+	request.responseHeaders.addRawHeader(b'Access-Control-Allow-Headers', b'Content-Type, Access-Control-Allow-Origin')
+	return json.dumps(response)
 
 
 def home_cor(obj):
@@ -31,19 +52,18 @@ def home_cor(obj):
 	return return_response
 
 
-def http_400(response: Dict):
-	response_object = home_cor(jsonify(**response))
-	response_object.status_code = 400
-	return response_object
+def http_400(request, response):
+	request.setResponseCode(400)
+	return return_json(request, response)
 
 
 @app.route('/')
-def api_root():
-	return render_template('index.html')
+def api_root(request):
+	return open(f'{templates_folder}/index.html').read()
 
 
 @app.route('/match/upload', methods=['OPTIONS', 'POST'])
-def api_match_upload():
+def api_match_upload(request):
 	required_parameters = {
 		'matches': {
 			'valid_types': [list],
@@ -56,14 +76,14 @@ def api_match_upload():
 	}
 
 	# Generic Start #
-	if request.method == 'POST':
-		data = request.json
+	if request.method == b'POST':
+		data = json.loads(request.content.read().decode('utf-8'))
 		if data is not None:
 			data = data  # type: Dict
 			for parameter_name in required_parameters:
 				parameter_value = data.get(parameter_name, None)
 				if parameter_value is None:
-					return http_400({
+					return http_400(request, {
 						"error": {
 							"error_code": 3,
 							"message": 'Required Parameter is Missing',
@@ -71,7 +91,7 @@ def api_match_upload():
 						}
 					})
 				if type(parameter_value) in required_parameters[parameter_name]['valid_types'] is False:
-					return http_400({
+					return http_400(request, {
 						"error": {
 							"error_code": 10,
 							"message": 'Invalid Type for Required Parameter!',
@@ -81,7 +101,7 @@ def api_match_upload():
 				else:
 					required_parameters[parameter_name]['value'] = parameter_value
 		else:
-			return http_400({
+			return http_400(request, {
 				"error": {
 					"error_code": 2,
 					"message": 'Required JSON Object Not Sent',
@@ -91,8 +111,8 @@ def api_match_upload():
 
 	response = dict()
 
-	if request.method == 'OPTIONS':
-		return home_cor(jsonify(**response))
+	if request.method == b'OPTIONS':
+		return return_json(request, response)
 	# Generic End #
 
 	matches = required_parameters['matches']['value']  # type: List[Dict]
@@ -105,9 +125,7 @@ def api_match_upload():
 				"success": True
 			}
 		}
-		response_object = home_cor(jsonify(**response))
-		response_object.status_code = 200
-		return response_object
+		return return_json(request, response)
 	except exceptions.GenericException as e:
 		response = {
 			"error": {
@@ -116,19 +134,17 @@ def api_match_upload():
 				"fields": e.fields
 			}
 		}
-		response_object = home_cor(jsonify(**response))
-		response_object.status_code = 400
-		return response_object
+		return http_400(request, response)
 
 
 @app.route('/download/app', methods=['OPTIONS', 'GET'])
-def api_download():
-	if request.method == 'OPTIONS':
-		return home_cor(jsonify(**{}))
-	if request.method == 'GET':
-		server_password = request.args.get('serverPassword', None)
+def api_download(request):
+	if request.method == b'OPTIONS':
+		return return_json(request, {})
+	if request.method == b'GET':
+		server_password = get_arg(request, 'serverPassword', None)
 		if server_password != os.environ['serverPassword']:
-			return http_400({
+			return http_400(request, {
 				"error": {
 					"code": 3,
 					"message": "Not Authorized!",
@@ -138,17 +154,15 @@ def api_download():
 		response = {
 			'matches': db_functions.matches_array()
 		}
-		return home_cor(jsonify(**response))
+		return return_json(request, response)
 
 
 @app.route('/events/<event_code>/matches/all', methods=['OPTIONS', 'GET'])
-def events_event_code_matches_all(event_code):
-	if request.method == 'OPTIONS':
-		return home_cor(jsonify(**{}))
-	if request.method == 'GET':
-		server_password = request.args.get('serverPassword', None)
+def events_event_code_matches_all(request, event_code):
+	if request.method == b'GET':
+		server_password = get_arg(request, 'serverPassword', None)
 		if server_password != os.environ['serverPassword']:
-			return http_400({
+			return http_400(request, {
 				"error": {
 					"code": 3,
 					"message": "Not Authorized!",
@@ -158,34 +172,47 @@ def events_event_code_matches_all(event_code):
 		response = {
 			'matches': db_functions.matches_array({event_code})
 		}
-		return home_cor(jsonify(**response))
+		return return_json(request, response)
+	elif request.method == b'OPTIONS':
+		return return_json(request, {})
 
 
 @app.route('/events', methods=['OPTIONS', 'GET'])
-def api_events():
+def api_events(request):
 	response = {
 		'events': db_functions.events_recorded()
 	}
-	return home_cor(jsonify(**response))
+	return return_json(request, response)
 
 
 @app.route('/download/csv', methods=['OPTIONS', 'GET'])
-def api_download_data():
-	if request.method == 'OPTIONS':
-		return home_cor(jsonify(**{}))
-	if request.method == 'GET':
-		dataset = request.args.get('dataset', None)
-		server_password = request.args.get('serverPassword', None)
+def api_download_data(request):
+	if request.method == b'OPTIONS':
+		return return_json(request, {})
+	if request.method == b'GET':
+		dataset = get_arg(request, 'dataset', None)
+		server_password = get_arg(request, 'serverPassword', None)
 		if server_password != os.environ['serverPassword']:
-			return http_400({
+			return http_400(request, {
 				"error": {
 					"code": 3,
 					"message": "Not Authorized!",
 					"fields": "serverPassword"
 				}
 			})
+		if dataset is None:
+			return http_400(request, {
+				"error": {
+					"code": 4,
+					"message": "Dataset not specified",
+					"fields": "dataset"
+				}
+			})
 		data = db_functions.matrix_data_for_event(dataset)
-		return excel.make_response_from_array(data, 'csv', file_name=f'{dataset}-{datetime.datetime.utcnow()}.csv')
+		io = StringIO()
+		save_data(io, data)
+		request.responseHeaders.addRawHeader(b'Content-Disposition', str.encode(f'attachment; filename="{dataset}-{datetime.datetime.utcnow()}.csv"'))
+		return io.getvalue()
 
 if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0', port=8000, threaded=True)
+	app.run('0.0.0.0', 8000)
