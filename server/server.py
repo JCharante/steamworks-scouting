@@ -9,10 +9,7 @@ import migration
 import sys
 import datetime
 
-
-try:
-	os.environ['serverPassword']
-except KeyError as e:
+if 'serverPassword' in os.environ is False:
 	print('Environmental Variable serverPassword not set.')
 	print('Exiting with Status Code -1')
 	sys.exit(-1)
@@ -144,6 +141,26 @@ def api_download():
 		return home_cor(jsonify(**response))
 
 
+@app.route('/events/<event_code>/matches/all', methods=['OPTIONS', 'GET'])
+def events_event_code_matches_all(event_code):
+	if request.method == 'OPTIONS':
+		return home_cor(jsonify(**{}))
+	if request.method == 'GET':
+		server_password = request.args.get('serverPassword', None)
+		if server_password != os.environ['serverPassword']:
+			return http_400({
+				"error": {
+					"code": 3,
+					"message": "Not Authorized!",
+					"fields": "serverPassword"
+				}
+			})
+		response = {
+			'matches': db_functions.matches_array({event_code})
+		}
+		return home_cor(jsonify(**response))
+
+
 @app.route('/events', methods=['OPTIONS', 'GET'])
 def api_events():
 	response = {
@@ -171,4 +188,4 @@ def api_download_data():
 		return excel.make_response_from_array(data, 'csv', file_name=f'{dataset}-{datetime.datetime.utcnow()}.csv')
 
 if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0', port=80, threaded=True)
+	app.run(debug=True, host='0.0.0.0', port=8000, threaded=True)
