@@ -188,4 +188,4 @@ def api_download_data():
 		return excel.make_response_from_array(data, 'csv', file_name=f'{dataset}-{datetime.datetime.utcnow()}.csv')
 
 if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0', port=8000, threaded=True)
+	app.run(debug=True, host='0.0.0.0', port=80, threaded=True)
