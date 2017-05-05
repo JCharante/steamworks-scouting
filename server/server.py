@@ -215,4 +215,4 @@ def api_download_data(request):
 		return io.getvalue()
 
 if __name__ == '__main__':
-	app.run('0.0.0.0', 8000)
+	app.run('0.0.0.0', 80)
