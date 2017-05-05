@@ -188,7 +188,7 @@ def api_download_data():
 		return excel.make_response_from_array(data, 'csv', file_name=f'{dataset}-{datetime.datetime.utcnow()}.csv')
 
 
-@app.route('/loaderio-<code>')
+@app.route('/loaderio-<code>/')
 def loaderio_verification(code):
 	if 'loaderio' in os.environ:
 		if os.environ['loaderio'] == 'true':
