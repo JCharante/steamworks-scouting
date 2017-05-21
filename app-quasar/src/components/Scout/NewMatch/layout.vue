@@ -1,12 +1,20 @@
 <template>
     <q-layout>
-        <FlexDrawer title="Scout New Match" :tabs="tabs"></FlexDrawer>
+        <FlexDrawerHeader slot="header" title="Scout New Match" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></FlexDrawerHeader>
+        <q-tabs slot="navigation">
+            <q-tab icon="info_outline" route="/scout/new_match" exact replace>Pre Match</q-tab>
+            <q-tab icon="android" route="/scout/new_match/auto" exact replace>Auto</q-tab>
+            <q-tab icon="face" route="/scout/new_match/teleop" exact replace>Teleop</q-tab>
+            <q-tab icon="gavel" route="/scout/new_match/after_match" exact replace>After Match</q-tab>
+        </q-tabs>
+        <FlexDrawerDrawer ref="drawer"></FlexDrawerDrawer>
         <router-view class="layout-view"></router-view>
     </q-layout>
 </template>
 
 <script>
-    import FlexDrawer from '../../FlexDrawer.vue'
+    import FlexDrawerHeader from '../../DrawerHead.vue'
+    import FlexDrawerDrawer from '../../DrawerBody.vue'
     import PreMatch from './PreMatch.vue'
     import Auto from './Auto.vue'
     import Teleop from './Teleop.vue'
@@ -14,37 +22,15 @@
 
     export default {
         components: {
-            'FlexDrawer': FlexDrawer,
+            'FlexDrawerHeader': FlexDrawerHeader,
+            'FlexDrawerDrawer': FlexDrawerDrawer,
             'PreMatch': PreMatch,
             'Auto': Auto,
             'Teleop': Teleop,
             'AfterMatch': AfterMatch
         },
         data () {
-            return {
-                tabs: [
-                    {
-                        'text': 'Pre Match',
-                        'route': '/scout/new_match',
-                        'icon': 'info_outline'
-                    },
-                    {
-                        'text': 'Auto',
-                        'route': '/scout/new_match/auto',
-                        'icon': 'android'
-                    },
-                    {
-                        'text': 'Teleop',
-                        'route': '/scout/new_match/teleop',
-                        'icon': 'face'
-                    },
-                    {
-                        'text': 'After Match',
-                        'route': '/scout/new_match/after_match',
-                        'icon': 'gavel'
-                    }
-                ]
-            }
+            return {}
         }
     }
 </script>

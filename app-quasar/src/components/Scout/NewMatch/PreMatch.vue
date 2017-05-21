@@ -1,33 +1,17 @@
 <template>
-    <div>
+    <!-- in each page -->
+    <div> <!-- root node required for subRoutes -->
         <div class="layout-padding">
-            <p>
-                Layouts are the elements that wrap page content, like navigational bar,
-                drawer, header or footer. Multiple pages can share the same Layout, which
-                is one of the main reason for their existence.
-            </p>
-            <p>
-                You can have multiple headers and/or footers. In each you can place
-                <span class="token">Toolbars</span>,
-                <span class="token">Tabs</span>,
-                <span class="token">Search bars</span>
-                or your own elements.
-            </p>
-            <p>
-                Use it wisely with Vue Router.
-            </p>
+            ...page content...
         </div>
+        <!--
+          You can have as many <div>s with
+          "layout-padding" CSS class as you want
+        -->
+        <!--
+          Also, anything placed outside of these <div>s with "layout-padding"
+          (so direct children of the root node) will have width 100% of your
+          page view
+        -->
     </div>
 </template>
-
-<script>
-    export default {
-        data () {
-            return {}
-        }
-    }
-</script>
-
-<style>
-
-</style>

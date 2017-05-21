@@ -1,7 +1,10 @@
 <template>
     <q-layout>
-        <div>
+        <FlexDrawerHeader slot="header" title="Home" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></FlexDrawerHeader>
+        <FlexDrawerDrawer ref="drawer"></FlexDrawerDrawer>
+        <div class="layout-view">
             <div class="layout-padding">
+                <p>Hi</p>
                 <div class="row inline">
                     <div class="auto">
                         <a href="#">
@@ -13,19 +16,17 @@
             </div>
         </div>
 
-        <FlexDrawer title="Scout New Match"></FlexDrawer>
-
-        <router-view class="layout-view"></router-view>
-
     </q-layout>
 </template>
 
 <script>
-    import FlexDrawer from './FlexDrawer.vue'
+    import FlexDrawerHeader from './DrawerHead.vue'
+    import FlexDrawerDrawer from './DrawerBody.vue'
 
     export default {
         components: {
-            'FlexDrawer': FlexDrawer
+            'FlexDrawerHeader': FlexDrawerHeader,
+            'FlexDrawerDrawer': FlexDrawerDrawer
         },
         data () {
             return {}

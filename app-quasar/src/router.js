@@ -30,6 +30,13 @@ export default new VueRouter({
                 {path: 'after_match', component: load('Scout/NewMatch/AfterMatch')}
             ]
         },
+        { path: '/demo',
+            component: load('demo/layout'),
+            children: [
+                {path: '', component: load('demo/TabOne')},
+                {path: 'tabtwo', component: load('demo/TabTwo')}
+            ]
+        },
         { path: '/', component: load('Index') }, // Default
         { path: '*', component: load('Error404') } // Not found
     ]
