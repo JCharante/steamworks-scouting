@@ -4,12 +4,11 @@
         <FlexDrawerDrawer ref="drawer"></FlexDrawerDrawer>
         <div class="layout-view">
             <div class="layout-padding">
-                <p>Hi</p>
                 <div class="row inline">
                     <div class="auto">
-                        <a href="#">
-                            <img src="../assets/achilles-1024.png" alt="achilles Logo">
-                        </a>
+                        <router-link to="/scout/new_match">
+                            <img src="../assets/achilles-1024.png" class="responsive">
+                        </router-link>
                     </div>
                 </div>
                 <p class="text-center">Logo by Wil W.L.</p>
@@ -33,10 +32,3 @@
         }
     }
 </script>
-
-<style>
-    img {
-        margin-top: 100px;
-        width: 100%;
-    }
-</style>
