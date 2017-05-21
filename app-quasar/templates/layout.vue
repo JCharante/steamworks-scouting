@@ -1,54 +1,66 @@
 <template>
-  <q-layout>
-    <div slot="header" class="toolbar">
-      <!-- opens drawer below
-      <button class="hide-on-drawer-visible" @click="$refs.drawer.open()">
-        <i>menu</i>
-      </button>
-      -->
-      <q-toolbar-title :padding="1">
-        Title
-      </q-toolbar-title>
-    </div>
+    <q-layout>
+        <div slot="header" class="toolbar">
+            <button class="hide-on-drawer-visible" @click="$refs.drawer.open()">
+                <i>menu</i>
+            </button>
+            <q-toolbar-title :padding="1">
+                Example Layout
+            </q-toolbar-title>
+        </div>
 
-    <!-- Navigation Tabs
-    <q-tabs slot="navigation">
-      <q-tab icon="mail" route="/layout" exact replace>Mails</q-tab>
-      <q-tab icon="alarm" route="/layout/alarm" exact replace>Alarms</q-tab>
-      <q-tab icon="help" route="/layout/help" exact replace>Help</q-tab>
-    </q-tabs>
-    -->
+        <q-tabs v-if="(tabs !== undefined && tabs !== null) && tabs.length > 0" slot="navigation">
+            <q-tab v-for="tab in tabs" :key="tab.route" :icon="tab.icon" :route="tab.route" exact replace>{{ tab.text }}</q-tab>
+        </q-tabs>
 
-    <!-- Drawer
-    <q-drawer ref="drawer">
-      <div class="toolbar">
-        <q-toolbar-title>
-          Drawer Title
-        </q-toolbar-title>
-      </div>
+        <q-drawer ref="drawer">
+            <div class="toolbar light">
+                <q-toolbar-title :padding="1">
+                    Drawer
+                </q-toolbar-title>
+            </div>
 
-      <div class="list no-border platform-delimiter">
-        <q-drawer-link icon="mail" :to="{path: '/', exact: true}">
-          Link
-        </q-drawer-link>
-      </div>
-    </q-drawer>
-    -->
+            <div class="list no-border platform-delimiter">
+                <q-drawer-link icon="home" to="/" exact>
+                    Home
+                </q-drawer-link>
 
-    <router-view class="layout-view"></router-view>
+                <hr>
+                <div class="list-label">Scout</div>
+                <q-drawer-link icon="note_add" to="/scout/new_match">
+                    New Match
+                </q-drawer-link>
+                <q-drawer-link icon="view_list" to="/">
+                    View Matches
+                </q-drawer-link>
+                <q-drawer-link icon="poll" to="/">
+                    Overview
+                </q-drawer-link>
+                <q-drawer-link icon="cloud" to="/">
+                    Server
+                </q-drawer-link>
 
-    <!-- Footer
-    <div slot="footer" class="toolbar"></div>
-    -->
-  </q-layout>
+                <hr>
+                <div class="list-label">Miscellaneous</div>
+                <q-drawer-link icon="settings" to="/">
+                    Settings
+                </q-drawer-link>
+                <q-drawer-link icon="volume_up" to="/">
+                    Soundboard
+                </q-drawer-link>
+            </div>
+        </q-drawer>
+
+        <router-view class="layout-view"></router-view>
+    </q-layout>
 </template>
 
 <script>
-export default {
-  data () {
-    return {}
-  }
-}
+    export default {
+        data () {
+            return {}
+        }
+    }
 </script>
 
 <style>
