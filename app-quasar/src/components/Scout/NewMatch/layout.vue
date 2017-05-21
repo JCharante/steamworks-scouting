@@ -1,20 +1,20 @@
 <template>
     <q-layout>
-        <FlexDrawerHeader slot="header" title="Scout New Match" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></FlexDrawerHeader>
+        <DrawerHead slot="header" title="Scout New Match" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
         <q-tabs slot="navigation">
             <q-tab icon="info_outline" route="/scout/new_match" exact replace>Pre Match</q-tab>
             <q-tab icon="android" route="/scout/new_match/auto" exact replace>Auto</q-tab>
             <q-tab icon="face" route="/scout/new_match/teleop" exact replace>Teleop</q-tab>
             <q-tab icon="gavel" route="/scout/new_match/after_match" exact replace>After Match</q-tab>
         </q-tabs>
-        <FlexDrawerDrawer ref="drawer"></FlexDrawerDrawer>
+        <DrawerBody ref="drawer"></DrawerBody>
         <router-view class="layout-view"></router-view>
     </q-layout>
 </template>
 
 <script>
-    import FlexDrawerHeader from '../../DrawerHead.vue'
-    import FlexDrawerDrawer from '../../DrawerBody.vue'
+    import DrawerHead from '../../DrawerHead.vue'
+    import DrawerBody from '../../DrawerBody.vue'
     import PreMatch from './PreMatch.vue'
     import Auto from './Auto.vue'
     import Teleop from './Teleop.vue'
@@ -22,8 +22,8 @@
 
     export default {
         components: {
-            'FlexDrawerHeader': FlexDrawerHeader,
-            'FlexDrawerDrawer': FlexDrawerDrawer,
+            'DrawerHead': DrawerHead,
+            'DrawerBody': DrawerBody,
             'PreMatch': PreMatch,
             'Auto': Auto,
             'Teleop': Teleop,

@@ -1,21 +1,21 @@
 <template>
     <q-layout>
-        <FlexDrawerHeader slot="header" title="Tabby Demo" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></FlexDrawerHeader>
+        <DrawerHead slot="header" title="Tabby Demo" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
         <Tabby :tabs="tabs" slot="navigation"></Tabby>
-        <FlexDrawerDrawer ref="drawer"></FlexDrawerDrawer>
+        <DrawerBody ref="drawer"></DrawerBody>
         <router-view class="layout-view"></router-view>
     </q-layout>
 </template>
 
 <script>
-    import FlexDrawerHeader from '../DrawerHead.vue'
-    import FlexDrawerDrawer from '../DrawerBody.vue'
+    import DrawerHead from '../DrawerHead.vue'
+    import DrawerBody from '../DrawerBody.vue'
     import Tabby from './Tabby.vue'
 
     export default {
         components: {
-            'FlexDrawerHeader': FlexDrawerHeader,
-            'FlexDrawerDrawer': FlexDrawerDrawer,
+            'DrawerHead': DrawerHead,
+            'DrawerBody': DrawerBody,
             'Tabby': Tabby
         },
         data () {

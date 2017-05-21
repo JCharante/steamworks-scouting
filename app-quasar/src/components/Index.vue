@@ -1,7 +1,7 @@
 <template>
     <q-layout>
-        <FlexDrawerHeader slot="header" title="Home" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></FlexDrawerHeader>
-        <FlexDrawerDrawer ref="drawer"></FlexDrawerDrawer>
+        <DrawerHead slot="header" title="Home" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
+        <DrawerBody ref="drawer"></DrawerBody>
         <div class="layout-view">
             <div class="layout-padding">
                 <div class="row inline">
@@ -19,13 +19,13 @@
 </template>
 
 <script>
-    import FlexDrawerHeader from './DrawerHead.vue'
-    import FlexDrawerDrawer from './DrawerBody.vue'
+    import DrawerHead from './DrawerHead.vue'
+    import DrawerBody from './DrawerBody.vue'
 
     export default {
         components: {
-            'FlexDrawerHeader': FlexDrawerHeader,
-            'FlexDrawerDrawer': FlexDrawerDrawer
+            'DrawerHead': DrawerHead,
+            'DrawerBody': DrawerBody
         },
         data () {
             return {}
