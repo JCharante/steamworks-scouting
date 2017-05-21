@@ -2,7 +2,7 @@
     <q-drawer ref="drawer">
         <div class="toolbar light">
             <q-toolbar-title :padding="1">
-                Drawer
+                Steamworks Scouting
             </q-toolbar-title>
         </div>
 
