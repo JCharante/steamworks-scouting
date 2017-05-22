@@ -31,7 +31,7 @@
             <q-drawer-link icon="settings" to="/">
                 Settings
             </q-drawer-link>
-            <q-drawer-link icon="volume_up" to="/">
+            <q-drawer-link icon="volume_up" to="/soundboard">
                 Soundboard
             </q-drawer-link>
         </div>

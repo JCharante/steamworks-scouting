@@ -37,6 +37,7 @@ export default new VueRouter({
                 {path: 'tabtwo', component: load('demo/TabTwo')}
             ]
         },
+        { path: '/soundboard', component: load('SoundBoard') },
         { path: '/', component: load('Index') }, // Default
         { path: '*', component: load('Error404') } // Not found
     ]
