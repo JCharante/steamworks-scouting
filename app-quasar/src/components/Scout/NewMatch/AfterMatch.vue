@@ -60,7 +60,7 @@
             <br>
 
             <div class="row justify-center">
-                <q-knob size="18rem" v-model="match.estimatedClimbTime" :min="0" :max="30" :placeholder="'Estimated Climb Time: ' + match.estimatedClimbTime + 's'"></q-knob>
+                <q-knob size="18rem" @input="updateKnobColor" :color="knobColor" v-model="match.estimatedClimbTime" :min="0" :max="30" :placeholder="'Estimated Climb Time: ' + match.estimatedClimbTime + 's'"></q-knob>
             </div>
 
 
@@ -70,8 +70,39 @@
 
 <script>
     export default {
+        methods: {
+            updateKnobColor: function () {
+                let self = this
+
+                if (self.match.estimatedClimbTime > 20) {
+                    self.knobColor = '#db2828' // negative
+                }
+                else if (self.match.estimatedClimbTime > 16) {
+                    self.knobColor = '#ff5722' // deep-orange
+                }
+                else if (self.match.estimatedClimbTime > 14) {
+                    self.knobColor = '#ff9800' // orange
+                }
+                else if (self.match.estimatedClimbTime > 12) {
+                    self.knobColor = '#ffc107' // amber
+                }
+                else if (self.match.estimatedClimbTime > 10) {
+                    self.knobColor = '#f2c037' // warning
+                }
+                else if (self.match.estimatedClimbTime > 8) {
+                    self.knobColor = '#cddc39' // lime
+                }
+                else if (self.match.estimatedClimbTime > 5) {
+                    self.knobColor = '#8bc34a' // light-green
+                }
+                else {
+                    self.knobColor = '#21ba45' // positive
+                }
+            }
+        },
         data () {
             return {
+                knobColor: '#21ba45', // positive
                 match: {
                     gearDispenseMethod: null,
                     gearRating: null,
