@@ -1,21 +1,103 @@
 <template>
     <div>
         <div class="layout-padding">
-            <p>
-                Layouts are the elements that wrap page content, like navigational bar,
-                drawer, header or footer. Multiple pages can share the same Layout, which
-                is one of the main reason for their existence.
-            </p>
-            <p>
-                You can have multiple headers and/or footers. In each you can place
-                <span class="token">Toolbars</span>,
-                <span class="token">Tabs</span>,
-                <span class="token">Search bars</span>
-                or your own elements.
-            </p>
-            <p>
-                Use it wisely with Vue Router.
-            </p>
+            <div class="list">
+                <div class="list-label">Teleop Info</div>
+
+                <div class="item two-lines">
+                    <div class="item-content">
+                        <span class="item-label">Total kPa: </span>
+                        <q-numeric v-model="match.totalkPa" :min="0"></q-numeric>
+                    </div>
+                </div>
+
+                <div class="item two-lines">
+                    <div class="item-content">
+                        <span class="item-label">Total Dumped Hoppers: </span>
+                        <q-numeric v-model="match.hoppers" :min="0"></q-numeric>
+                    </div>
+                </div>
+
+                <label class="item">
+                    <div class="item-primary">
+                        <q-checkbox v-model="match.collectedFromHopper"></q-checkbox>
+                    </div>
+                    <div class="item-content">
+                        Collected from Hopper
+                    </div>
+                </label>
+
+                <label class="item">
+                    <div class="item-primary">
+                        <q-checkbox v-model="match.collectedFuelOffGround"></q-checkbox>
+                    </div>
+                    <div class="item-content">
+                        Collected Fuel from Floor
+                    </div>
+                </label>
+
+                <div class="item two-lines">
+                    <div class="item-content">
+                        <span class="item-label">Total Gears: </span>
+                        <q-numeric v-model="match.gears" :min="0"></q-numeric>
+                    </div>
+                </div>
+
+                <label class="item">
+                    <div class="item-primary">
+                        <q-checkbox v-model="match.obtainedGearFromHumanPlayer"></q-checkbox>
+                    </div>
+                    <div class="item-content">
+                        Obtained Gear from Human Player
+                    </div>
+                </label>
+
+                <label class="item">
+                    <div class="item-primary">
+                        <q-checkbox v-model="match.obtainedGearFromFloor"></q-checkbox>
+                    </div>
+                    <div class="item-content">
+                        Obtained Gear from Floor
+                    </div>
+                </label>
+
+                <div class="item two-lines">
+                    <div class="item-content row items-center">
+                        <label style="margin-right: 10px;">High Goal Position:</label>
+                        <br>
+                        <q-select class="full-width" type="checkbox" v-model="match.highGoalShotFrom" :options="selectOptions.highGoalShotFrom"></q-select>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </template>
+
+<script>
+    export default {
+        data () {
+            return {
+                match: {
+                    totalkPa: 0,
+                    hoppers: 0,
+                    collectedFromHopper: false,
+                    collectedFuelOffGround: false,
+                    gears: 0,
+                    obtainedGearFromHumanPlayer: false,
+                    obtainedGearFromFloor: false,
+                    shotLowGoal: false,
+                    gearPosition: null,
+                    highGoalShotFrom: []
+                },
+                selectOptions: {
+                    highGoalShotFrom: [
+                        {label: 'Key', value: 'key'},
+                        {label: 'Wall', value: 'wall'},
+                        {label: 'Afar', value: 'afar'}
+                    ]
+                }
+            }
+        }
+    }
+</script>
