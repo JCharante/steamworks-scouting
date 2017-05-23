@@ -5,7 +5,7 @@
         <div class="layout-view">
             <div class="layout-padding">
                 <div class="row inline">
-                    <div class="auto">
+                    <div class="auto  ">
                         <router-link to="/scout/new_match">
                             <img src="../assets/achilles-1024.png" class="responsive">
                         </router-link>
