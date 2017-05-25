@@ -44,15 +44,15 @@
     export default {
         mounted () {
             let self = this
-            console.log('PreMatch: Mounted with router prop matchID =', self.$route.params.matchID)
+            console.info('%cPreMatch: %cMounted with router prop matchID = %O', 'color: blue', 'color: black', self.$route.params.matchID)
             let fetchedMatch = matchActions.fetchMatch(self.$select('matches'), self.$route.params.matchID)
-            console.log('PreMatch: fetchedMatch', fetchedMatch)
+            console.info('%cPreMatch: %cfetchedMatch = %O', 'color: blue', 'color: black', fetchedMatch)
             if (fetchedMatch === undefined) {
-                console.log('PreMatch: Couldn\'t find match in store. Redirecting to create new match')
+                console.info('%cPreMatch: %cCouldn\'t find match in store. Redirecting to create new match', 'color: blue', 'color: red')
                 self.$router.push('/scout/new')
             }
             else {
-                console.log('PreMatch: Loading match data from Redux Store')
+                console.info('%cPreMatch: %cLoading match data from Redux Store', 'color: blue', 'color: green')
                 self.match = Object.assign({}, self.match, fetchedMatch)
             }
         },
@@ -65,7 +65,7 @@
                 let self = this
                 let fetchedMatch = matchActions.fetchMatch(self.$select('matches'), self.$route.params.matchID)
                 if (fetchedMatch !== undefined) {
-                    console.log('PreMatch: Saving to Redux Store')
+                    console.info('%cPreMatch: %cSaving to Redux Store', 'color: blue', 'color: black')
                     store.dispatch(matchActions.updateMatch(self.match.matchID, self.match))
                 }
             }
