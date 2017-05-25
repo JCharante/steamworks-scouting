@@ -30,7 +30,20 @@ const reducers = combineReducers({
     matches
 })
 
-const reduxStore = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+let initialState = {
+    matches: JSON.parse(localStorage.getItem('matches') || '{}')
+}
+
+let reduxStore = null
+
+if (localStorage.getItem('matches') === null) {
+    console.info('%cstore.js: %cInitialized Store from Scratch', 'color: blue', 'color: black')
+    reduxStore = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+}
+else {
+    console.info('%cstore.js: %cInitialized Store from Local Storage', 'color: blue', 'color: green')
+    reduxStore = createStore(reducers, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+}
 
 const store = new Revue(Vue, reduxStore, actions)
 
