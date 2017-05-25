@@ -38,8 +38,8 @@
 </template>
 
 <script>
-    import store from '../../../store.js'
-    import * as matchActions from '../../../actions/matches.js'
+    import store from '../../store.js'
+    import * as matchActions from '../../actions/matches.js'
 
     export default {
         mounted () {

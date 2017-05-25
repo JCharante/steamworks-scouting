@@ -13,8 +13,8 @@
 </template>
 
 <script>
-    import DrawerHead from '../../DrawerHead.vue'
-    import DrawerBody from '../../DrawerBody.vue'
+    import DrawerHead from '../DrawerHead.vue'
+    import DrawerBody from '../DrawerBody.vue'
     import PreMatch from './PreMatch.vue'
     import Auto from './Auto.vue'
     import Teleop from './Teleop.vue'

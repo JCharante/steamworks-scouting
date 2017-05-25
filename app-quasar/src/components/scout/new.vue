@@ -20,11 +20,11 @@
 </template>
 
 <script>
-    import DrawerHead from '../../DrawerHead.vue'
-    import DrawerBody from '../../DrawerBody.vue'
-    import store from '../../../store.js'
-    import * as matchActions from '../../../actions/matches.js'
-    import * as util from '../../../util.js'
+    import DrawerHead from '../DrawerHead.vue'
+    import DrawerBody from '../DrawerBody.vue'
+    import store from '../../store.js'
+    import * as matchActions from '../../actions/matches.js'
+    import * as util from '../../util.js'
 
     export default {
         mounted () {

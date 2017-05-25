@@ -21,14 +21,14 @@ export default new VueRouter({
      */
 
     routes: [
-        { path: '/scout/new', component: load('Scout/NewMatch/new') },
+        { path: '/scout/new', component: load('scout/new') },
         { path: '/scout/:matchID',
-            component: load('Scout/NewMatch/layout'),
+            component: load('scout/layout'),
             children: [
-                {path: '', component: load('Scout/NewMatch/PreMatch')},
-                {path: 'auto', component: load('Scout/NewMatch/Auto')},
-                {path: 'teleop', component: load('Scout/NewMatch/Teleop')},
-                {path: 'after_match', component: load('Scout/NewMatch/AfterMatch')}
+                {path: '', component: load('scout/PreMatch')},
+                {path: 'auto', component: load('scout/Auto')},
+                {path: 'teleop', component: load('scout/Teleop')},
+                {path: 'after_match', component: load('scout/AfterMatch')}
             ]
         },
         { path: '/demo',
