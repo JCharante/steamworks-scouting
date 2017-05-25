@@ -119,7 +119,7 @@
                     akPa: 0,
                     aCrossedLine: false,
                     aDumpedHopper: false,
-                    tCollectedFromHopper: false,
+                    aCollectedFromHopper: false,
                     aLowGoal: false,
                     aGearPosition: null,
                     aSuccessfulGearPlacement: false,
