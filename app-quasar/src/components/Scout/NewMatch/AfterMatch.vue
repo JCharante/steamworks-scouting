@@ -49,8 +49,8 @@
                 <div class="item multiple-lines">
                     <div class="item-content">
                         <div class="stacked-label" ref="noteDiv">
-                            <textarea class="full-width" :class="{'has-error': match.notes.length > 200}" v-model="match.notes"></textarea>
-                            <label>Notes ({{ 200 - match.notes.length }} chars remaining)</label>
+                            <textarea class="full-width" rows="5" :class="{'has-error': match.notes.length > 200}" v-model="match.notes"></textarea>
+                            <label>Notes ({{ 200 - match.notes.length }} characters remaining)</label>
                         </div>
                     </div>
                 </div>

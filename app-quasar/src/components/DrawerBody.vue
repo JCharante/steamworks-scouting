@@ -13,7 +13,7 @@
 
             <hr>
             <div class="list-label">Scout</div>
-            <q-drawer-link icon="note_add" to="/scout/new_match">
+            <q-drawer-link icon="note_add" to="/scout/new">
                 New Match
             </q-drawer-link>
             <q-drawer-link icon="view_list" to="/">

@@ -2,13 +2,13 @@
     <q-layout>
         <DrawerHead slot="header" title="Scout New Match" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
         <q-tabs slot="navigation">
-            <q-tab icon="tune" route="/scout/new_match" exact replace>Pre Match</q-tab>
-            <q-tab icon="android" route="/scout/new_match/auto" exact replace>Auto</q-tab>
-            <q-tab icon="face" route="/scout/new_match/teleop" exact replace>Teleop</q-tab>
-            <q-tab icon="gavel" route="/scout/new_match/after_match" exact replace>After Match</q-tab>
+            <q-tab icon="tune" :route="'/scout/' + matchID" exact replace>Pre Match</q-tab>
+            <q-tab icon="android" :route="'/scout/' + matchID + '/auto'" exact replace>Auto</q-tab>
+            <q-tab icon="face" :route="'/scout/' + matchID + '/teleop'" exact replace>Teleop</q-tab>
+            <q-tab icon="gavel" :route="'/scout/' + matchID + '/after_match'" exact replace>After Match</q-tab>
         </q-tabs>
         <DrawerBody ref="drawer"></DrawerBody>
-        <router-view class="layout-view"></router-view>
+        <router-view ref="cur" class="layout-view"></router-view>
     </q-layout>
 </template>
 
@@ -21,6 +21,11 @@
     import AfterMatch from './AfterMatch.vue'
 
     export default {
+        mounted () {
+            let self = this
+            self.matchID = self.$route.params.matchID
+            // console.log('layout: Mounted with route prop matchID =', self.matchID)
+        },
         components: {
             'DrawerHead': DrawerHead,
             'DrawerBody': DrawerBody,
@@ -30,14 +35,9 @@
             'AfterMatch': AfterMatch
         },
         data () {
-            return {}
+            return {
+                matchID: null
+            }
         }
     }
 </script>
-
-<style>
-    img {
-        margin-top: 100px;
-        width: 100%;
-    }
-</style>

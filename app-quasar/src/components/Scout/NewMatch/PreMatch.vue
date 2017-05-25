@@ -38,11 +38,45 @@
 </template>
 
 <script>
+    import store from '../../../store.js'
+    import * as matchActions from '../../../actions/matches.js'
+
     export default {
+        mounted () {
+            let self = this
+            console.log('PreMatch: Mounted with router prop matchID =', self.$route.params.matchID)
+            let fetchedMatch = matchActions.fetchMatch(self.$select('matches'), self.$route.params.matchID)
+            console.log('PreMatch: fetchedMatch', fetchedMatch)
+            if (fetchedMatch === undefined) {
+                console.log('PreMatch: Couldn\'t find match in store. Redirecting to create new match')
+                self.$router.push('/scout/new')
+            }
+            else {
+                console.log('PreMatch: Loading match data from Redux Store')
+                self.match = Object.assign({}, self.match, fetchedMatch)
+            }
+        },
+        beforeDestroy () {
+            let self = this
+            self.saveChangesInRedux()
+        },
+        methods: {
+            saveChangesInRedux () {
+                let self = this
+                let fetchedMatch = matchActions.fetchMatch(self.$select('matches'), self.$route.params.matchID)
+                if (fetchedMatch !== undefined) {
+                    console.log('PreMatch: Saving to Redux Store')
+                    store.dispatch(matchActions.updateMatch(self.match.matchID, self.match))
+                }
+            }
+        },
         data () {
             return {
+                store: store,
+                matches: this.$select('matches'),
                 match: {
-                    eventName: 'practice',
+                    matchID: null,
+                    eventName: null,
                     matchNumber: null,
                     teamNumber: null
                 },
