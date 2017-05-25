@@ -69,8 +69,37 @@
 </template>
 
 <script>
+    import store from '../../../store.js'
+    import * as matchActions from '../../../actions/matches.js'
+
     export default {
+        mounted () {
+            let self = this
+            console.info('%cAfterMatch: %cMounted with router prop matchID = %O', 'color: blue', 'color: black', self.$route.params.matchID)
+            let fetchedMatch = matchActions.fetchMatch(self.$select('matches'), self.$route.params.matchID)
+            console.info('%cAfterMatch: %cfetchedMatch = %O', 'color: blue', 'color: black', fetchedMatch)
+            if (fetchedMatch === undefined) {
+                console.info('%cAfterMatch: %cCouldn\'t find match in store. Redirecting to create new match', 'color: blue', 'color: red')
+                self.$router.push('/scout/new')
+            }
+            else {
+                console.info('%cAfterMatch: %cLoading match data from Redux Store', 'color: blue', 'color: green')
+                self.match = Object.assign({}, self.match, fetchedMatch)
+            }
+        },
+        beforeDestroy () {
+            let self = this
+            self.saveChangesInRedux()
+        },
         methods: {
+            saveChangesInRedux () {
+                let self = this
+                let fetchedMatch = matchActions.fetchMatch(self.$select('matches'), self.$route.params.matchID)
+                if (fetchedMatch !== undefined) {
+                    console.info('%cAfterMatch: %cSaving to Redux Store', 'color: blue', 'color: black')
+                    store.dispatch(matchActions.updateMatch(self.match.matchID, self.match))
+                }
+            },
             updateKnobColor: function () {
                 let self = this
 
