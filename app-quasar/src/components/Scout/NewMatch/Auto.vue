@@ -31,7 +31,7 @@
 
                 <label class="item">
                     <div class="item-primary">
-                        <q-checkbox v-model="match.tCollectedFromHopper"></q-checkbox>
+                        <q-checkbox v-model="match.aCollectedFromHopper"></q-checkbox>
                     </div>
                     <div class="item-content">
                         Collected from Hopper
