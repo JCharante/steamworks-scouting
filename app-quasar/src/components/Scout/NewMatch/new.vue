@@ -31,8 +31,8 @@
             let self = this
             self.matchID = util.generateUUID4()
             store.dispatch(matchActions.createMatch(self.matchID))
-            console.log('new: Created Match', self.matchID, matchActions.fetchMatch(self.$select('matches'), self.matchID))
-            console.log('new: Redirecting to scout page')
+            console.info('%cnew: %cCreated Match %O: %O', 'color: blue', 'color: black', self.matchID, matchActions.fetchMatch(self.$select('matches'), self.matchID))
+            console.info('%cnew: %cRedirecting to scout page', 'color: blue', 'color: black')
             self.$router.push('/scout/' + self.matchID)
         },
         components: {
