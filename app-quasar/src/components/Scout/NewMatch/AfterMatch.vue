@@ -85,6 +85,7 @@
             else {
                 console.info('%cAfterMatch: %cLoading match data from Redux Store', 'color: blue', 'color: green')
                 self.match = Object.assign({}, self.match, fetchedMatch)
+                self.updateKnobColor()
             }
         },
         beforeDestroy () {
