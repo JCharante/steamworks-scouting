@@ -31,7 +31,7 @@
 
                 <label class="item">
                     <div class="item-primary">
-                        <q-checkbox v-model="match.aCollectedFromHopper"></q-checkbox>
+                        <q-checkbox v-model="match.tCollectedFromHopper"></q-checkbox>
                     </div>
                     <div class="item-content">
                         Collected from Hopper
@@ -119,7 +119,7 @@
                     akPa: 0,
                     aCrossedLine: false,
                     aDumpedHopper: false,
-                    aCollectedFromHopper: false,
+                    tCollectedFromHopper: false,
                     aLowGoal: false,
                     aGearPosition: null,
                     aSuccessfulGearPlacement: false,
