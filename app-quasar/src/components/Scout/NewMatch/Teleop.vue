@@ -96,6 +96,7 @@
         beforeDestroy () {
             let self = this
             self.saveChangesInRedux()
+            matchActions.saveStoreToLocalStorage(self.$select('matches'))
         },
         methods: {
             saveChangesInRedux () {
