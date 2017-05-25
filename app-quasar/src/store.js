@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Revue from 'revue'
+import {LocalStorage} from 'quasar'
 import {createStore, combineReducers} from 'redux'
 import actions from './actions/matches'
 
@@ -30,19 +31,15 @@ const reducers = combineReducers({
     matches
 })
 
-let initialState = {
-    matches: JSON.parse(localStorage.getItem('matches') || '{}')
-}
-
 let reduxStore = null
 
-if (localStorage.getItem('matches') === null) {
+if (LocalStorage.get.item('matches') === null) {
     console.info('%cstore.js: %cInitialized Store from Scratch', 'color: blue', 'color: black')
     reduxStore = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 }
 else {
     console.info('%cstore.js: %cInitialized Store from Local Storage', 'color: blue', 'color: green')
-    reduxStore = createStore(reducers, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    reduxStore = createStore(reducers, {matches: LocalStorage.get.item('matches')}, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 }
 
 const store = new Revue(Vue, reduxStore, actions)
