@@ -61,6 +61,15 @@
                     </div>
                 </label>
 
+                <label class="item">
+                    <div class="item-primary">
+                        <q-checkbox v-model="match.activeGearMechanism"></q-checkbox>
+                    </div>
+                    <div class="item-content">
+                        Active Gear Mechanism
+                    </div>
+                </label>
+
                 <div class="item two-lines">
                     <div class="item-content row items-center">
                         <label style="margin-right: 10px;">High Goal Position:</label>
@@ -118,6 +127,7 @@
                     totalGears: 0,
                     obtainedGearFromHumanPlayer: false,
                     obtainedGearFromFloor: false,
+                    activeGearMechanism: false,
                     tShotLowGoal: false,
                     tHighGoalShotFrom: []
                 },

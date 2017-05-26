@@ -135,7 +135,6 @@
             return {
                 knobColor: '#21ba45', // positive
                 match: {
-                    gearDispenseMethod: null,
                     gearRating: null,
                     lowGoalRating: null,
                     highGoalRating: null,
@@ -145,11 +144,6 @@
                     estimatedClimbTime: 0
                 },
                 selectOptions: {
-                    gearDispenseMethod: [
-                        {label: 'Non-existent', value: null},
-                        {label: 'Passive', value: 'passive'},
-                        {label: 'Active', value: 'active'}
-                    ],
                     gearRating: [
                         {label: 'Bad', value: 'bad'},
                         {label: 'Okay', value: 'okay'},
