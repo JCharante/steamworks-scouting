@@ -8,7 +8,7 @@
                 <div class="group">
                     <button class="full-width secondary" @click="playSound('charge-1.wav')">Charge</button>
                     <button class="full-width warning" @click="playSound('three-bells.wav')">Tele Op Start</button>
-                    <button class="full-width negative" @click="playSound('fog-blast.wav')">Field Fault</button>
+                    <button class="full-width negative" @click="playSound('fog-blast.wav')">Carson Anthem</button>
                     <button class="full-width info" @click="playSound('buzzer.wav')">Match End</button>
                 </div>
 
