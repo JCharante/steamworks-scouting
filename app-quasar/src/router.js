@@ -22,7 +22,7 @@ export default new VueRouter({
 
     routes: [
         { path: '/scout/new', component: load('scout/new') },
-        { path: '/scout/:matchID',
+        { path: '/scout/edit/:matchID',
             component: load('scout/layout'),
             children: [
                 {path: '', component: load('scout/PreMatch')},
