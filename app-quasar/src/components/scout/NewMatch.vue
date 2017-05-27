@@ -7,7 +7,7 @@
             <div class="layout-padding">
                 <blockquote>
                     <p>{{ quoteText }}</p>
-                    <small>{{ quotaAttributedTo }}</small>
+                    <small>{{ quoteAttributedTo }}</small>
                 </blockquote>
                 <hr>
                 <button class="primary full-width tolowercase" @click="$router.push('/scout/edit/' + matchID)">Begin Scouting!</button>
@@ -124,7 +124,7 @@
             return {
                 matchID: util.generateUUID4(),
                 quoteText: '',
-                quotaAttributedTo: ''
+                quoteAttributedTo: ''
             }
         }
     }
