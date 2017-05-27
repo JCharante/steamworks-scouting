@@ -21,7 +21,8 @@ export default new VueRouter({
      */
 
     routes: [
-        { path: '/scout/new', component: load('scout/new') },
+        { path: '/scout/view', component: load('scoutedMatches/layout') },
+        { path: '/scout/new', component: load('scout/NewMatch') },
         { path: '/scout/edit/:matchID',
             component: load('scout/layout'),
             children: [
