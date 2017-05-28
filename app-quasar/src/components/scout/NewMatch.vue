@@ -40,7 +40,10 @@
         {text: 'No one can make you feel inferior without your consent.', attributedTo: 'Eleanor Roosevelt'},
         {text: 'If you tell the truth, you don\'t have to remember anything.', attributedTo: 'Mark Twain'},
         {text: 'I\'ve learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.', attributedTo: 'Maya Angelou'},
+        {text: 'It\'s one of the greatest gifts you can give yourself, to forgive. Forgive Everybody.', attributedTo: 'Maya Angelou'},
         {text: 'Uhhh....Strap???', attributedTo: 'Probably Albert Einstein'},
+        {text: 'Education is what remains after one has forgotten what one has learned in school.', attributedTo: 'Albert Einstein'},
+        {text: 'Nothing is more dangerous than an idea, when it\'s the only one we have.', attributedTo: 'Alain'},
         {text: 'Mentor Built, Student Watched.', attributedTo: 'Team 1254 - The Chez Cakes'},
         {text: 'Delicious and nutritious!', attributedTo: 'Team 254 - The Cheesy Poofs'},
         {text: 'Always forgive your enemies; nothing annoys them so much.', attributedTo: 'Oscar Wilde'},
@@ -70,7 +73,7 @@
         {text: 'It is never too late to be what you might have been.', attributedTo: 'George Eliot'},
         {text: 'I love deadlines. I love the whooshing noise they make as they go by.', attributedTo: 'Douglas Adams'},
         {text: 'I\'m not upset that you lied to me, I\'m upset that from now on I can\'t believe you.', attributedTo: 'Friedrich Nietzsche'},
-        {text: 'If you only read the books that everyone else is reading, you can only think what everyone else is thinking.', attributedTo: 'Haruki Murakami,'},
+        {text: 'If you only read the books that everyone else is reading, you can only think what everyone else is thinking.', attributedTo: 'Haruki Murakami'},
         {text: 'Folks are usually about as happy as they make their minds up to be.', attributedTo: 'Abraham Lincoln'},
         {text: 'Life isn\'t about finding yourself. Life is about creating yourself.', attributedTo: 'George Bernard Shaw'},
         {text: 'The difference between genius and stupidity is: genius has its limits.', attributedTo: 'Alexandre Dumas fils'},
@@ -103,7 +106,10 @@
         {text: 'I think deeply about things and want others to do likewise. I work for ideas and learn from people. I don’t like excluding people. I’m a perfectionist, but I won’t let that get in the way of publication. Except for education and entertainment, I’m not going to waste my time on things that won’t have an impact. I try to be friends with everyone, but I hate it when you don’t take me seriously. I don’t hold grudges, it’s not productive, but I learn from my experience. I want to make the world a better place.', attributedTo: 'Aaron Swartz'},
         {text: 'Growing up, I slowly had this process of realizing that all the things around me that people had told me were just the natural way things were, the way things always would be, they weren’t natural at all. They were things that could be changed, and they were things that, more importantly, were wrong and should change, and once I realized that, there was really no going back.', attributedTo: 'Aaron Swartz'},
         {text: 'You only get to see your own perspective. And even our mistakes make sense from our perspective — we see all of the context, everything that led up to it. It all makes sense because we saw it happen. When we screw up, it’s for a reason. When other people screw up, it’s because they’re screwups.', attributedTo: 'Aaron Swartz'},
-        {text: 'In other words, instead of providing a place for a group of like-minded people to come together, magazines provide a sampling of what a group of like-minded people might say in such an instance so that you can pretend you’re part of them.', attributedTo: 'Aaron Swartz'}
+        {text: 'In other words, instead of providing a place for a group of like-minded people to come together, magazines provide a sampling of what a group of like-minded people might say in such an instance so that you can pretend you’re part of them.', attributedTo: 'Aaron Swartz'},
+        {text: 'A leader can never be happy until his people are happy.', attributedTo: 'Genghis Khan'},
+        {text: 'It is not sufficient that I succeed - all others must fail.', attributedTo: 'Genghis Khan'},
+        {text: 'One arrow alone can be easily broken but many arrows are indestructible.', attributedTo: 'Genghis Khan'}
     ]
 
     export default {
