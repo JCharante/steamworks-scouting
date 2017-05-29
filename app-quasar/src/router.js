@@ -21,7 +21,15 @@ export default new VueRouter({
      */
 
     routes: [
-        { path: '/scout/view', component: load('scoutedMatches/layout') },
+        { path: '/test', component: load('test') },
+        { path: '/scout/view',
+            component: load('scoutedMatches/layout'),
+            children: [
+                {path: '', component: load('scoutedMatches/PickEvent')},
+                {path: 'event/:eventName', component: load('scoutedMatches/PickMatch')},
+                {path: 'event/:eventName/match/:matchNumber', component: load('scoutedMatches/PickTeam')}
+            ]
+        },
         { path: '/scout/new', component: load('scout/NewMatch') },
         { path: '/scout/edit/:matchID',
             component: load('scout/layout'),

@@ -6,7 +6,7 @@
         <div class="layout-view">
             <div class="layout-padding">
                 <blockquote>
-                    <p>{{ quoteText }}</p>
+                    <p class="literal">{{ quoteText }}</p>
                     <small>{{ quoteAttributedTo }}</small>
                 </blockquote>
                 <hr>
@@ -36,12 +36,12 @@
         {text: 'A room without books is like a body without a soul.', attributedTo: 'Marcus Tullius Cicero'},
         {text: 'You only live once, but if you do it right, once is enough.', attributedTo: 'Mae West'},
         {text: 'Be the change that you wish to see in the world.', attributedTo: 'Mahatma Gandhi'},
-        {text: 'Don\'t walk in front of me… I may not follow\nDon\'t walk behind me… I may not lead.\nWalk beside me… just be my friend', attributedTo: 'Albert Camus'},
+        {text: 'Don\'t walk in front of me… I may not follow.\nDon\'t walk behind me… I may not lead.\nWalk beside me… just be my friend.', attributedTo: 'Albert Camus'},
         {text: 'No one can make you feel inferior without your consent.', attributedTo: 'Eleanor Roosevelt'},
         {text: 'If you tell the truth, you don\'t have to remember anything.', attributedTo: 'Mark Twain'},
         {text: 'I\'ve learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.', attributedTo: 'Maya Angelou'},
         {text: 'It\'s one of the greatest gifts you can give yourself, to forgive. Forgive Everybody.', attributedTo: 'Maya Angelou'},
-        {text: 'Uhhh....Strap???', attributedTo: 'Probably Albert Einstein'},
+        {text: 'Uhhh....Strap???', attributedTo: 'Team 125 - Nutrons'},
         {text: 'Education is what remains after one has forgotten what one has learned in school.', attributedTo: 'Albert Einstein'},
         {text: 'Nothing is more dangerous than an idea, when it\'s the only one we have.', attributedTo: 'Alain'},
         {text: 'Mentor Built, Student Watched.', attributedTo: 'Team 1254 - The Chez Cakes'},
@@ -109,7 +109,12 @@
         {text: 'In other words, instead of providing a place for a group of like-minded people to come together, magazines provide a sampling of what a group of like-minded people might say in such an instance so that you can pretend you’re part of them.', attributedTo: 'Aaron Swartz'},
         {text: 'A leader can never be happy until his people are happy.', attributedTo: 'Genghis Khan'},
         {text: 'It is not sufficient that I succeed - all others must fail.', attributedTo: 'Genghis Khan'},
-        {text: 'One arrow alone can be easily broken but many arrows are indestructible.', attributedTo: 'Genghis Khan'}
+        {text: 'One arrow alone can be easily broken but many arrows are indestructible.', attributedTo: 'Genghis Khan'},
+        {text: 'Turning off an emotion is always a tough decision. I remember how a couple years ago I decided to say goodbye to anger. Sure, anger has its bright moments — you haven’t really lived until you’ve known that special joy of hurling a chair across the room — but it’s also quite time-consuming. Every time someone comes up and hits you, you have to run around chasing after them. And once you start getting angry it’s hard to stop — an angry person doesn’t really want to calm down, it sort of enjoys being angry. So I finally decided to get rid of the whole thing. And you know what? I haven’t regretted the decision one bit.', attributedTo: 'Aaron Swartz'},
+        {text: 'Regret — that’s another interesting emotion. I mean, what purpose does it really serve? “There’s no use crying over spilled milk,” my mom once told me when I started sobbing after I got milk all over the floor while trying to make cereal. “I suppose that’s true,” I replied between sobs. “Although maybe my tears will dilute the milk and make it stick to the floor less.” But I was wrong — the milk stayed just as sticky. So maybe regret should be the next one to go.', attributedTo: 'Aaron Swartz'},
+        {text: 'But actually, I think it’s going to be frustration. It’s not discussed much, but frustration is really quite distracting. You’re trying to solve some difficult problem but it’s just not working. Instead of taking a moment to try and think of the solution, you just keep getting more and more frustrated until you start jumping up and down and smashing various things. So not only do you waste time jumping, but you also have to pay to replace the stuff you smashed. It’s really a net loss.', attributedTo: 'Aaron Swartz'},
+        {text: 'I want to feel nostalgic, I want to feel like there’s this place, just a couple subway stops away, where everything will be alright. A better place, a place I should be in, a place I can go back to. But even just visiting it, the facts are plain. It doesn’t exist, it never has. I’m nostalgic for a place that never existed.', attributedTo: 'Aaron Swartz'},
+        {text: 'do no harm permanently', attributedTo: '2602:306:305c:aec0:d9cf:5016:278b:387e'}
     ]
 
     export default {
@@ -139,5 +144,9 @@
 <style>
     .tolowercase {
         text-transform: none;
+    }
+
+    .literal {
+        white-space: pre-wrap
     }
 </style>

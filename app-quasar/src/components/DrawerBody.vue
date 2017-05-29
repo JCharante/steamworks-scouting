@@ -16,7 +16,7 @@
             <q-drawer-link icon="note_add" to="/scout/new">
                 New Match
             </q-drawer-link>
-            <q-drawer-link icon="view_list" to="/">
+            <q-drawer-link icon="view_list" to="/scout/view">
                 View Matches
             </q-drawer-link>
             <q-drawer-link icon="poll" to="/">

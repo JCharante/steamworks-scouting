@@ -22,6 +22,16 @@ function matches (state = {matches: {}, matchKeys: []}, action) {
         return Object.assign({}, state, {
             matches: Object.assign({}, state.matches, bob)
         })
+    case 'DELETE_MATCH':
+        return Object.assign({}, state, {
+            matchKeys: state.matchKeys.filter(matchID => matchID !== action.payload.matchID),
+            matches: Object.keys(state.matches).reduce((result, matchID) => {
+                if (matchID !== action.payload.matchID) {
+                    result[matchID] = state.matches[matchID]
+                }
+                return result
+            }, {})
+        })
     default:
         return state
     }

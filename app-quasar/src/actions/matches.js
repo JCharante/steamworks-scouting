@@ -16,6 +16,10 @@ export function updateMatch (matchID, dict) {
     return {type: 'UPDATE_MATCH', payload: {matchID, dict}}
 }
 
+export function deleteMatch (matchID) {
+    return {type: 'DELETE_MATCH', payload: {matchID}}
+}
+
 export function fetchMatch (store, matchID) {
     return store.matches[matchID]
 }
