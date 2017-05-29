@@ -47,6 +47,7 @@
                             handler () {
                                 Toast.create('💔 but I was your biggest fan')
                                 store.dispatch(matchActions.deleteMatch(self.matchID))
+                                self.$emit('updateList')
                             }
                         }
                     ]

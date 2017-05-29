@@ -1,7 +1,7 @@
 <template>
     <div class="layout-padding">
         <div class="list">
-            <ListItemTeam v-for="matchID in matchIDs" :matchID="matchID" :matchNumber="matchNumber" :eventName="eventName" :key="matchID"></ListItemTeam>
+            <ListItemTeam v-for="matchID in matchIDs" @updateList="populateUniqueTeams()" :matchID="matchID" :matchNumber="matchNumber" :eventName="eventName" :key="matchID"></ListItemTeam>
         </div>
     </div>
 </template>
@@ -21,8 +21,9 @@
         methods: {
             populateUniqueTeams () {
                 let self = this
-                Object.keys(self.allMatches.matches).forEach(function (key) {
-                    let match = self.allMatches.matches[key]
+                self.matchIDs = []
+                Object.keys(self.$select('matches').matches).forEach(function (key) {
+                    let match = self.$select('matches').matches[key]
                     if (match.eventName === self.eventName && match.matchNumber === self.matchNumber) {
                         self.matchIDs.push(match.matchID)
                     }
@@ -31,7 +32,6 @@
         },
         data () {
             return {
-                allMatches: this.$select('matches'),
                 eventName: this.$route.params.eventName,
                 matchNumber: parseInt(this.$route.params.matchNumber),
                 matchIDs: []
