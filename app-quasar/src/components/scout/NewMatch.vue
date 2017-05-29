@@ -10,7 +10,7 @@
                     <small>{{ quoteAttributedTo }}</small>
                 </blockquote>
                 <hr>
-                <button class="primary full-width tolowercase" @click="$router.push('/scout/edit/' + matchID)">Begin Scouting!</button>
+                <button class="primary full-width tolowercase" @click="createMatch()">Begin Scouting!</button>
             </div>
         </div>
     </q-layout>
@@ -123,9 +123,15 @@
             let quote = quotes[Math.floor(Math.random() * quotes.length)]
             self.quoteText = quote.text
             self.quoteAttributedTo = quote.attributedTo
-            store.dispatch(matchActions.createMatch(self.matchID))
-            console.info('%cNewMatch: %cCreated Match %O: %O', 'color: blue', 'color: black', self.matchID, matchActions.fetchMatch(self.$select('matches'), self.matchID))
-            console.info('%cNewMatch: %cRedirecting to scout page', 'color: blue', 'color: black')
+        },
+        methods: {
+            createMatch () {
+                let self = this
+                store.dispatch(matchActions.createMatch(self.matchID))
+                console.info('%cNewMatch: %cCreated Match %O: %O', 'color: blue', 'color: black', self.matchID, matchActions.fetchMatch(self.$select('matches'), self.matchID))
+                console.info('%cNewMatch: %cRedirecting to scout page', 'color: blue', 'color: black')
+                self.$router.push('/scout/edit/' + self.matchID)
+            }
         },
         components: {
             'DrawerHead': DrawerHead,
