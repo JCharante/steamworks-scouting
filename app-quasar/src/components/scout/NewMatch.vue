@@ -4,14 +4,16 @@
         <DrawerBody ref="drawer"></DrawerBody>
 
         <div class="layout-view">
-            <div class="layout-padding">
-                <blockquote>
-                    <p class="literal">{{ quoteText }}</p>
-                    <small>{{ quoteAttributedTo }}</small>
-                </blockquote>
-                <hr>
-                <button class="primary full-width tolowercase" @click="createMatch()">Begin Scouting!</button>
-            </div>
+            <q-pull-to-refresh :handler="refresher" :distance="15" pull-message="Pull to Fetch Another Quote" refresh-message="Quoting.." release-message="Release to Fetch Another Quote">
+                <div class="layout-padding">
+                    <blockquote>
+                        <p class="literal">{{ quoteText }}</p>
+                        <small>{{ quoteAttributedTo }}</small>
+                    </blockquote>
+                    <hr>
+                    <button class="primary full-width tolowercase" @click="createMatch()">Begin Scouting!</button>
+                </div>
+            </q-pull-to-refresh>
         </div>
     </q-layout>
 </template>
@@ -125,6 +127,13 @@
             self.quoteAttributedTo = quote.attributedTo
         },
         methods: {
+            refresher (done) {
+                let self = this
+                let quote = quotes[Math.floor(Math.random() * quotes.length)]
+                self.quoteText = quote.text
+                self.quoteAttributedTo = quote.attributedTo
+                done()
+            },
             createMatch () {
                 let self = this
                 store.dispatch(matchActions.createMatch(self.matchID))
