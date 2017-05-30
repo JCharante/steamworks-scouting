@@ -38,6 +38,7 @@
 </template>
 
 <script>
+    import { Dialog } from 'quasar'
     import store from '../../store.js'
     import * as matchActions from '../../actions/matches.js'
 
@@ -58,6 +59,12 @@
         },
         beforeDestroy () {
             let self = this
+            if ((self.match.eventName === null || self.match.eventName === '') || (self.match.matchNumber === '' || self.match.matchNumber === null) || (self.match.teamNumber === '' || self.match.teamNumber === null)) {
+                Dialog.create({
+                    title: 'Alert',
+                    message: 'When leaving the event name, match number, or team number empty the match will be deleted by the rubbish collector automatically'
+                })
+            }
             self.saveChangesInRedux()
             matchActions.saveStoreToLocalStorage(self.$select('matches'))
         },

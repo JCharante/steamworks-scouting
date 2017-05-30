@@ -20,6 +20,22 @@ export function deleteMatch (matchID) {
     return {type: 'DELETE_MATCH', payload: {matchID}}
 }
 
+export function deleteInvalidMatches (store, matches) {
+    let invalidMatchIDs = new Set()
+    Object.keys(matches).forEach(function (key) {
+        let match = matches[key]
+        if (match.eventName === null || (match.matchNumber === '' || match.matchNumber === null) || (match.teamNumber === '' || match.teamNumber === null)) {
+            invalidMatchIDs.add(match.matchID)
+        }
+    })
+    console.log(invalidMatchIDs)
+    invalidMatchIDs = Array.from(invalidMatchIDs)
+    invalidMatchIDs.forEach(function (value) {
+        console.info(value)
+        store.dispatch(deleteMatch(value))
+    })
+}
+
 export function fetchMatch (store, matchID) {
     return store.matches[matchID]
 }

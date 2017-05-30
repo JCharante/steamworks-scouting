@@ -8,7 +8,8 @@
 
 <script>
     import ListItemEvent from './ListItemEvent.vue'
-    import '../../store.js'
+    import * as matchActions from '../../actions/matches.js'
+    import store from '../../store.js'
 
     export default {
         components: {
@@ -16,6 +17,7 @@
         },
         mounted () {
             let self = this
+            matchActions.deleteInvalidMatches(store, self.matches.matches)
             self.populateUniqueEvents()
         },
         methods: {
