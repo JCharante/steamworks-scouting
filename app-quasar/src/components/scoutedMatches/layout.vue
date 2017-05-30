@@ -9,12 +9,17 @@
 <script>
     import DrawerHead from '../DrawerHead.vue'
     import DrawerBody from '../DrawerBody.vue'
+    import * as matchActions from '../../actions/matches.js'
     import '../../store.js'
 
     export default {
         components: {
             'DrawerHead': DrawerHead,
             'DrawerBody': DrawerBody
+        },
+        beforeDestroy () {
+            let self = this
+            matchActions.saveStoreToLocalStorage(self.$select('matches'))
         },
         data () {
             return {}
