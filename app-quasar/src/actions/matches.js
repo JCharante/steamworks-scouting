@@ -28,10 +28,8 @@ export function deleteInvalidMatches (store, matches) {
             invalidMatchIDs.add(match.matchID)
         }
     })
-    console.log(invalidMatchIDs)
     invalidMatchIDs = Array.from(invalidMatchIDs)
     invalidMatchIDs.forEach(function (value) {
-        console.info(value)
         store.dispatch(deleteMatch(value))
     })
 }
