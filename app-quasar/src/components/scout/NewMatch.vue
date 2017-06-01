@@ -116,7 +116,8 @@
         {text: 'Regret — that’s another interesting emotion. I mean, what purpose does it really serve? “There’s no use crying over spilled milk,” my mom once told me when I started sobbing after I got milk all over the floor while trying to make cereal. “I suppose that’s true,” I replied between sobs. “Although maybe my tears will dilute the milk and make it stick to the floor less.” But I was wrong — the milk stayed just as sticky. So maybe regret should be the next one to go.', attributedTo: 'Aaron Swartz'},
         {text: 'But actually, I think it’s going to be frustration. It’s not discussed much, but frustration is really quite distracting. You’re trying to solve some difficult problem but it’s just not working. Instead of taking a moment to try and think of the solution, you just keep getting more and more frustrated until you start jumping up and down and smashing various things. So not only do you waste time jumping, but you also have to pay to replace the stuff you smashed. It’s really a net loss.', attributedTo: 'Aaron Swartz'},
         {text: 'I want to feel nostalgic, I want to feel like there’s this place, just a couple subway stops away, where everything will be alright. A better place, a place I should be in, a place I can go back to. But even just visiting it, the facts are plain. It doesn’t exist, it never has. I’m nostalgic for a place that never existed.', attributedTo: 'Aaron Swartz'},
-        {text: 'do no harm permanently', attributedTo: '2602:306:305c:aec0:d9cf:5016:278b:387e'}
+        {text: 'do no harm permanently', attributedTo: '2602:306:305c:aec0:d9cf:5016:278b:387e'},
+        {text: 'I\'m not a fan of signing yearbooks. Why would you get the signature of someone you(\'ll) see on a regular basis? And if you (d/w)on\'t, then are they really your friend? Therefor only strangers should sign your yearbook, and why would you want a stranger\'s signature‽', attributedTo: 'John'}
     ]
 
     export default {
