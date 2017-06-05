@@ -31,26 +31,26 @@ export default new VueRouter({
         { path: '/scout/view',
             component: load('scoutedMatches/layout'),
             children: [
-                {path: '', component: load('scoutedMatches/PickEvent')},
-                {path: 'event/:eventName', component: load('scoutedMatches/PickMatch')},
-                {path: 'event/:eventName/match/:matchNumber', component: load('scoutedMatches/PickTeam')}
+                { path: '', component: load('scoutedMatches/PickEvent') },
+                { path: 'event/:eventName', component: load('scoutedMatches/PickMatch') },
+                { path: 'event/:eventName/match/:matchNumber', component: load('scoutedMatches/PickTeam') }
             ]
         },
         { path: '/scout/new', component: load('scout/NewMatch') },
         { path: '/scout/edit/:matchID',
             component: load('scout/layout'),
             children: [
-                {path: '', component: load('scout/PreMatch')},
-                {path: 'auto', component: load('scout/Auto')},
-                {path: 'teleop', component: load('scout/Teleop')},
-                {path: 'after_match', component: load('scout/AfterMatch')}
+                { path: '', component: load('scout/PreMatch') },
+                { path: 'auto', component: load('scout/Auto') },
+                { path: 'teleop', component: load('scout/Teleop') },
+                { path: 'after_match', component: load('scout/AfterMatch') }
             ]
         },
         { path: '/demo',
             component: load('demo/layout'),
             children: [
-                {path: '', component: load('demo/TabOne')},
-                {path: 'tabtwo', component: load('demo/TabTwo')}
+                { path: '', component: load('demo/TabOne') },
+                { path: 'tabtwo', component: load('demo/TabTwo') }
             ]
         },
         { path: '/soundboard', component: load('SoundBoard') },
