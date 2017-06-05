@@ -11,10 +11,7 @@
     import '../../store.js'
 
     export default {
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody
-        },
+        components: { DrawerHead, DrawerBody },
         beforeDestroy () {
             let self = this
             matchActions.saveStoreToLocalStorage(self.$select('matches'))

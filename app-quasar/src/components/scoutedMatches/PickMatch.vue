@@ -17,11 +17,7 @@
     import '../../store.js'
 
     export default {
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody,
-            'ListItemMatch': ListItemMatch
-        },
+        components: { DrawerHead, DrawerBody, ListItemMatch },
         mounted () {
             let self = this
             self.populateUniqueMatches()

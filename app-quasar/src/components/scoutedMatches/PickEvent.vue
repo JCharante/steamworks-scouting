@@ -18,11 +18,7 @@
     import store from '../../store.js'
 
     export default {
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody,
-            'ListItemEvent': ListItemEvent
-        },
+        components: { DrawerHead, DrawerBody, ListItemEvent },
         mounted () {
             let self = this
             matchActions.deleteInvalidMatches(store, self.matches.matches)

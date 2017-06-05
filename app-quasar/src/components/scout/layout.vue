@@ -26,14 +26,7 @@
             self.matchID = self.$route.params.matchID
             // console.log('layout: Mounted with route prop matchID =', self.matchID)
         },
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody,
-            'PreMatch': PreMatch,
-            'Auto': Auto,
-            'Teleop': Teleop,
-            'AfterMatch': AfterMatch
-        },
+        components: { DrawerHead, DrawerBody, PreMatch, Auto, Teleop, AfterMatch },
         data () {
             return {
                 matchID: null

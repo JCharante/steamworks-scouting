@@ -17,11 +17,7 @@
     import '../../store.js'
 
     export default {
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody,
-            'ListItemTeam': ListItemTeam
-        },
+        components: { DrawerHead, DrawerBody, ListItemTeam },
         mounted () {
             let self = this
             self.populateUniqueTeams()

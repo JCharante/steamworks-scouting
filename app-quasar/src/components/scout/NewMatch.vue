@@ -143,10 +143,7 @@
                 self.$router.push(`/scout/edit/${self.matchID}`)
             }
         },
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody
-        },
+        components: { DrawerHead, DrawerBody },
         data () {
             return {
                 matchID: util.generateUUID4(),

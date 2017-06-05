@@ -23,10 +23,7 @@
     import DrawerBody from './DrawerBody.vue'
 
     export default {
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody
-        },
+        components: { DrawerHead, DrawerBody },
         methods: {
             playSound: function (soundFile) {
                 let audio = new Audio(`../statics/external/media/${soundFile}`)

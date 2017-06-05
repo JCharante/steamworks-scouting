@@ -17,12 +17,7 @@
     import Download from './Download.vue'
 
     export default {
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody,
-            'Upload': Upload,
-            'Download': Download
-        },
+        components: { DrawerHead, DrawerBody, Upload, Download },
         data () {
             return {}
         }

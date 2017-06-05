@@ -17,10 +17,7 @@
     import DrawerBody from './DrawerBody.vue'
 
     export default {
-        components: {
-            'DrawerHead': DrawerHead,
-            'DrawerBody': DrawerBody
-        },
+        components: { DrawerHead, DrawerBody },
         data () {
             return {}
         }
