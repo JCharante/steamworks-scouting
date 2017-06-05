@@ -1,7 +1,5 @@
 <template>
     <q-layout>
-        <DrawerHead slot="header" title="Scouted Matches" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
-        <DrawerBody ref="drawer"></DrawerBody>
         <router-view class="layout-view"></router-view>
     </q-layout>
 </template>

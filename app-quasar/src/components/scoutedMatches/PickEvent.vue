@@ -1,18 +1,26 @@
 <template>
-    <div class="layout-padding">
-        <div class="list">
-            <ListItemEvent v-for="event in events" :eventName="event" :key="event"></ListItemEvent>
+    <div>
+        <DrawerHead slot="header" title="Scouted Matches - Pick Event" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
+        <DrawerBody ref="drawer"></DrawerBody>
+        <div class="layout-padding">
+            <div class="list">
+                <ListItemEvent v-for="event in events" :eventName="event" :key="event"></ListItemEvent>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    import DrawerHead from '../DrawerHead.vue'
+    import DrawerBody from '../DrawerBody.vue'
     import ListItemEvent from './ListItemEvent.vue'
     import * as matchActions from '../../actions/matches.js'
     import store from '../../store.js'
 
     export default {
         components: {
+            'DrawerHead': DrawerHead,
+            'DrawerBody': DrawerBody,
             'ListItemEvent': ListItemEvent
         },
         mounted () {
