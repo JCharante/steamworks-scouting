@@ -22,7 +22,7 @@
             <q-drawer-link icon="poll" to="/">
                 Overview
             </q-drawer-link>
-            <q-drawer-link icon="cloud" to="/">
+            <q-drawer-link icon="cloud" to="/server" exact>
                 Server
             </q-drawer-link>
 

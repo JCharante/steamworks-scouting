@@ -21,6 +21,13 @@ export default new VueRouter({
      */
 
     routes: [
+        { path: '/server',
+            component: load('server/layout'),
+            children: [
+                { path: '', component: load('server/Upload') },
+                { path: 'download', component: load('server/Download') }
+            ]
+        },
         { path: '/test', component: load('test') },
         { path: '/scout/view',
             component: load('scoutedMatches/layout'),
