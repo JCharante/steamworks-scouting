@@ -5,7 +5,7 @@
             secondIcon: 'keyboard_arrow_right'
         }"
         link
-        @click.native="$router.push('/scout/view/event/' + eventName + '/match/' + matchNumber)"
+        @click.native="$router.push(`/scout/view/event/${eventName}/match/${matchNumber}`)"
     ></q-list-item>
 </template>
 

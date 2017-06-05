@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DrawerHead slot="header" :title="eventName + ' - Pick Match'" :backUrl="'/scout/view'" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
+        <DrawerHead slot="header" :title="`${eventName} - Pick Match`" :backUrl="'/scout/view'" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
         <DrawerBody ref="drawer"></DrawerBody>
         <div class="layout-padding">
             <div class="list">

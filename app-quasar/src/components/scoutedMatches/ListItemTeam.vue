@@ -8,7 +8,7 @@
                 more_vert
                 <q-popover ref="popover">
                     <div class="list">
-                        <div class="item item-link" @click="$router.push('/scout/edit/' + match.matchID)">
+                        <div class="item item-link" @click="$router.push(`/scout/edit/${match.matchID}`)">
                             <div class="item-content">Edit</div>
                         </div>
                         <div class="item item-link" @click="deleteMatch">
@@ -34,7 +34,7 @@
                 self.$refs.popover.close()
                 Dialog.create({
                     title: 'Confirm',
-                    message: 'Are you sure you want to delete ' + self.match.eventName + ' >> Q' + self.match.matchNumber + ' >> ' + self.match.teamNumber + ' ?',
+                    message: `Are you sure you want to delete ${self.match.eventName} >> Q${self.match.matchNumber} >> ${self.match.teamNumber} ?`,
                     buttons: [
                         {
                             label: 'Nevermind',

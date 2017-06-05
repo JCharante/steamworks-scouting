@@ -2,10 +2,10 @@
     <q-layout>
         <DrawerHead slot="header" title="Scout New Match" @openDrawerBody="$refs.drawer.$refs.drawer.open()"></DrawerHead>
         <q-tabs slot="navigation">
-            <q-tab class="keep-case" icon="tune" :route="'/scout/edit/' + matchID" exact replace>Pre Match</q-tab>
-            <q-tab class="keep-case" icon="android" :route="'/scout/edit/' + matchID + '/auto'" exact replace>Auto</q-tab>
-            <q-tab class="keep-case" icon="face" :route="'/scout/edit/' + matchID + '/teleop'" exact replace>Tele Op</q-tab>
-            <q-tab class="keep-case" icon="gavel" :route="'/scout/edit/' + matchID + '/after_match'" exact replace>After Match</q-tab>
+            <q-tab class="keep-case" icon="tune" :route="`/scout/edit/${matchID}`" exact replace>Pre Match</q-tab>
+            <q-tab class="keep-case" icon="android" :route="`/scout/edit/${matchID}/auto`" exact replace>Auto</q-tab>
+            <q-tab class="keep-case" icon="face" :route="`/scout/edit/${matchID}/teleop`" exact replace>Tele Op</q-tab>
+            <q-tab class="keep-case" icon="gavel" :route="`/scout/edit/${matchID}/after_match`" exact replace>After Match</q-tab>
         </q-tabs>
         <DrawerBody ref="drawer"></DrawerBody>
         <router-view ref="cur" class="layout-view"></router-view>

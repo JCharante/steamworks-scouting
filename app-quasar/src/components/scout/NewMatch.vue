@@ -140,7 +140,7 @@
                 store.dispatch(matchActions.createMatch(self.matchID))
                 console.info('%cNewMatch: %cCreated Match %O: %O', 'color: blue', 'color: black', self.matchID, matchActions.fetchMatch(self.$select('matches'), self.matchID))
                 console.info('%cNewMatch: %cRedirecting to scout page', 'color: blue', 'color: black')
-                self.$router.push('/scout/edit/' + self.matchID)
+                self.$router.push(`/scout/edit/${self.matchID}`)
             }
         },
         components: {

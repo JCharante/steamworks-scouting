@@ -29,7 +29,7 @@
         },
         methods: {
             playSound: function (soundFile) {
-                let audio = new Audio('../statics/external/media/' + soundFile)
+                let audio = new Audio(`../statics/external/media/${soundFile}`)
                 audio.play()
                 return null
             }
