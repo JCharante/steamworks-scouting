@@ -28,7 +28,6 @@ export default new VueRouter({
                 { path: 'download', component: load('server/Download') }
             ]
         },
-        { path: '/test', component: load('test') },
         { path: '/scout/view',
             component: load('scoutedMatches/layout'),
             children: [
