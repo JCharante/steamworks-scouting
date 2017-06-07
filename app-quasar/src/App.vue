@@ -9,6 +9,9 @@
 /*
  * Root component
  */
+
+import './store.js'
+
 export default {
     mounted () {
         console.log('%cachilles', 'font-family: cursive; font-size: 100px; background-color: #2b9eb3; color: white; border-style: solid;')
