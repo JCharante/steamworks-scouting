@@ -1,5 +1,3 @@
-import {LocalStorage} from 'quasar'
-
 export function createMatch (matchID) {
     return {
         type: 'CREATE_MATCH',
@@ -36,11 +34,6 @@ export function deleteInvalidMatches (store, matches) {
 
 export function fetchMatch (store, matchID) {
     return store.matches[matchID]
-}
-
-export function saveStoreToLocalStorage (store) {
-    console.info('%cmatches.js: %cSaving Redux Store %O \'matches\' to Local Storage', 'color: blue', 'color: black', store)
-    LocalStorage.set('matches', store)
 }
 
 export default null

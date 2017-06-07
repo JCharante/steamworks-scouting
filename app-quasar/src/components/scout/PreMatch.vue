@@ -39,7 +39,7 @@
 
 <script>
     import { Dialog } from 'quasar'
-    import store from '../../store.js'
+    import { store, writeStoresToDisk } from '../../store.js'
     import { events } from '../../statics/js/events.js'
     import * as matchActions from '../../actions/matches.js'
 
@@ -67,7 +67,7 @@
                 })
             }
             self.saveChangesInRedux()
-            matchActions.saveStoreToLocalStorage(self.$select('matches'))
+            writeStoresToDisk()
         },
         methods: {
             saveChangesInRedux () {

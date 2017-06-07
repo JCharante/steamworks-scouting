@@ -7,14 +7,12 @@
 <script>
     import DrawerHead from '../DrawerHead.vue'
     import DrawerBody from '../DrawerBody.vue'
-    import * as matchActions from '../../actions/matches.js'
-    import '../../store.js'
+    import { writeStoresToDisk } from '../../store.js'
 
     export default {
         components: { DrawerHead, DrawerBody },
         beforeDestroy () {
-            let self = this
-            matchActions.saveStoreToLocalStorage(self.$select('matches'))
+            writeStoresToDisk()
         },
         data () {
             return {}

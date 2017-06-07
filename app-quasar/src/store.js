@@ -37,21 +37,49 @@ function matches (state = {matches: {}, matchKeys: []}, action) {
     }
 }
 
-const reducers = combineReducers({
-    matches
-})
+function settings (state = {}, action) {
+    switch (action.type) {
+    case 'SET_DEFAULT_EVENT':
+        return Object.assign({}, state, {
+            defaultEvent: action.payload
+        })
+    case 'SET_SCOUT_NAME':
+        return Object.assign({}, state, {
+            scoutName: action.payload
+        })
+    case 'SET_SERVER_PASSWORD':
+        return Object.assign({}, state, {
+            serverPassword: action.payload
+        })
+    default:
+        return state
+    }
+}
+
+const reducers = combineReducers({ matches, settings })
 
 let reduxStore = null
 
-if (LocalStorage.get.item('matches') === null) {
+if (LocalStorage.get.item('store') === null) {
     console.info('%cstore.js: %cInitialized Store from Scratch', 'color: blue', 'color: black')
     reduxStore = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 }
 else {
     console.info('%cstore.js: %cInitialized Store from Local Storage', 'color: blue', 'color: green')
-    reduxStore = createStore(reducers, {matches: LocalStorage.get.item('matches')}, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    reduxStore = createStore(reducers, LocalStorage.get.item('store'), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 }
 
-const store = new Revue(Vue, reduxStore, actions)
+export const store = new Revue(Vue, reduxStore, actions)
+
+export function writeStoresToDisk () {
+    let temporaryComponent = new Vue({
+        methods: {
+            fetchStores () {
+                return { matches: this.$select('matches'), settings: this.$select('settings') }
+            }
+        }
+    })
+    LocalStorage.set('store', temporaryComponent.fetchStores())
+}
 
 export default store

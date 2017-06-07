@@ -23,7 +23,7 @@
                         <div class="item-content row items-center">
                             <label style="margin-right: 10px;">Event:</label>
                             <br>
-                            <q-select class="full-width" type="radio" v-model="defaultEventName" :options="selectOptions.eventName"></q-select>
+                            <q-select class="full-width" type="radio" v-model="defaultEventCode" :options="selectOptions.eventName"></q-select>
                         </div>
                     </div>
                 </div>
@@ -37,8 +37,8 @@
 <script>
     import DrawerHead from './DrawerHead.vue'
     import DrawerBody from './DrawerBody.vue'
-    // import '../store.js'
-    // import * as matchActions from '../actions/matches.js'
+    import { store, writeStoresToDisk } from '../store.js'
+    import { setDefaultEvent, setScoutName, setServerPassword } from '../statics/js/settings.js'
     import { events } from '../statics/js/events.js'
     import { Toast } from 'quasar'
 
@@ -46,14 +46,18 @@
         components: { DrawerHead, DrawerBody },
         methods: {
             save () {
-                Toast.create.negative('Not yet Implemented')
+                store.dispatch(setDefaultEvent(this.defaultEventCode))
+                store.dispatch(setScoutName(this.scoutName))
+                store.dispatch(setServerPassword(this.serverPassword))
+                writeStoresToDisk()
+                Toast.create.positive('Saved Settings')
             }
         },
         data () {
             return {
-                scoutName: '',
-                serverPassword: '',
-                defaultEventName: null,
+                scoutName: this.$select('settings.scoutName'),
+                serverPassword: this.$select('settings.serverPassword'),
+                defaultEventCode: this.$select('settings.defaultEvent'),
                 selectOptions: {
                     eventName: events
                 }

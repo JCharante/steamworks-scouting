@@ -69,7 +69,7 @@
 </template>
 
 <script>
-    import store from '../../store.js'
+    import { store, writeStoresToDisk } from '../../store.js'
     import * as matchActions from '../../actions/matches.js'
 
     export default {
@@ -91,7 +91,7 @@
         beforeDestroy () {
             let self = this
             self.saveChangesInRedux()
-            matchActions.saveStoreToLocalStorage(self.$select('matches'))
+            writeStoresToDisk()
         },
         methods: {
             saveChangesInRedux () {
