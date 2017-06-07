@@ -28,7 +28,7 @@
 
             <hr>
             <div class="list-label">Miscellaneous</div>
-            <q-drawer-link icon="settings" to="/">
+            <q-drawer-link icon="settings" to="/settings">
                 Settings
             </q-drawer-link>
             <q-drawer-link icon="volume_up" to="/soundboard">

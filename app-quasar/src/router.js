@@ -21,6 +21,7 @@ export default new VueRouter({
      */
 
     routes: [
+        { path: '/settings', component: load('Settings') },
         { path: '/server',
             component: load('server/layout'),
             children: [
