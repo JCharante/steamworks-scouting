@@ -10,4 +10,8 @@ export function setServerPassword (serverPassword) {
     return { type: 'SET_SERVER_PASSWORD', payload: serverPassword }
 }
 
+export function setServerAddress (serverAddress) {
+    return { type: 'SET_SERVER_ADDRESS', payload: serverAddress }
+}
+
 export default null

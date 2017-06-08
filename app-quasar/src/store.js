@@ -37,7 +37,7 @@ function matches (state = {matches: {}, matchKeys: []}, action) {
     }
 }
 
-function settings (state = {}, action) {
+function settings (state = { serverAddress: 'https://steamworks-scouting.jcharante.com' }, action) {
     switch (action.type) {
     case 'SET_DEFAULT_EVENT':
         return Object.assign({}, state, {
@@ -50,6 +50,10 @@ function settings (state = {}, action) {
     case 'SET_SERVER_PASSWORD':
         return Object.assign({}, state, {
             serverPassword: action.payload
+        })
+    case 'SET_SERVER_ADDRESS':
+        return Object.assign({}, state, {
+            serverAddress: action.payload
         })
     default:
         return state

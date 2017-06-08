@@ -13,6 +13,12 @@
                         </div>
                     </div>
                     <div class="item two-lines">
+                        <i class="item-primary">pregnant_woman</i> <!-- If anyone Asks, it's because it represents the mothership -->
+                        <div class="item-content">
+                            <input placeholder="Server Address" class="full-width" v-model="serverAddress">
+                        </div>
+                    </div>
+                    <div class="item two-lines">
                         <i class="item-primary">lock</i>
                         <div class="item-content">
                             <input placeholder="Server Password" class="full-width" v-model="serverPassword">
@@ -27,8 +33,10 @@
                         </div>
                     </div>
                 </div>
-
-                <button class="full-width primary" @click="save">Save</button>
+                <div class="group">
+                    <button class="full-width info" @click="testConnection">Test Connection</button>
+                    <button class="full-width primary" @click="save">Save</button>
+                </div>
             </div>
         </div>
     </q-layout>
@@ -38,7 +46,7 @@
     import DrawerHead from './DrawerHead.vue'
     import DrawerBody from './DrawerBody.vue'
     import { store, writeStoresToDisk } from '../store.js'
-    import { setDefaultEvent, setScoutName, setServerPassword } from '../statics/js/settings.js'
+    import { setDefaultEvent, setScoutName, setServerPassword, setServerAddress } from '../statics/js/settings.js'
     import { events } from '../statics/js/events.js'
     import { Toast } from 'quasar'
 
@@ -49,12 +57,17 @@
                 store.dispatch(setDefaultEvent(this.defaultEventCode))
                 store.dispatch(setScoutName(this.scoutName))
                 store.dispatch(setServerPassword(this.serverPassword))
+                store.dispatch(setServerAddress(this.serverAddress))
                 writeStoresToDisk()
                 Toast.create.positive('Saved Settings')
+            },
+            testConnection () {
+                Toast.create.negative('Not yet Implemented')
             }
         },
         data () {
             return {
+                serverAddress: this.$select('settings.serverAddress'),
                 scoutName: this.$select('settings.scoutName'),
                 serverPassword: this.$select('settings.serverPassword'),
                 defaultEventCode: this.$select('settings.defaultEvent'),
