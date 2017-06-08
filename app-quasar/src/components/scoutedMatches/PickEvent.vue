@@ -4,7 +4,7 @@
         <DrawerBody ref="drawer"></DrawerBody>
         <div class="layout-padding">
             <div class="list">
-                <ListItemEvent v-for="event in events" :eventName="event" :key="event"></ListItemEvent>
+                <ListItemEvent v-for="event in events" :eventCode="event" :key="event"></ListItemEvent>
             </div>
         </div>
     </div>

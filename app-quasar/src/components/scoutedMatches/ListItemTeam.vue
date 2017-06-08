@@ -22,6 +22,7 @@
 </template>
 
 <script>
+    import { eventNames } from '../../statics/js/events.js'
     import store from '../../store.js'
     import * as matchActions from '../../actions/matches.js'
     import { Dialog, Toast } from 'quasar'
@@ -34,7 +35,7 @@
                 self.$refs.popover.close()
                 Dialog.create({
                     title: 'Confirm',
-                    message: `Are you sure you want to delete ${self.match.eventName} >> Q${self.match.matchNumber} >> ${self.match.teamNumber} ?`,
+                    message: `Are you sure you want to delete ${eventNames[self.match.eventName] || self.match.eventName} >> Q${self.match.matchNumber} >> ${self.match.teamNumber} ?`,
                     buttons: [
                         {
                             label: 'Nevermind',

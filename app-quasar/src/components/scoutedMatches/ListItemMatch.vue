@@ -5,13 +5,13 @@
             secondIcon: 'keyboard_arrow_right'
         }"
         link
-        @click.native="$router.push(`/scout/view/event/${eventName}/match/${matchNumber}`)"
+        @click.native="$router.push(`/scout/view/event/${eventCode}/match/${matchNumber}`)"
     ></q-list-item>
 </template>
 
 <script>
     export default {
-        props: ['eventName', 'matchNumber'],
+        props: ['eventCode', 'matchNumber'],
         data () {
             return {}
         }
