@@ -14,7 +14,19 @@
                     <q-btn color="primary" class="full-width" @click="createMatch()" no-caps>Begin Scouting!</q-btn>
                 </div>
             </q-pull-to-refresh>
+            <q-fixed-position corner="bottom-right" :offset="[18, 18]">
+                <q-btn round small color="info" icon="fa-question" class="animate-pop" @click="$refs.explanation.open()"/>
+            </q-fixed-position>
         </div>
+
+        <q-modal minimized ref="explanation" :content-css="{padding: '35px'}">
+            <h5>Why Quotes?</h5>
+            <p>Some stuff happens in the background on this page, and the only way to give it "enough" time,
+                without having you wait for an arbitrary amount of time is to have you (the user) press a button.
+                Now pressing a button is pretty boring, so we might as well display a random quote.</p>
+            <q-btn color="purple" outline @click="$refs.explanation.close()">Close</q-btn>
+        </q-modal>
+
     </q-layout>
 </template>
 
@@ -27,7 +39,9 @@
     import {
         QPullToRefresh,
         QLayout,
-        QBtn
+        QBtn,
+        QFixedPosition,
+        QModal
     } from 'quasar'
 
     const quotes = [
@@ -153,7 +167,9 @@
             QPullToRefresh,
             QBtn,
             DrawerHead,
-            DrawerBody
+            DrawerBody,
+            QFixedPosition,
+            QModal
         },
         data () {
             return {
