@@ -15,7 +15,7 @@
                 </div>
             </q-pull-to-refresh>
             <q-fixed-position corner="bottom-right" :offset="[18, 18]">
-                <q-btn round small color="info" icon="fa-question" class="animate-pop" @click="$refs.explanation.open()"/>
+                <q-btn round small color="purple" icon="fa-question" class="animate-pop" @click="$refs.explanation.open()"/>
             </q-fixed-position>
         </div>
 
